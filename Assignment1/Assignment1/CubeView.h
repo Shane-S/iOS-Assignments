@@ -23,11 +23,6 @@
 @property (nonatomic) GLKMatrix3 normalMatrix;
 
 /**
- * @brief Draws the cube.
- */
-- (void)draw;
-
-/**
  * @brief Updates the normal and model-view matrices.
  * @param projection The perspective matrix.
  * @param cameraBase The matrix defining camera's rotation and position.
@@ -38,4 +33,9 @@
  * @brief Initialises the CubeView with a reference to the cube it will render.
  */
 - (instancetype) initWithCube: (Cube *)cube;
+
+/**
+ * @brief Tells the cube view to free any resources it is holding.
+ */
+- (void)destroy;
 @end

@@ -111,6 +111,10 @@ enum
     return YES;
 }
 
+- (IBAction)doScale:(UIPinchGestureRecognizer *)sender {
+    _cube.scale = GLKVector3Make(sender.scale, sender.scale, sender.scale);
+}
+
 - (void)setupGL
 {
     [EAGLContext setCurrentContext:self.context];
@@ -148,6 +152,8 @@ enum
         glDeleteProgram(_program);
         _program = 0;
     }
+    
+    [_cubeView destroy];
 }
 
 #pragma mark - GLKView and GLKViewController delegate methods

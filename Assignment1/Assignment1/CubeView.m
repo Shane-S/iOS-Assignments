@@ -62,8 +62,9 @@
     _modelViewProjectionMatrix = GLKMatrix4Multiply(*projection, _modelViewMatrix);
 }
 
-- (void) draw {
-    
-    
+
+-(void) destroy {
+    glDeleteBuffers(1, &_vertexBuffer);
+    glDeleteVertexArraysOES(1, &_vertexArray);
 }
 @end
