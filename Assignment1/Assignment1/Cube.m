@@ -85,5 +85,15 @@ static GLfloat _actualCubeVertices[216] = {
     return self;
 }
 
+- (GLKVector3 *)rotationRef {
+    return &_rotation;
+}
 
+-(GLKVector3 *)positionRef {
+    return &_position;
+}
+
+-(GLKVector3 *)scaleRef {
+    return &_scale;
+}
 @end

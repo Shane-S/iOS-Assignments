@@ -12,7 +12,7 @@
 #import "CubeView.h"
 
 @interface GameViewController : GLKViewController
-@property (weak, nonatomic) IBOutlet UIButton *cubeResetBtn;
 @property (weak, nonatomic) IBOutlet UILabel *cubeInfoLabel;
+@property (weak, nonatomic) IBOutlet UILabel *counterValueLabel;
 
 @end

@@ -10,7 +10,7 @@
 #import "GLProgramUtils.h"
 #import <OpenGLES/ES2/glext.h>
 
-
+const int REVOLUTIONS_PER_MINUTE = 30;
 
 // Uniform index.
 enum
@@ -42,8 +42,18 @@ enum
     
     Cube *_cube;
     CubeView *_cubeView;
+    CGPoint _dragStart;
+    CGPoint _moveStart;
+    
+    BOOL _isRotating;
+    BOOL _isMoving;
+    BOOL _isRotatingContinuous;
+    
+    NSTimeInterval _prevRotationTime;
 }
 @property (strong, nonatomic) EAGLContext *context;
+
+@property (strong, nonatomic) UITapGestureRecognizer *doubleTap;
 
 /**
  * @brief Creates the GL context for rendering and initialises the CubeView.
@@ -56,10 +66,26 @@ enum
 - (void)tearDownGL;
 
 /**
- * Loads the shaders for rendering, creates a program a program object and stores it in _program.
+ * @brief Loads the shaders for rendering, creates a program a program object and stores it in _program.
  */
 - (BOOL)loadShaders;
 
+/**
+ * @brief Clamps the cube's scale and rotation.
+ */
+- (void)clampCube;
+
+/**
+ * @brief Moves the cube around the screen.
+ * @param recognizer The gesture recognizer that sent the event.
+ */
+- (void)doMove:(UIPanGestureRecognizer *)recognizer;
+
+/**
+ * @brief Rotates the cube about the x and y axes.
+ * @param recognizer The gesture recognizer that sent the event.
+ */
+- (void)doRotate:(UIPanGestureRecognizer *)recognizer;
 @end
 
 @implementation GameViewController
@@ -77,6 +103,15 @@ enum
     GLKView *view = (GLKView *)self.view;
     view.context = self.context;
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
+    
+    _isMoving = FALSE;
+    _isRotating = FALSE;
+    _prevRotationTime = 0;
+    
+    // Set up UI recognizer for double tap which can't be properly configured in the interface builder :(
+    _doubleTap = [[UITapGestureRecognizer alloc] initWithTarget: self action:@selector(toggleContinuousRotation:)];
+    _doubleTap.numberOfTapsRequired = 2;
+    [self.view addGestureRecognizer:_doubleTap];
     
     [self setupGL];
 }
@@ -112,8 +147,73 @@ enum
 }
 
 - (IBAction)doScale:(UIPinchGestureRecognizer *)sender {
-    _cube.scale = GLKVector3Make(sender.scale, sender.scale, sender.scale);
+    
+    if(_isRotatingContinuous) return;
+    
+    [_cube scaleRef]->x = _cube.scale.x * sender.scale;
+    [_cube scaleRef]->y = _cube.scale.y * sender.scale;
+    [_cube scaleRef]->z = _cube.scale.z * sender.scale;
+    
+    sender.scale = 1;
 }
+
+- (IBAction)doPan:(UIPanGestureRecognizer *)recognizer
+{
+    if(_isRotatingContinuous) return;
+    
+    int touches = [recognizer numberOfTouches];
+    if((touches == 1 && !_isMoving) || _isRotating) [self doRotate:recognizer];
+    else if((touches == 2 &&  !_isRotating) || _isMoving) [self doMove:recognizer];
+}
+
+- (void)doRotate:(UIPanGestureRecognizer *)recognizer {
+    if (recognizer.state == UIGestureRecognizerStateBegan)
+    {
+        // Set the initial origin on drag start
+        _dragStart = [recognizer locationInView:self.view];
+        _isRotating = TRUE;
+    }
+    else if (recognizer.state == UIGestureRecognizerStateChanged)
+    {
+        // Add the rotation delta to the cube's current rotation
+        CGPoint newPt = [recognizer locationInView:self.view];
+        [_cube rotationRef]->x = _cube.rotation.x + ((newPt.y - _dragStart.y) * M_PI / 180);
+        [_cube rotationRef]->y = _cube.rotation.y + ((newPt.x - _dragStart.x) * M_PI / 180);
+        _dragStart = newPt;
+    }
+    else _isRotating = FALSE;
+}
+
+- (void)doMove:(UIPanGestureRecognizer *)recognizer {
+    if(recognizer.state == UIGestureRecognizerStateBegan)
+    {
+        _moveStart = [recognizer locationInView:self.view];
+        _isMoving = TRUE;
+    }
+    else if (recognizer.state != UIGestureRecognizerStateEnded)
+    {
+        // Add the rotation delta to the cube's current rotation
+        CGPoint newPt = [recognizer locationInView:self.view];
+        
+        [_cube positionRef]->x = _cube.position.x + ((newPt.x - _moveStart.x) / 30);
+        [_cube positionRef]->y = _cube.position.y + ((-newPt.y + _moveStart.y) / 30);
+        _moveStart = newPt;
+    }
+    else _isMoving = FALSE;
+}
+
+- (IBAction)toggleContinuousRotation:(id)sender {
+    _isRotatingContinuous = _isRotatingContinuous ? FALSE: TRUE;
+    if(_isRotatingContinuous) _prevRotationTime = [NSDate timeIntervalSinceReferenceDate];
+}
+
+- (IBAction)resetScene:(id)sender {
+    _cube.rotation = GLKVector3Make(0, 0, 0);
+    _cube.scale = GLKVector3Make(1, 1, 1);
+    _cube.position = GLKVector3Make(0, 0, 0);
+    _isRotatingContinuous = false;
+}
+
 
 - (void)setupGL
 {
@@ -123,20 +223,12 @@ enum
     glEnable(GL_DEPTH_TEST);
     
     // Set the cube's properties
-    GLKVector3 cubeProps;
     _cube = [[Cube alloc] init];
+    _cube.position = GLKVector3Make(0, 0, 0);
+    _cube.rotation = GLKVector3Make(0, 0, 0);
+    _cube.scale = GLKVector3Make(1, 1, 1);
     
-    cubeProps.x = 0;
-    cubeProps.y = 0;
-    cubeProps.z = 0;
-    _cube.position = cubeProps;
-    _cube.rotation = cubeProps;
-    
-    cubeProps.x = 1;
-    cubeProps.y = 1;
-    cubeProps.z = 1;
-    _cube.scale = cubeProps;
-    
+    // Create the cube view with its cube
     _cubeView = [[CubeView alloc] initWithCube: _cube];
     
 }
@@ -163,8 +255,42 @@ enum
     float aspect = fabsf(self.view.bounds.size.width / self.view.bounds.size.height);
     GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspect, 0.1f, 100.0f);
     GLKMatrix4 baseModelViewMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, -4.0f);
-  
+    NSString *cubeInfo = [NSString stringWithFormat:@"Rotation: (%.1f°, %.1f°, %.1f°)\nPosition: (%.2f, %.2f, %.2f)",
+                          _cube.rotation.x * 180 / M_PI, _cube.rotation.y * 180 / M_PI, _cube.rotation.z * 180 / M_PI,
+                          _cube.position.x, _cube.position.y, _cube.position.z];
+    
+    if(_isRotatingContinuous) [self updateContinuousRotation];
+    
+    [self clampCube];
     [_cubeView updateMatricesWithProjection: &projectionMatrix andCameraBase: &baseModelViewMatrix];
+    
+    [_cubeInfoLabel setText: cubeInfo];
+}
+
+- (void)clampCube {
+    if(_cube.rotation.x > M_PI * 2) [_cube rotationRef]->x = (2 * M_PI) - _cube.rotation.x;
+    else if(_cube.rotation.x < 0) [_cube rotationRef]->x = _cube.rotation.x + (2 * M_PI);
+    
+    if(_cube.rotation.y > M_PI * 2) [_cube rotationRef]->y = (2 * M_PI) - _cube.rotation.y;
+    else if(_cube.rotation.y < 0) [_cube rotationRef]->y = _cube.rotation.y + (2 * M_PI);
+    
+    if(_cube.scale.x < 0.1f) {
+        [_cube scaleRef]->x = 0.1f;
+        [_cube scaleRef]->y = 0.1f;
+        [_cube scaleRef]->z = 0.1f;
+    } else if(_cube.scale.x > 2) {
+        [_cube scaleRef]->x = 2;
+        [_cube scaleRef]->y = 2;
+        [_cube scaleRef]->z = 2;
+    }
+}
+
+- (void)updateContinuousRotation {
+    NSTimeInterval currentTime = [NSDate timeIntervalSinceReferenceDate];
+    double timeDelta = currentTime - _prevRotationTime;
+    double angleDelta = timeDelta * REVOLUTIONS_PER_MINUTE / 60 * 2 * M_PI; // s * rev/min * min/60s * 2PI/rev
+    [_cube rotationRef]->y += angleDelta;
+    _prevRotationTime = currentTime;
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
