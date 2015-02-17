@@ -19,6 +19,8 @@
 		703BCEE31A82C4F400E2E088 /* Assignment1Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 703BCEE21A82C4F400E2E088 /* Assignment1Tests.m */; };
 		703BCEFD1A82CB2600E2E088 /* Cube.m in Sources */ = {isa = PBXBuildFile; fileRef = 703BCEFC1A82CB2600E2E088 /* Cube.m */; };
 		70A05AB31A8BEBAA004B6DDD /* CubeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 70A05AB21A8BEBAA004B6DDD /* CubeView.m */; };
+		70CBBE681A93C7DF00CCB192 /* CPPCounter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 70CBBE661A93C7DF00CCB192 /* CPPCounter.cpp */; };
+		70CBBE6B1A93CA1400CCB192 /* Counter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70CBBE6A1A93CA1400CCB192 /* Counter.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +55,10 @@
 		703BCEFE1A82CB4900E2E088 /* Cube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cube.h; sourceTree = "<group>"; };
 		70A05AB11A8BEBAA004B6DDD /* CubeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CubeView.h; sourceTree = "<group>"; };
 		70A05AB21A8BEBAA004B6DDD /* CubeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CubeView.m; sourceTree = "<group>"; };
+		70CBBE661A93C7DF00CCB192 /* CPPCounter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CPPCounter.cpp; sourceTree = "<group>"; };
+		70CBBE671A93C7DF00CCB192 /* CPPCounter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPPCounter.h; sourceTree = "<group>"; };
+		70CBBE691A93CA1400CCB192 /* Counter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Counter.h; sourceTree = "<group>"; };
+		70CBBE6A1A93CA1400CCB192 /* Counter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Counter.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +82,10 @@
 		703BCEB61A82C4F400E2E088 = {
 			isa = PBXGroup;
 			children = (
+				70CBBE661A93C7DF00CCB192 /* CPPCounter.cpp */,
+				70CBBE691A93CA1400CCB192 /* Counter.h */,
+				70CBBE6A1A93CA1400CCB192 /* Counter.mm */,
+				70CBBE671A93C7DF00CCB192 /* CPPCounter.h */,
 				703BCEC11A82C4F400E2E088 /* Assignment1 */,
 				703BCEDF1A82C4F400E2E088 /* Assignment1Tests */,
 				703BCEC01A82C4F400E2E088 /* Products */,
@@ -246,7 +256,9 @@
 				703BCEFD1A82CB2600E2E088 /* Cube.m in Sources */,
 				703BCEC81A82C4F400E2E088 /* AppDelegate.m in Sources */,
 				703BCECF1A82C4F400E2E088 /* GameViewController.m in Sources */,
+				70CBBE6B1A93CA1400CCB192 /* Counter.mm in Sources */,
 				703BCEC51A82C4F400E2E088 /* main.m in Sources */,
+				70CBBE681A93C7DF00CCB192 /* CPPCounter.cpp in Sources */,
 				701D5CFC1A8EA17F009A22CC /* GLProgramUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -40,10 +40,10 @@
 /// Returns a reference to the rotation property.
 - (GLKVector3 *)rotationRef;
 
-/// Returns a reference to the position
+/// Returns a reference to the position.
 - (GLKVector3 *)positionRef;
 
-/// Returns a reference to the scale
+/// Returns a reference to the scale.
 - (GLKVector3 *)scaleRef;
 @end
 

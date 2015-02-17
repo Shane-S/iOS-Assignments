@@ -10,6 +10,7 @@
 #import <GLKit/GLKit.h>
 #import "Cube.h"
 #import "CubeView.h"
+#include "Counter.h"
 
 @interface GameViewController : GLKViewController
 @property (weak, nonatomic) IBOutlet UILabel *cubeInfoLabel;

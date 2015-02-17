@@ -26,6 +26,9 @@
                                 <variation key="heightClass=regular" fixedFrame="YES">
                                     <rect key="frame" x="0.0" y="0.0" width="69" height="30"/>
                                 </variation>
+                                <connections>
+                                    <action selector="changeCounter:" destination="LVB-YS-i5n" eventType="touchUpInside" id="fe1-PN-UeY"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wZM-f6-Yf9">
                                 <rect key="frame" x="544" y="20" width="40" height="30"/>

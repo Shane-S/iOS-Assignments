@@ -55,6 +55,7 @@ enum
 
 @property (strong, nonatomic) UITapGestureRecognizer *doubleTap;
 
+@property (strong, nonatomic) Counter *mixedCounter;
 /**
  * @brief Creates the GL context for rendering and initialises the CubeView.
  */
@@ -108,6 +109,8 @@ enum
     _isRotating = FALSE;
     _prevRotationTime = 0;
     
+    _mixedCounter = [[Counter alloc] init];
+    
     // Set up UI recognizer for double tap which can't be properly configured in the interface builder :(
     _doubleTap = [[UITapGestureRecognizer alloc] initWithTarget: self action:@selector(toggleContinuousRotation:)];
     _doubleTap.numberOfTapsRequired = 2;
@@ -148,19 +151,26 @@ enum
 
 - (IBAction)doScale:(UIPinchGestureRecognizer *)sender {
     
+    // Nothing is allowed to happen if the cube is currently rotating
     if(_isRotatingContinuous) return;
     
+    // Scale the cube by whatever the delta from last time was
     [_cube scaleRef]->x = _cube.scale.x * sender.scale;
     [_cube scaleRef]->y = _cube.scale.y * sender.scale;
     [_cube scaleRef]->z = _cube.scale.z * sender.scale;
     
+    // Reset the scale to 1 so that sender.scale contains only the delta from this scale
     sender.scale = 1;
 }
 
 - (IBAction)doPan:(UIPanGestureRecognizer *)recognizer
 {
+    // Nothing is allowed to happen if the cube is currently rotating
     if(_isRotatingContinuous) return;
     
+    // If the pan recognizer registers one touch or is already rotating, rotate; if it's two or already moving, move
+    // This should have been done with shouldFireOnlyIfRecognizerFails (or whatever that function is) with another
+    // recognizer for two-finger panning, but this already works
     int touches = [recognizer numberOfTouches];
     if((touches == 1 && !_isMoving) || _isRotating) [self doRotate:recognizer];
     else if((touches == 2 &&  !_isRotating) || _isMoving) [self doMove:recognizer];
@@ -175,7 +185,7 @@ enum
     }
     else if (recognizer.state == UIGestureRecognizerStateChanged)
     {
-        // Add the rotation delta to the cube's current rotation
+        // Add the rotation delta to the cube's current rotation and set the current point to drag start
         CGPoint newPt = [recognizer locationInView:self.view];
         [_cube rotationRef]->x = _cube.rotation.x + ((newPt.y - _dragStart.y) * M_PI / 180);
         [_cube rotationRef]->y = _cube.rotation.y + ((newPt.x - _dragStart.x) * M_PI / 180);
@@ -187,12 +197,13 @@ enum
 - (void)doMove:(UIPanGestureRecognizer *)recognizer {
     if(recognizer.state == UIGestureRecognizerStateBegan)
     {
+        // Set the inital origin when the pan begins
         _moveStart = [recognizer locationInView:self.view];
         _isMoving = TRUE;
     }
     else if (recognizer.state != UIGestureRecognizerStateEnded)
     {
-        // Add the rotation delta to the cube's current rotation
+        // Add the rotation delta to the cube's current rotation and set the current point to move start
         CGPoint newPt = [recognizer locationInView:self.view];
         
         [_cube positionRef]->x = _cube.position.x + ((newPt.x - _moveStart.x) / 30);
@@ -203,15 +214,21 @@ enum
 }
 
 - (IBAction)toggleContinuousRotation:(id)sender {
+    // Toggle the rotation on/off and set the start time for the next rotation calculation
     _isRotatingContinuous = _isRotatingContinuous ? FALSE: TRUE;
     if(_isRotatingContinuous) _prevRotationTime = [NSDate timeIntervalSinceReferenceDate];
+}
+
+- (IBAction)changeCounter:(id)sender {
+    [_mixedCounter incrementCounter];
+    [_mixedCounter toggleCounter];
 }
 
 - (IBAction)resetScene:(id)sender {
     _cube.rotation = GLKVector3Make(0, 0, 0);
     _cube.scale = GLKVector3Make(1, 1, 1);
     _cube.position = GLKVector3Make(0, 0, 0);
-    _isRotatingContinuous = false;
+    _isRotatingContinuous = FALSE;
 }
 
 
@@ -252,12 +269,15 @@ enum
 
 - (void)update
 {
+    // Recalculate the projection matrix based on the screen's current aspect ratio and move the world 4 units along with x-axis
     float aspect = fabsf(self.view.bounds.size.width / self.view.bounds.size.height);
     GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspect, 0.1f, 100.0f);
     GLKMatrix4 baseModelViewMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, -4.0f);
+    
     NSString *cubeInfo = [NSString stringWithFormat:@"Rotation: (%.1f°, %.1f°, %.1f°)\nPosition: (%.2f, %.2f, %.2f)",
                           _cube.rotation.x * 180 / M_PI, _cube.rotation.y * 180 / M_PI, _cube.rotation.z * 180 / M_PI,
                           _cube.position.x, _cube.position.y, _cube.position.z];
+    NSString *counterText = [NSString stringWithFormat: @"%@: %d", _mixedCounter.usingObjC ? @"Obj-C" :@"C++", [_mixedCounter getCounterValue]];
     
     if(_isRotatingContinuous) [self updateContinuousRotation];
     
@@ -265,6 +285,7 @@ enum
     [_cubeView updateMatricesWithProjection: &projectionMatrix andCameraBase: &baseModelViewMatrix];
     
     [_cubeInfoLabel setText: cubeInfo];
+    [_counterValueLabel setText:counterText];
 }
 
 - (void)clampCube {
