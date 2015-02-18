@@ -17,17 +17,17 @@ typedef struct CPPCounterImpl CPPCounterImpl;
 
 @property (nonatomic) BOOL usingObjC;
 
-/**
+/*!
  * @brief Increments the count of the currently active object.
  */
 -(void)incrementCounter;
 
-/**
+/*!
  * @brief Toggles the active object between the Objective C counter and the C++ counter.
  */
 -(void)toggleCounter;
 
-/**
+/*!
  * @brief Retrieves the counter value for the currently active object.
  * @return The counter value for the currently active object.
  */

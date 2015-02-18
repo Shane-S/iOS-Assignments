@@ -56,6 +56,7 @@ enum
 @property (strong, nonatomic) UITapGestureRecognizer *doubleTap;
 
 @property (strong, nonatomic) Counter *mixedCounter;
+
 /**
  * @brief Creates the GL context for rendering and initialises the CubeView.
  */

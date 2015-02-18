@@ -1,0 +1,10 @@
+Assignment 1
+Shane Spoor, A00852406
+
+==Controls==
+Double-Tap: Start and stop the rectangle's rotation (note that other gesture controls will not work until rotation stops)
+Pan, Single Finger: Rotate the cube about the X and Y axes
+Pan, Two Fingers: Move the cube around the screen
+Pinch: Zoom in/out
+Increment Button: Increment the Objective-C and C++ counters and displays the counter value of the current counter object
+Reset Button: Reset the cube to default scale, rotation and position

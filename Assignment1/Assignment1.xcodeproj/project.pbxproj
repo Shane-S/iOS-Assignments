@@ -18,6 +18,7 @@
 		703BCED71A82C4F400E2E088 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 703BCED51A82C4F400E2E088 /* LaunchScreen.xib */; };
 		703BCEE31A82C4F400E2E088 /* Assignment1Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 703BCEE21A82C4F400E2E088 /* Assignment1Tests.m */; };
 		703BCEFD1A82CB2600E2E088 /* Cube.m in Sources */ = {isa = PBXBuildFile; fileRef = 703BCEFC1A82CB2600E2E088 /* Cube.m */; };
+		7051468F1A9524B5001AF90D /* README in Resources */ = {isa = PBXBuildFile; fileRef = 7051468E1A9524B5001AF90D /* README */; };
 		70A05AB31A8BEBAA004B6DDD /* CubeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 70A05AB21A8BEBAA004B6DDD /* CubeView.m */; };
 		70CBBE681A93C7DF00CCB192 /* CPPCounter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 70CBBE661A93C7DF00CCB192 /* CPPCounter.cpp */; };
 		70CBBE6B1A93CA1400CCB192 /* Counter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70CBBE6A1A93CA1400CCB192 /* Counter.mm */; };
@@ -53,6 +54,7 @@
 		703BCEE21A82C4F400E2E088 /* Assignment1Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Assignment1Tests.m; sourceTree = "<group>"; };
 		703BCEFC1A82CB2600E2E088 /* Cube.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cube.m; sourceTree = "<group>"; };
 		703BCEFE1A82CB4900E2E088 /* Cube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cube.h; sourceTree = "<group>"; };
+		7051468E1A9524B5001AF90D /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		70A05AB11A8BEBAA004B6DDD /* CubeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CubeView.h; sourceTree = "<group>"; };
 		70A05AB21A8BEBAA004B6DDD /* CubeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CubeView.m; sourceTree = "<group>"; };
 		70CBBE661A93C7DF00CCB192 /* CPPCounter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CPPCounter.cpp; sourceTree = "<group>"; };
@@ -85,6 +87,7 @@
 				70CBBE661A93C7DF00CCB192 /* CPPCounter.cpp */,
 				70CBBE691A93CA1400CCB192 /* Counter.h */,
 				70CBBE6A1A93CA1400CCB192 /* Counter.mm */,
+				7051468E1A9524B5001AF90D /* README */,
 				70CBBE671A93C7DF00CCB192 /* CPPCounter.h */,
 				703BCEC11A82C4F400E2E088 /* Assignment1 */,
 				703BCEDF1A82C4F400E2E088 /* Assignment1Tests */,
@@ -230,6 +233,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7051468F1A9524B5001AF90D /* README in Resources */,
 				703BCED71A82C4F400E2E088 /* LaunchScreen.xib in Resources */,
 				703BCED21A82C4F400E2E088 /* Main.storyboard in Resources */,
 				703BCED41A82C4F400E2E088 /* Images.xcassets in Resources */,
