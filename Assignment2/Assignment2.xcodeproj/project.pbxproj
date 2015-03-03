@@ -20,6 +20,17 @@
 		703E39AD1AA03F5B006C2477 /* CubeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 703E39A71AA03F5B006C2477 /* CubeView.m */; };
 		703E39AE1AA03F5B006C2477 /* DisjointSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 703E39A81AA03F5B006C2477 /* DisjointSet.cpp */; };
 		703E39AF1AA03F5B006C2477 /* GLProgramUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 703E39AB1AA03F5B006C2477 /* GLProgramUtils.m */; };
+		7078F7F41AA52DFC006BB1A7 /* Plane.m in Sources */ = {isa = PBXBuildFile; fileRef = 7078F7F31AA52DFC006BB1A7 /* Plane.m */; };
+		7078F7F71AA5438F006BB1A7 /* PlaneView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7078F7F61AA5438F006BB1A7 /* PlaneView.m */; };
+		7078F8031AA57AEC006BB1A7 /* crate.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7078F8021AA57AEC006BB1A7 /* crate.jpg */; };
+		7078F8051AA59561006BB1A7 /* floor.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7078F8041AA59561006BB1A7 /* floor.jpg */; };
+		7078F80A1AA5970B006BB1A7 /* both_walls.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7078F8061AA5970B006BB1A7 /* both_walls.jpg */; };
+		7078F80B1AA5970B006BB1A7 /* left_wall.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7078F8071AA5970B006BB1A7 /* left_wall.jpg */; };
+		7078F80C1AA5970B006BB1A7 /* no_walls.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7078F8081AA5970B006BB1A7 /* no_walls.jpg */; };
+		7078F80D1AA5970B006BB1A7 /* right_wall.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7078F8091AA5970B006BB1A7 /* right_wall.jpg */; };
+		70C9F6141AA2D78E00FFE49B /* Camera.m in Sources */ = {isa = PBXBuildFile; fileRef = 70C9F6131AA2D78E00FFE49B /* Camera.m */; };
+		70C9F6171AA2FE9500FFE49B /* maze.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 70C9F6151AA2FE9500FFE49B /* maze.cpp */; };
+		70C9F6191AA3006600FFE49B /* MazeWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C9F6181AA3006600FFE49B /* MazeWrapper.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +67,22 @@
 		703E39A91AA03F5B006C2477 /* DisjointSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisjointSet.h; sourceTree = "<group>"; };
 		703E39AA1AA03F5B006C2477 /* GLProgramUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLProgramUtils.h; sourceTree = "<group>"; };
 		703E39AB1AA03F5B006C2477 /* GLProgramUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLProgramUtils.m; sourceTree = "<group>"; };
+		7078F7F21AA52DFC006BB1A7 /* Plane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Plane.h; sourceTree = "<group>"; };
+		7078F7F31AA52DFC006BB1A7 /* Plane.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Plane.m; sourceTree = "<group>"; };
+		7078F7F51AA5438F006BB1A7 /* PlaneView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaneView.h; sourceTree = "<group>"; };
+		7078F7F61AA5438F006BB1A7 /* PlaneView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaneView.m; sourceTree = "<group>"; };
+		7078F8021AA57AEC006BB1A7 /* crate.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = crate.jpg; sourceTree = "<group>"; };
+		7078F8041AA59561006BB1A7 /* floor.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = floor.jpg; sourceTree = "<group>"; };
+		7078F8061AA5970B006BB1A7 /* both_walls.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = both_walls.jpg; sourceTree = "<group>"; };
+		7078F8071AA5970B006BB1A7 /* left_wall.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = left_wall.jpg; sourceTree = "<group>"; };
+		7078F8081AA5970B006BB1A7 /* no_walls.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = no_walls.jpg; sourceTree = "<group>"; };
+		7078F8091AA5970B006BB1A7 /* right_wall.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = right_wall.jpg; sourceTree = "<group>"; };
+		70C9F6121AA2D78E00FFE49B /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
+		70C9F6131AA2D78E00FFE49B /* Camera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Camera.m; sourceTree = "<group>"; };
+		70C9F6151AA2FE9500FFE49B /* maze.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = maze.cpp; sourceTree = "<group>"; };
+		70C9F6161AA2FE9500FFE49B /* maze.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = maze.h; sourceTree = "<group>"; };
+		70C9F6181AA3006600FFE49B /* MazeWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MazeWrapper.mm; sourceTree = "<group>"; };
+		70C9F61A1AA3012700FFE49B /* MazeWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MazeWrapper.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +174,12 @@
 		703E39B11AA0416B006C2477 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				7078F8061AA5970B006BB1A7 /* both_walls.jpg */,
+				7078F8071AA5970B006BB1A7 /* left_wall.jpg */,
+				7078F8081AA5970B006BB1A7 /* no_walls.jpg */,
+				7078F8091AA5970B006BB1A7 /* right_wall.jpg */,
+				7078F8041AA59561006BB1A7 /* floor.jpg */,
+				7078F8021AA57AEC006BB1A7 /* crate.jpg */,
 				703E398B1AA02AA3006C2477 /* Images.xcassets */,
 				703E39B21AA04177006C2477 /* Shaders */,
 			);
@@ -165,10 +198,18 @@
 		703E39B31AA04195006C2477 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				70C9F6151AA2FE9500FFE49B /* maze.cpp */,
+				70C9F6161AA2FE9500FFE49B /* maze.h */,
 				703E39A41AA03F5B006C2477 /* Cube.h */,
 				703E39A51AA03F5B006C2477 /* Cube.m */,
 				703E39A81AA03F5B006C2477 /* DisjointSet.cpp */,
 				703E39A91AA03F5B006C2477 /* DisjointSet.h */,
+				70C9F6121AA2D78E00FFE49B /* Camera.h */,
+				70C9F6131AA2D78E00FFE49B /* Camera.m */,
+				70C9F6181AA3006600FFE49B /* MazeWrapper.mm */,
+				70C9F61A1AA3012700FFE49B /* MazeWrapper.h */,
+				7078F7F21AA52DFC006BB1A7 /* Plane.h */,
+				7078F7F31AA52DFC006BB1A7 /* Plane.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -189,6 +230,8 @@
 				703E398D1AA02AA3006C2477 /* LaunchScreen.xib */,
 				703E39A61AA03F5B006C2477 /* CubeView.h */,
 				703E39A71AA03F5B006C2477 /* CubeView.m */,
+				7078F7F51AA5438F006BB1A7 /* PlaneView.h */,
+				7078F7F61AA5438F006BB1A7 /* PlaneView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -273,10 +316,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7078F80B1AA5970B006BB1A7 /* left_wall.jpg in Resources */,
 				703E398F1AA02AA3006C2477 /* LaunchScreen.xib in Resources */,
+				7078F8031AA57AEC006BB1A7 /* crate.jpg in Resources */,
 				703E398A1AA02AA3006C2477 /* Main.storyboard in Resources */,
 				703E398C1AA02AA3006C2477 /* Images.xcassets in Resources */,
+				7078F80A1AA5970B006BB1A7 /* both_walls.jpg in Resources */,
+				7078F8051AA59561006BB1A7 /* floor.jpg in Resources */,
 				703E39841AA02AA3006C2477 /* Shader.vsh in Resources */,
+				7078F80D1AA5970B006BB1A7 /* right_wall.jpg in Resources */,
+				7078F80C1AA5970B006BB1A7 /* no_walls.jpg in Resources */,
 				703E39821AA02AA3006C2477 /* Shader.fsh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -295,10 +344,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70C9F6191AA3006600FFE49B /* MazeWrapper.mm in Sources */,
+				7078F7F71AA5438F006BB1A7 /* PlaneView.m in Sources */,
 				703E39AE1AA03F5B006C2477 /* DisjointSet.cpp in Sources */,
 				703E39AD1AA03F5B006C2477 /* CubeView.m in Sources */,
+				70C9F6171AA2FE9500FFE49B /* maze.cpp in Sources */,
 				703E39AC1AA03F5B006C2477 /* Cube.m in Sources */,
+				7078F7F41AA52DFC006BB1A7 /* Plane.m in Sources */,
 				703E39AF1AA03F5B006C2477 /* GLProgramUtils.m in Sources */,
+				70C9F6141AA2D78E00FFE49B /* Camera.m in Sources */,
 				703E39801AA02AA3006C2477 /* AppDelegate.m in Sources */,
 				703E39871AA02AA3006C2477 /* GameViewController.m in Sources */,
 				703E397D1AA02AA3006C2477 /* main.m in Sources */,
@@ -494,6 +548,7 @@
 				703E39A01AA02AA3006C2477 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		703E39A11AA02AA3006C2477 /* Build configuration list for PBXNativeTarget "Assignment2Tests" */ = {
 			isa = XCConfigurationList;
@@ -502,6 +557,7 @@
 				703E39A31AA02AA3006C2477 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

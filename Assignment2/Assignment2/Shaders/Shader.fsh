@@ -6,9 +6,15 @@
 //  Copyright (c) 2015 BCIT. All rights reserved.
 //
 
+precision mediump float;
+
 varying lowp vec4 colorVarying;
+varying vec2 texCoordOut;
+
+/* set up a uniform sampler2D to get texture */
+uniform sampler2D texture;
 
 void main()
 {
-    gl_FragColor = colorVarying;
+    gl_FragColor = texture2D(texture, texCoordOut);
 }

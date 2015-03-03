@@ -8,6 +8,9 @@
 
 #import "GameViewController.h"
 #import "GLProgramUtils.h"
+#import "Camera.h"
+#import "MazeWrapper.h"
+#import "PlaneView.h"
 #import <OpenGLES/ES2/glext.h>
 
 const int REVOLUTIONS_PER_MINUTE = 30;
@@ -17,6 +20,7 @@ enum
 {
     UNIFORM_MODELVIEWPROJECTION_MATRIX,
     UNIFORM_NORMAL_MATRIX,
+    UNIFORM_TEXTURE,
     NUM_UNIFORMS
 };
 GLint uniforms[NUM_UNIFORMS];
@@ -34,11 +38,13 @@ GLint uniforms[NUM_UNIFORMS];
     Cube* _rotatorCube;
     CubeView *_cubeView;
     CGPoint _dragStart;
-    CGPoint _moveStart;
-
-    BOOL _isRotatingContinuous;
-    
     NSTimeInterval _prevRotationTime;
+    
+    Camera* _camera;
+    
+    NSMutableArray* _walls;
+    
+    MazeWrapper* maze;
 }
 @property (strong, nonatomic) EAGLContext *context;
 
@@ -78,6 +84,13 @@ GLint uniforms[NUM_UNIFORMS];
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
     _prevRotationTime = 0;
     
+    
+    float aspect = (float)self.view.bounds.size.width / self.view.bounds.size.height;
+    _camera = [[Camera alloc] initWithPosition:GLKVector3Make(0, 0, 4.0f)  andLookAtPoint:GLKVector3Make(0, 0, 0)
+                           andProjectionMatrix:GLKMatrix4MakePerspective(DEFAULT_FOV * (360 / M_PI * 2), aspect, DEFAULT_NEARPLANE, DEFAULT_FARPLANE)];
+    
+    maze = [[MazeWrapper alloc] init];
+    
     [self setupGL];
 }
 
@@ -115,7 +128,6 @@ GLint uniforms[NUM_UNIFORMS];
     _rotatorCube.rotation = GLKVector3Make(0, 0, 0);
     _rotatorCube.scale = GLKVector3Make(1, 1, 1);
     _rotatorCube.position = GLKVector3Make(0, 0, 0);
-    _isRotatingContinuous = FALSE;
 }
 
 - (void)setupGL
@@ -129,10 +141,28 @@ GLint uniforms[NUM_UNIFORMS];
     _rotatorCube = [[Cube alloc] init];
     _rotatorCube.position = GLKVector3Make(0, 0, 0);
     _rotatorCube.rotation = GLKVector3Make(0, 0, 0);
-    _rotatorCube.scale = GLKVector3Make(1, 1, 1);
+    _rotatorCube.scale = GLKVector3Make(0.3f, 0.3f, 0.3f);
     
     // Create the cube view with its cube
-    _cubeView = [[CubeView alloc] initWithCube: _rotatorCube];
+    _cubeView = [[CubeView alloc] initWithCube: _rotatorCube andTexture:[GLProgramUtils setupTexture:[[NSBundle mainBundle] pathForResource:@"crate" ofType:@"jpg"]]];
+    
+    GLuint floorTexture = [GLProgramUtils setupTexture:[[NSBundle mainBundle] pathForResource:@"floor" ofType:@"jpg"]];
+    _walls = [[NSMutableArray alloc] init];
+    // Create the walls and floor
+    for(int row = 0; row < maze.numRows; row++)
+    {
+        for(int col = 0; col < maze.numCols; col++)
+        {
+            // Create the floor for this tile
+            Plane* floorPlane = [[Plane alloc] initWithPosition: GLKVector3Make(col * MAZE_CELL_WIDTH, -1, row * MAZE_CELL_WIDTH) andScale:1 andPlaneType:FLOOR];
+            PlaneView* floorView = [[PlaneView alloc] initWithPlane:floorPlane andTexture:floorTexture];
+            [_walls addObject:floorView];
+            
+            // Determine the walls and add them
+        }
+    }
+    
+    glActiveTexture(GL_TEXTURE0);
     
 }
 
@@ -154,14 +184,13 @@ GLint uniforms[NUM_UNIFORMS];
 #pragma mark - GLKView and GLKViewController delegate methods
 
 - (void)update
-{
-    // Recalculate the projection matrix based on the screen's current aspect ratio and move the world 4 units along with x-axis
-    float aspect = fabsf(self.view.bounds.size.width / self.view.bounds.size.height);
-    GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspect, 0.1f, 100.0f);
-    GLKMatrix4 baseModelViewMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, -4.0f);
-    
+{   
+    [_camera updateMatricesWithScreenWidth:self.view.bounds.size.width andScreenHeight:self.view.bounds.size.height andFieldOfView:DEFAULT_FOV];
+
     [self clampCube];
-    [_cubeView updateMatricesWithProjection: &projectionMatrix andCameraBase: &baseModelViewMatrix];
+    
+    [_cubeView updateMatricesWithView: _camera.view];
+    for(PlaneView* planeView in _walls) [planeView updateMatricesWithView: _camera.view];
 }
 
 - (void)clampCube {
@@ -189,12 +218,35 @@ GLint uniforms[NUM_UNIFORMS];
     // Use the program we compiled earlier
     glUseProgram(_program);
     
+    [self drawCube];
+    [self drawMaze];
+}
+
+-(void)drawCube
+{
     glBindVertexArrayOES(_cubeView.vertexArray);
-    
-    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _cubeView.modelViewProjectionMatrix.m);
+    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, GLKMatrix4Multiply(_camera.projection, _cubeView.modelViewMatrix).m);
     glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, _cubeView.normalMatrix.m);
     
+    glBindTexture(GL_TEXTURE_2D, _cubeView.texture);
+    glUniform1i(uniforms[UNIFORM_TEXTURE], 0);
+    
     glDrawArrays(GL_TRIANGLES, 0, 36);
+}
+
+-(void)drawMaze
+{
+    for(PlaneView* planeView in _walls)
+    {
+        glBindVertexArrayOES(planeView.vertexArray);
+        glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, GLKMatrix4Multiply(_camera.projection, planeView.modelViewMatrix).m);
+        glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, planeView.normalMatrix.m);
+        
+        glBindTexture(GL_TEXTURE_2D, planeView.texture);
+        glUniform1i(uniforms[UNIFORM_TEXTURE], 0);
+        
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+    }
 }
 
 #pragma mark -  OpenGL ES 2 shader compilation
@@ -207,7 +259,8 @@ GLint uniforms[NUM_UNIFORMS];
     // Specify the mapping of the shader variables to their respective attribute indices
     ShaderAttribute shaderAttrs[] = {
         {GLKVertexAttribPosition, "position"},
-        {GLKVertexAttribNormal, "normal"}
+        {GLKVertexAttribNormal, "normal"},
+        {GLKVertexAttribTexCoord0, "texCoordIn"}
     };
     
     // Try to create the program
@@ -216,6 +269,9 @@ GLint uniforms[NUM_UNIFORMS];
     }
     uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX] = glGetUniformLocation(_program, "modelViewProjectionMatrix");
     uniforms[UNIFORM_NORMAL_MATRIX] = glGetUniformLocation(_program, "normalMatrix");
+    uniforms[UNIFORM_TEXTURE] = glGetUniformLocation(_program, "texture");
+    
+    glActiveTexture(GL_TEXTURE0);
     return YES;
 }
 

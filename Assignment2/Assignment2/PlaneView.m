@@ -1,30 +1,23 @@
 //
-//  CubeView.m
-//  Assignment1
+//  PlaneView.m
+//  Assignment2
 //
-//  Created by Shane Spoor on 2015-02-11.
+//  Created by Shane Spoor on 2015-03-02.
 //  Copyright (c) 2015 BCIT. All rights reserved.
 //
 
-#import "CubeView.h"
+#import "PlaneView.h"
 #import "GLProgramUtils.h"
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
-@interface CubeView()
+@implementation PlaneView
 
-@property (strong, nonatomic) Cube* cube;
-
-@end
-
-@implementation CubeView
-
-- (instancetype)initWithCube: (Cube*) cube andTexture:(GLuint)texture
+-(instancetype) initWithPlane: (Plane*) plane andTexture: (GLuint)texture
 {
-    
-    self = [super init];
-    
-    if(self) {
+    if((self = [super init]))
+    {
+        _plane = plane;
         
         // Create a vertex array, which will specify the format of the vertices in the vertex buffer, and tell OpenGL to use it as the current vertex array
         glGenVertexArraysOES(1, &_vertexArray);
@@ -33,7 +26,7 @@
         // Create a buffer, tell OpenGL to set it as the active buffer (with glBindBuffer), and set the buffer's data to the cube's vertices
         glGenBuffers(1, &_vertexBuffer);
         glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-        glBufferData(GL_ARRAY_BUFFER, cube.vertexArraySize, cube.vertexData, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, plane.verticesSize, plane.vertices, GL_STATIC_DRAW);
         
         // Tell OpenGL to set the format for the vertex buffer in the vertex array
         glEnableVertexAttribArray(GLKVertexAttribPosition);
@@ -45,7 +38,6 @@
         
         // Break the bindings (not strictly necessary since this would be done automatically on drawing next)
         glBindVertexArrayOES(0);
-        _cube = cube;
         
         _texture = texture;
     }
@@ -55,20 +47,12 @@
 
 -(void) updateMatricesWithView: (GLKMatrix4)view {
     
-    // Perform model rotation & scaling
-    _modelMatrix = GLKMatrix4MakeTranslation(_cube.position.x, _cube.position.y, _cube.position.z);
-    _modelMatrix = GLKMatrix4Rotate(_modelMatrix, _cube.rotation.x, 1.0f, 0.0f, 0.0f);
-    _modelMatrix = GLKMatrix4Rotate(_modelMatrix, _cube.rotation.y, 0.0f, 1.0f, 0.0f);
-    _modelMatrix = GLKMatrix4Multiply(_modelMatrix, GLKMatrix4MakeScale(_cube.scale.x, _cube.scale.y, _cube.scale.z));
+    // Perform model translation & scaling
+    _modelMatrix = GLKMatrix4Multiply(_modelMatrix, GLKMatrix4MakeScale(_plane.scale, _plane.scale, _plane.scale));
+    _modelMatrix = GLKMatrix4MakeTranslation(_plane.position.x, _plane.position.y, _plane.position.z);
     
     _modelViewMatrix = GLKMatrix4Multiply(view, _modelMatrix);
     
     _normalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(_modelViewMatrix), NULL);
-}
-
-
--(void) destroy {
-    glDeleteBuffers(1, &_vertexBuffer);
-    glDeleteVertexArraysOES(1, &_vertexArray);
 }
 @end
