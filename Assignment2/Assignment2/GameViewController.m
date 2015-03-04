@@ -33,6 +33,15 @@ enum
 };
 GLint uniforms[NUM_UNIFORMS];
 
+// The wall textures for planes
+enum
+{
+    NO_WALLS = 0,
+    RIGHT_WALL,
+    LEFT_WALL,
+    BOTH_WALLS
+};
+
 @interface GameViewController () {
     GLuint _program;
     
@@ -94,7 +103,7 @@ GLint uniforms[NUM_UNIFORMS];
     
     
     float aspect = (float)self.view.bounds.size.width / self.view.bounds.size.height;
-    _camera = [[Camera alloc] initWithPosition:GLKVector3Make(0, 0, 0.0f)  andRotation:0
+    _camera = [[Camera alloc] initWithPosition:GLKVector3Make(0, 0, 0.0f)  andRotation:M_PI
                            andProjectionMatrix:GLKMatrix4MakePerspective(DEFAULT_FOV * (360 / M_PI * 2), aspect, DEFAULT_NEARPLANE, DEFAULT_FARPLANE)];
     
     maze = [[MazeWrapper alloc] init];
@@ -176,10 +185,13 @@ GLint uniforms[NUM_UNIFORMS];
 -(void) setupMaze
 {
     GLuint floorTexture = [GLProgramUtils setupTexture:@"floor.jpg"];
-    GLuint noWallsTexture = [GLProgramUtils setupTexture:@"no_walls.jpg"];
-    GLuint leftWallTexture = [GLProgramUtils setupTexture:@"left_wall.jpg"];
-    GLuint rightWallTexture = [GLProgramUtils setupTexture:@"right_wall.jpg"];
-    GLuint bothWallsTexture = [GLProgramUtils setupTexture:@"both_walls.jpg"];
+    
+    GLuint textures[] = {
+        [GLProgramUtils setupTexture:@"no_walls.jpg"],
+        [GLProgramUtils setupTexture:@"left_wall.jpg"],
+        [GLProgramUtils setupTexture:@"right_wall.jpg"],
+        [GLProgramUtils setupTexture:@"both_walls.jpg"],
+    };
     
     _walls = [[NSMutableArray alloc] init];
     MazeCell cell;
@@ -190,109 +202,68 @@ GLint uniforms[NUM_UNIFORMS];
         for(int col = 0; col < maze.numCols; col++)
         {
             // Create the floor for this tile
-            Plane* floorPlane = [[Plane alloc] initWithPosition: GLKVector3Make(col * MAZE_CELL_WIDTH, -1, -row * MAZE_CELL_WIDTH) andScale:1 andPlaneType:FLOOR];
+            Plane* floorPlane = [[Plane alloc] initWithPosition: GLKVector3Make(col * MAZE_CELL_WIDTH, -1, row * MAZE_CELL_WIDTH) andScale:1 andPlaneType:FLOOR];
             PlaneView* floorView = [[PlaneView alloc] initWithPlane:floorPlane andTexture:floorTexture];
             [_walls addObject:floorView];
             
             // Determine the walls and add them
             [maze getCellAtRow:row andCol:col storeIn:&cell];
             
-            if(cell.northWallPresent)
-            {
-                PlaneType wallType = NORTH_WALL;
-                const GLKVector3* ref = &(planePositions[wallType]);
-                Plane* northPlane = [[Plane alloc] initWithPosition: GLKVector3Make(col * MAZE_CELL_WIDTH + ref->x, 0, -row * MAZE_CELL_WIDTH + ref->z) andScale:1 andPlaneType:wallType];
-                
-                GLuint texture;
-                if(cell.eastWallPresent && cell.westWallPresent) texture = bothWallsTexture;
-                else if(cell.eastWallPresent) texture = rightWallTexture;
-                else if(cell.westWallPresent) texture = leftWallTexture;
-                else texture = noWallsTexture;
-                
-                PlaneView* northView = [[PlaneView alloc] initWithPlane: northPlane andTexture:texture];
-                [_walls addObject: northView];
-            }
-            /*if(cell.southWallPresent)
-            {
-                PlaneType wallType = SOUTH_WALL;
-                const GLKVector3* ref = &(planePositions[wallType]);
-                Plane* southPlane = [[Plane alloc] initWithPosition: GLKVector3Make(col * MAZE_CELL_WIDTH + ref->x, 0, -row * MAZE_CELL_WIDTH + ref->z) andScale:1 andPlaneType:wallType];
-                
-                GLuint texture;
-                if(cell.eastWallPresent && cell.westWallPresent) texture = bothWallsTexture;
-                else if(cell.eastWallPresent) texture = rightWallTexture;
-                else if(cell.westWallPresent) texture = leftWallTexture;
-                else texture = noWallsTexture;
-                
-                PlaneView* southView = [[PlaneView alloc] initWithPlane: southPlane andTexture:texture];
-                [_walls addObject: southView];
-            }
-            if(cell.westWallPresent)
-            {
-                PlaneType wallType = WEST_WALL;
-                const GLKVector3* ref = &(planePositions[wallType]);
-                Plane* westPlane = [[Plane alloc] initWithPosition: GLKVector3Make(col * MAZE_CELL_WIDTH + ref->x, 0, -row * MAZE_CELL_WIDTH + ref->z) andScale:1 andPlaneType:wallType];
-                
-                GLuint texture;
-                if(cell.eastWallPresent && cell.westWallPresent) texture = bothWallsTexture;
-                else if(cell.eastWallPresent) texture = rightWallTexture;
-                else if(cell.westWallPresent) texture = leftWallTexture;
-                else texture = noWallsTexture;
-                
-                PlaneView* westView = [[PlaneView alloc] initWithPlane: westPlane andTexture:texture];
-                [_walls addObject: westView];
-            }
-            if(cell.eastWallPresent)
-            {
-                PlaneType wallType = EAST_WALL;
-                const GLKVector3* ref = &(planePositions[wallType]);
-                Plane* eastPlane = [[Plane alloc] initWithPosition: GLKVector3Make(col * MAZE_CELL_WIDTH + ref->x, 0, -row * MAZE_CELL_WIDTH + ref->z) andScale:1 andPlaneType:wallType];
-                
-                GLuint texture;
-                if(cell.eastWallPresent && cell.westWallPresent) texture = bothWallsTexture;
-                else if(cell.eastWallPresent) texture = rightWallTexture;
-                else if(cell.westWallPresent) texture = leftWallTexture;
-                else texture = noWallsTexture;
-                
-                PlaneView* eastView = [[PlaneView alloc] initWithPlane: eastPlane andTexture:texture];
-                [_walls addObject: eastView];
-            }*/
+            if(cell.northWallPresent) [self makeMazeCell:&cell andPlaneType:NORTH_WALL andCol:col andRow:row andTextures:textures];
+            if(cell.southWallPresent) [self makeMazeCell:&cell andPlaneType:SOUTH_WALL andCol:col andRow:row andTextures:textures];
+            if(cell.westWallPresent) [self makeMazeCell:&cell andPlaneType:WEST_WALL andCol:col andRow:row andTextures:textures];
+            if(cell.eastWallPresent) [self makeMazeCell:&cell andPlaneType:EAST_WALL andCol:col andRow:row andTextures:textures];
+
         }
     }
 }
 
--(GLuint)textureForCell: (MazeCell*) cell withDirection: (Direction)dir bothWalls: (GLuint)both rightWall: (GLuint)right leftWall: (GLuint)left noWalls: (GLuint)none
+-(void)makeMazeCell: (MazeCell*) cell andPlaneType: (PlaneType)wallType andCol: (int)col andRow: (int)row andTextures: (GLuint*)textures
 {
-    switch(dir)
+    const GLKVector3* ref = &(planePositions[wallType]);
+    Plane* eastPlane = [[Plane alloc] initWithPosition: GLKVector3Make(col * MAZE_CELL_WIDTH + ref->x, 0, row * MAZE_CELL_WIDTH + ref->z) andScale:1 andPlaneType:wallType];
+    
+    GLuint texture = [self textureForCell:cell withPlaneType:wallType andTextureList:textures];
+    
+    PlaneView* eastView = [[PlaneView alloc] initWithPlane: eastPlane andTexture:texture];
+    [_walls addObject: eastView];
+}
+
+-(GLuint)textureForCell: (MazeCell*) cell withPlaneType: (PlaneType)planeType andTextureList: (GLuint *)textures;
+{
+    switch(planeType)
     {
-        case dirNORTH:
+        case NORTH_WALL:
         {
-            if(cell->eastWallPresent && cell->westWallPresent) return both;
-            else if(cell->westWallPresent) return right;
-            else if(cell->eastWallPresent) return left;
-            else return none;
+            if(cell->eastWallPresent && cell->westWallPresent) return textures[BOTH_WALLS];
+            else if(cell->westWallPresent) return textures[RIGHT_WALL];
+            else if(cell->eastWallPresent) return textures[LEFT_WALL];
+            else return textures[NO_WALLS];
         }
-        case dirSOUTH:
+        case SOUTH_WALL:
         {
-            if(cell->eastWallPresent && cell->westWallPresent) return both;
-            else if(cell->eastWallPresent) return right;
-            else if(cell->westWallPresent) return left;
-            else return none;
+            if(cell->eastWallPresent && cell->westWallPresent) return textures[BOTH_WALLS];
+            else if(cell->eastWallPresent) return textures[RIGHT_WALL];
+            else if(cell->westWallPresent) return textures[LEFT_WALL];
+            else return textures[NO_WALLS];
         }
-        case dirWEST:
+        case WEST_WALL:
         {
-            if(cell->northWallPresent && cell->southWallPresent) return both;
-            else if(cell->southWallPresent) return right;
-            else if(cell->northWallPresent) return left;
-            else return none;
+            if(cell->northWallPresent && cell->southWallPresent) return textures[BOTH_WALLS];
+            else if(cell->southWallPresent) return textures[RIGHT_WALL];
+            else if(cell->northWallPresent) return textures[LEFT_WALL];
+            else return textures[NO_WALLS];
         }
-        case dirEAST:
+        case EAST_WALL:
         {
-            if(cell->northWallPresent && cell->southWallPresent) return both;
-            else if(cell->northWallPresent) return right;
-            else if(cell->southWallPresent) return left;
-            else return none;
+            if(cell->northWallPresent && cell->southWallPresent) return textures[BOTH_WALLS];
+            else if(cell->northWallPresent) return textures[RIGHT_WALL];
+            else if(cell->southWallPresent) return textures[LEFT_WALL];
+            else return textures[NO_WALLS];
         }
+        case FLOOR:
+            NSLog(@"textureForCell: should not have received 'FLOOR' enum");
+            return 0;
     }
 }
 
