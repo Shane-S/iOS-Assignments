@@ -18,13 +18,7 @@
 #define __MAZE_H__
 
 #include "DisjointSet.h"
-
-struct MazeCell
-{
-	bool northWallPresent, southWallPresent, eastWallPresent, westWallPresent;
-};
-
-typedef enum { dirNORTH=0, dirEAST, dirSOUTH, dirWEST } Direction;
+#include "MazeCell.h"
 
 class Maze
 {

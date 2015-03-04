@@ -58,18 +58,18 @@ static GLfloat _actualCubeVertices[] = {
 @implementation Cube
 
 -(instancetype)init {
-    return [self initWithScale: GLKVector3Make(1, 1, 1) Rotation: GLKVector3Make(0, 0, 0) andPosition: GLKVector3Make(0, 0, 0)];
+    return [self initWithScale: GLKVector3Make(1, 1, 1) andRotation: GLKVector3Make(0, 0, 0) andPosition: GLKVector3Make(0, 0, 0)];
 }
 
 -(instancetype)initWithPosition:(GLKVector3)pos {
-    return [self initWithScale: GLKVector3Make(1, 1, 1) Rotation: GLKVector3Make(0, 0, 0) andPosition: pos];
+    return [self initWithScale: GLKVector3Make(1, 1, 1) andRotation: GLKVector3Make(0, 0, 0) andPosition: pos];
 }
 
 -(instancetype) initWithRotation: (GLKVector3)rot andPosition: (GLKVector3)pos {
-    return [self initWithScale: GLKVector3Make(1, 1, 1) Rotation: rot andPosition: pos];
+    return [self initWithScale: GLKVector3Make(1, 1, 1) andRotation: rot andPosition: pos];
 }
 
--(instancetype)initWithScale:(GLKVector3)scl Rotation: (GLKVector3)rot andPosition: (GLKVector3)pos{
+-(instancetype)initWithScale:(GLKVector3)scl andRotation: (GLKVector3)rot andPosition: (GLKVector3)pos{
     self = [super init];
     
     if(self) {

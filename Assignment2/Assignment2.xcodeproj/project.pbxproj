@@ -83,6 +83,7 @@
 		70C9F6161AA2FE9500FFE49B /* maze.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = maze.h; sourceTree = "<group>"; };
 		70C9F6181AA3006600FFE49B /* MazeWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MazeWrapper.mm; sourceTree = "<group>"; };
 		70C9F61A1AA3012700FFE49B /* MazeWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MazeWrapper.h; sourceTree = "<group>"; };
+		70DCE80B1AA690B000B21BF9 /* MazeCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MazeCell.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -210,6 +211,7 @@
 				70C9F61A1AA3012700FFE49B /* MazeWrapper.h */,
 				7078F7F21AA52DFC006BB1A7 /* Plane.h */,
 				7078F7F31AA52DFC006BB1A7 /* Plane.m */,
+				70DCE80B1AA690B000B21BF9 /* MazeCell.h */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -480,6 +482,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Assignment2/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -490,6 +493,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Assignment2/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

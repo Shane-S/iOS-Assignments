@@ -12,6 +12,17 @@ static const float _planeVertices[5][FLOATS_PER_FACE] =
 {
     // North wall
     {
+        // positionX, positionY, positionZ,  normalX, normalY, normalZ, u, v
+        0.5f,      0.5f,      0.5f,          0.0f,     0.0f,   1.0f,    1, 1,
+       -0.5f,      0.5f,      0.5f,          0.0f,     0.0f,   1.0f,    0, 1,
+        0.5f,     -0.5f,      0.5f,          0.0f,     0.0f,   1.0f,    1, 0,
+        0.5f,     -0.5f,      0.5f,          0.0f,     0.0f,   1.0f,    1, 0,
+       -0.5f,      0.5f,      0.5f,          0.0f,     0.0f,   1.0f,    0, 1,
+       -0.5f,     -0.5f,      0.5f,          0.0f,     0.0f,   1.0f,    0, 0,
+    },
+    
+    // South wall
+    {
      // positionX, positionY, positionZ,     normalX, normalY, normalZ, u, v
         0.5f,     -0.5f,     -0.5f,          0.0f,     0.0f,  -1.0f,    0, 0,
        -0.5f,     -0.5f,     -0.5f,          0.0f,     0.0f,  -1.0f,    1, 0,
@@ -21,29 +32,7 @@ static const float _planeVertices[5][FLOATS_PER_FACE] =
        -0.5f,      0.5f,     -0.5f,          0.0f,     0.0f,  -1.0f,    1, 1
     },
     
-    // South wall
-    {
-     // positionX, positionY, positionZ,     normalX, normalY, normalZ, u, v
-        0.5f,      0.5f,      0.5f,          0.0f,     0.0f,   1.0f,    1, 1,
-       -0.5f,      0.5f,      0.5f,          0.0f,     0.0f,   1.0f,    0, 1,
-        0.5f,     -0.5f,      0.5f,          0.0f,     0.0f,   1.0f,    1, 0,
-        0.5f,     -0.5f,      0.5f,          0.0f,     0.0f,   1.0f,    1, 0,
-       -0.5f,      0.5f,      0.5f,          0.0f,     0.0f,   1.0f,    0, 1,
-       -0.5f,     -0.5f,      0.5f,          0.0f,     0.0f,   1.0f,    0, 0,
-    },
-    
     // West wall
-    {
-      // positionX, positionY, positionZ,    normalX, normalY, normalZ, u, v
-        -0.5f,      0.5f,     -0.5f,        -1.0f,    0.0f,    0.0f,    0, 1,
-        -0.5f,     -0.5f,     -0.5f,        -1.0f,    0.0f,    0.0f,    0, 0,
-        -0.5f,      0.5f,      0.5f,        -1.0f,    0.0f,    0.0f,    1, 1,
-        -0.5f,      0.5f,      0.5f,        -1.0f,    0.0f,    0.0f,    1, 1,
-        -0.5f,     -0.5f,     -0.5f,        -1.0f,    0.0f,    0.0f,    0, 0,
-        -0.5f,     -0.5f,      0.5f,        -1.0f,    0.0f,    0.0f,    1, 0,
-    },
-    
-    // East wall
     {
      // positionX, positionY, positionZ,     normalX, normalY, normalZ, u, v
         0.5f,     -0.5f,     -0.5f,          1.0f,    0.0f,    0.0f,    1, 0,
@@ -52,6 +41,17 @@ static const float _planeVertices[5][FLOATS_PER_FACE] =
         0.5f,     -0.5f,      0.5f,          1.0f,    0.0f,    0.0f,    0, 0,
         0.5f,      0.5f,     -0.5f,          1.0f,    0.0f,    0.0f,    1, 1,
         0.5f,      0.5f,      0.5f,          1.0f,    0.0f,    0.0f,    0, 1,
+    },
+    
+    // East wall
+    {
+      // positionX, positionY, positionZ,    normalX, normalY, normalZ, u, v
+        -0.5f,      0.5f,     -0.5f,        -1.0f,    0.0f,    0.0f,    0, 1,
+        -0.5f,     -0.5f,     -0.5f,        -1.0f,    0.0f,    0.0f,    0, 0,
+        -0.5f,      0.5f,      0.5f,        -1.0f,    0.0f,    0.0f,    1, 1,
+        -0.5f,      0.5f,      0.5f,        -1.0f,    0.0f,    0.0f,    1, 1,
+        -0.5f,     -0.5f,     -0.5f,        -1.0f,    0.0f,    0.0f,    0, 0,
+        -0.5f,     -0.5f,      0.5f,        -1.0f,    0.0f,    0.0f,    1, 0,
     },
     
     // Floor
@@ -64,6 +64,16 @@ static const float _planeVertices[5][FLOATS_PER_FACE] =
        -0.5f,      0.5f,     -0.5f,          0.0f,    1.0f,    0.0f,    0, 1,
        -0.5f,      0.5f,      0.5f,          0.0f,    1.0f,    0.0f,    0, 0,
     }
+};
+
+// The correct positioning in the cube to have the wall face inward from its side
+const GLKVector3 planePositions[5] =
+{
+    {0, 0, -1},
+    {0, 0, 1},
+    {-1, 0, 0},
+    {1, 0, 0},
+    {0, -1, 0}
 };
 
 @implementation Plane

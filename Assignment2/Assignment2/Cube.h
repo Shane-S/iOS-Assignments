@@ -35,7 +35,7 @@
 - (instancetype) initWithRotation: (GLKVector3)rot andPosition: (GLKVector3) rot;
 
 /// Make a cube at the specified location and with the specified rotation and scale.
-- (instancetype) initWithScale: (GLKVector3)scl Rotation: (GLKVector3)rot andPosition: (GLKVector3)pos;
+- (instancetype) initWithScale: (GLKVector3)scl andRotation: (GLKVector3)rot andPosition: (GLKVector3)pos;
 
 /// Returns a reference to the rotation property.
 - (GLKVector3 *)rotationRef;

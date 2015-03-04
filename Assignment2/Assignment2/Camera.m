@@ -14,14 +14,15 @@ const float DEFAULT_FARPLANE = 100.0f;
 
 @implementation Camera
 
--(instancetype)initWithPosition: (GLKVector3)position andLookAtPoint: (GLKVector3)lookAtPoint andProjectionMatrix: (GLKMatrix4)projection
+-(instancetype)initWithPosition: (GLKVector3)position andRotation: (float)rotation andProjectionMatrix: (GLKMatrix4)projection
 {
     if((self = [super init]))
     {
         _projection = projection;
         _position = position;
-        _lookAtPoint = lookAtPoint;
-        _view = GLKMatrix4MakeLookAt(position.x, position.y, position.z, lookAtPoint.x, lookAtPoint.y, lookAtPoint.z, 0, 1, 0);
+        _rotation = rotation;
+        _view = GLKMatrix4Rotate(GLKMatrix4Identity, rotation, 0, 1, 0);
+        _view = GLKMatrix4Translate(_view, position.x, position.y, position.z);
         _viewProjection = GLKMatrix4Multiply(projection, _view);
     }
     return self;
@@ -31,9 +32,22 @@ const float DEFAULT_FARPLANE = 100.0f;
 {
     float aspectRatio = (float)width / height;
     
-    _view = GLKMatrix4MakeLookAt(_position.x, _position.y, _position.z, _lookAtPoint.x, _lookAtPoint.y, _lookAtPoint.z, 0, 1, 0);
+    // Note: since we're translating the world about the camera, the transforms must all be negated
+    _view = GLKMatrix4RotateY(GLKMatrix4Identity, -_rotation);
+    _view = GLKMatrix4Translate(_view, -_position.x, -_position.y, -_position.z);
     
     _projection = GLKMatrix4MakePerspective(DEFAULT_FOV, aspectRatio, DEFAULT_NEARPLANE, DEFAULT_FARPLANE);
     _viewProjection = GLKMatrix4Multiply(_projection, _view);
+}
+
+-(GLKVector3)lookAtVector
+{
+    // Rotate the -z axis about y to match the camera's current direction and return the value
+    GLKVector3 direction;
+    GLKMatrix4 rot = GLKMatrix4MakeYRotation(_rotation);
+
+    direction = GLKMatrix4MultiplyVector3(rot, GLKVector3Make(0, 0, -1));
+    
+    return direction;
 }
 @end

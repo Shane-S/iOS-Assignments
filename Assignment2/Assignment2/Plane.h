@@ -21,6 +21,8 @@ typedef enum _PlaneType
     FLOOR,
 } PlaneType;
 
+extern const GLKVector3 planePositions[5];
+
 @interface Plane : NSObject
 
 @property (nonatomic) GLKVector3 position;

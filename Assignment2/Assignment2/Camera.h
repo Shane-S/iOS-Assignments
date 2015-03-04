@@ -14,7 +14,8 @@
 @property (nonatomic) GLKMatrix4 view;
 @property (nonatomic) GLKMatrix4 projection;
 @property (nonatomic) GLKVector3 position;
-@property (nonatomic) GLKVector3 lookAtPoint;
+@property (nonatomic) float rotation;
+@property (nonatomic, readonly) GLKVector3 lookAtVector;
 @property (nonatomic, readonly) GLKMatrix4 viewProjection;
 
 extern const float DEFAULT_FOV;
@@ -29,7 +30,7 @@ extern const float DEFAULT_FARPLANE;
  * @param projection  The projection matrix.
  * @return A Camera instance.
  */
--(instancetype)initWithPosition: (GLKVector3)position andLookAtPoint: (GLKVector3)lookAtPoint andProjectionMatrix: (GLKMatrix4)projection;
+-(instancetype)initWithPosition: (GLKVector3)position andRotation: (float)rotation andProjectionMatrix: (GLKMatrix4)projection;
 
 /**
  * @brief Updates the projection and viewProjection matrices.

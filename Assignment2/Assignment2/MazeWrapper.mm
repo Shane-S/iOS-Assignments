@@ -52,4 +52,8 @@ public:
     return mazeImpl->maze->cols;
 }
 
+-(void)getCellAtRow:(int)r andCol:(int)c storeIn:(MazeCell *)cell
+{
+    *cell = mazeImpl->maze->GetCell(r, c);
+}
 @end

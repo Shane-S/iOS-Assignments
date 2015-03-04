@@ -13,7 +13,15 @@
 #import "PlaneView.h"
 #import <OpenGLES/ES2/glext.h>
 
-const int REVOLUTIONS_PER_MINUTE = 30;
+/// The RPM of the spinning cube
+const int REVOLUTIONS_PER_MINUTE = 5;
+
+/// Specifies the amount by which the camera will rotate about the y-axis
+/// (i.e. by how much the Look At point will change) on scrolling one screen unit in the
+/// x-axis
+const float CAMERA_ROTATE_FACTOR = 0.01f;
+
+const float CAMERA_MOVE_FACTOR = 0.03f;
 
 // Uniform index.
 enum
@@ -86,7 +94,7 @@ GLint uniforms[NUM_UNIFORMS];
     
     
     float aspect = (float)self.view.bounds.size.width / self.view.bounds.size.height;
-    _camera = [[Camera alloc] initWithPosition:GLKVector3Make(0, 0, 4.0f)  andLookAtPoint:GLKVector3Make(0, 0, 0)
+    _camera = [[Camera alloc] initWithPosition:GLKVector3Make(0, 0, 0.0f)  andRotation:0
                            andProjectionMatrix:GLKMatrix4MakePerspective(DEFAULT_FOV * (360 / M_PI * 2), aspect, DEFAULT_NEARPLANE, DEFAULT_FARPLANE)];
     
     maze = [[MazeWrapper alloc] init];
@@ -124,6 +132,20 @@ GLint uniforms[NUM_UNIFORMS];
     return YES;
 }
 
+- (IBAction)onPan:(UIPanGestureRecognizer *)sender {
+    if(sender.state == UIGestureRecognizerStateBegan)
+    {
+        _dragStart = [sender locationInView:self.view];
+    }
+    CGPoint cur = [sender locationInView:self.view];
+    GLKVector2 d = GLKVector2Make(cur.x - _dragStart.x, _dragStart.y - cur.y);
+    _camera.rotation -= d.x * CAMERA_ROTATE_FACTOR;
+    
+    GLKVector3 movement = GLKVector3MultiplyScalar(_camera.lookAtVector, d.y * CAMERA_MOVE_FACTOR);
+    _camera.position = (GLKVector3Add(_camera.position, movement));
+    _dragStart = cur;
+}
+
 - (IBAction)resetScene:(id)sender {
     _rotatorCube.rotation = GLKVector3Make(0, 0, 0);
     _rotatorCube.scale = GLKVector3Make(1, 1, 1);
@@ -136,34 +158,142 @@ GLint uniforms[NUM_UNIFORMS];
     [self loadShaders];
     
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
     
     // Set the cube's properties
-    _rotatorCube = [[Cube alloc] init];
-    _rotatorCube.position = GLKVector3Make(0, 0, 0);
-    _rotatorCube.rotation = GLKVector3Make(0, 0, 0);
-    _rotatorCube.scale = GLKVector3Make(0.3f, 0.3f, 0.3f);
+    _rotatorCube = [[Cube alloc] initWithScale: GLKVector3Make(0.3f, 0.3f, 0.3f) andRotation: GLKVector3Make(0, 0, 0) andPosition: GLKVector3Make(0, 0, 0)];
     
     // Create the cube view with its cube
-    _cubeView = [[CubeView alloc] initWithCube: _rotatorCube andTexture:[GLProgramUtils setupTexture:[[NSBundle mainBundle] pathForResource:@"crate" ofType:@"jpg"]]];
+    _cubeView = [[CubeView alloc] initWithCube: _rotatorCube andTexture:[GLProgramUtils setupTexture:@"crate.jpg"]];
     
-    GLuint floorTexture = [GLProgramUtils setupTexture:[[NSBundle mainBundle] pathForResource:@"floor" ofType:@"jpg"]];
+    [self setupMaze];
+    
+    glActiveTexture(GL_TEXTURE0);
+    
+}
+
+-(void) setupMaze
+{
+    GLuint floorTexture = [GLProgramUtils setupTexture:@"floor.jpg"];
+    GLuint noWallsTexture = [GLProgramUtils setupTexture:@"no_walls.jpg"];
+    GLuint leftWallTexture = [GLProgramUtils setupTexture:@"left_wall.jpg"];
+    GLuint rightWallTexture = [GLProgramUtils setupTexture:@"right_wall.jpg"];
+    GLuint bothWallsTexture = [GLProgramUtils setupTexture:@"both_walls.jpg"];
+    
     _walls = [[NSMutableArray alloc] init];
+    MazeCell cell;
+    
     // Create the walls and floor
     for(int row = 0; row < maze.numRows; row++)
     {
         for(int col = 0; col < maze.numCols; col++)
         {
             // Create the floor for this tile
-            Plane* floorPlane = [[Plane alloc] initWithPosition: GLKVector3Make(col * MAZE_CELL_WIDTH, -1, row * MAZE_CELL_WIDTH) andScale:1 andPlaneType:FLOOR];
+            Plane* floorPlane = [[Plane alloc] initWithPosition: GLKVector3Make(col * MAZE_CELL_WIDTH, -1, -row * MAZE_CELL_WIDTH) andScale:1 andPlaneType:FLOOR];
             PlaneView* floorView = [[PlaneView alloc] initWithPlane:floorPlane andTexture:floorTexture];
             [_walls addObject:floorView];
             
             // Determine the walls and add them
+            [maze getCellAtRow:row andCol:col storeIn:&cell];
+            
+            if(cell.northWallPresent)
+            {
+                PlaneType wallType = NORTH_WALL;
+                const GLKVector3* ref = &(planePositions[wallType]);
+                Plane* northPlane = [[Plane alloc] initWithPosition: GLKVector3Make(col * MAZE_CELL_WIDTH + ref->x, 0, -row * MAZE_CELL_WIDTH + ref->z) andScale:1 andPlaneType:wallType];
+                
+                GLuint texture;
+                if(cell.eastWallPresent && cell.westWallPresent) texture = bothWallsTexture;
+                else if(cell.eastWallPresent) texture = rightWallTexture;
+                else if(cell.westWallPresent) texture = leftWallTexture;
+                else texture = noWallsTexture;
+                
+                PlaneView* northView = [[PlaneView alloc] initWithPlane: northPlane andTexture:texture];
+                [_walls addObject: northView];
+            }
+            /*if(cell.southWallPresent)
+            {
+                PlaneType wallType = SOUTH_WALL;
+                const GLKVector3* ref = &(planePositions[wallType]);
+                Plane* southPlane = [[Plane alloc] initWithPosition: GLKVector3Make(col * MAZE_CELL_WIDTH + ref->x, 0, -row * MAZE_CELL_WIDTH + ref->z) andScale:1 andPlaneType:wallType];
+                
+                GLuint texture;
+                if(cell.eastWallPresent && cell.westWallPresent) texture = bothWallsTexture;
+                else if(cell.eastWallPresent) texture = rightWallTexture;
+                else if(cell.westWallPresent) texture = leftWallTexture;
+                else texture = noWallsTexture;
+                
+                PlaneView* southView = [[PlaneView alloc] initWithPlane: southPlane andTexture:texture];
+                [_walls addObject: southView];
+            }
+            if(cell.westWallPresent)
+            {
+                PlaneType wallType = WEST_WALL;
+                const GLKVector3* ref = &(planePositions[wallType]);
+                Plane* westPlane = [[Plane alloc] initWithPosition: GLKVector3Make(col * MAZE_CELL_WIDTH + ref->x, 0, -row * MAZE_CELL_WIDTH + ref->z) andScale:1 andPlaneType:wallType];
+                
+                GLuint texture;
+                if(cell.eastWallPresent && cell.westWallPresent) texture = bothWallsTexture;
+                else if(cell.eastWallPresent) texture = rightWallTexture;
+                else if(cell.westWallPresent) texture = leftWallTexture;
+                else texture = noWallsTexture;
+                
+                PlaneView* westView = [[PlaneView alloc] initWithPlane: westPlane andTexture:texture];
+                [_walls addObject: westView];
+            }
+            if(cell.eastWallPresent)
+            {
+                PlaneType wallType = EAST_WALL;
+                const GLKVector3* ref = &(planePositions[wallType]);
+                Plane* eastPlane = [[Plane alloc] initWithPosition: GLKVector3Make(col * MAZE_CELL_WIDTH + ref->x, 0, -row * MAZE_CELL_WIDTH + ref->z) andScale:1 andPlaneType:wallType];
+                
+                GLuint texture;
+                if(cell.eastWallPresent && cell.westWallPresent) texture = bothWallsTexture;
+                else if(cell.eastWallPresent) texture = rightWallTexture;
+                else if(cell.westWallPresent) texture = leftWallTexture;
+                else texture = noWallsTexture;
+                
+                PlaneView* eastView = [[PlaneView alloc] initWithPlane: eastPlane andTexture:texture];
+                [_walls addObject: eastView];
+            }*/
         }
     }
-    
-    glActiveTexture(GL_TEXTURE0);
-    
+}
+
+-(GLuint)textureForCell: (MazeCell*) cell withDirection: (Direction)dir bothWalls: (GLuint)both rightWall: (GLuint)right leftWall: (GLuint)left noWalls: (GLuint)none
+{
+    switch(dir)
+    {
+        case dirNORTH:
+        {
+            if(cell->eastWallPresent && cell->westWallPresent) return both;
+            else if(cell->westWallPresent) return right;
+            else if(cell->eastWallPresent) return left;
+            else return none;
+        }
+        case dirSOUTH:
+        {
+            if(cell->eastWallPresent && cell->westWallPresent) return both;
+            else if(cell->eastWallPresent) return right;
+            else if(cell->westWallPresent) return left;
+            else return none;
+        }
+        case dirWEST:
+        {
+            if(cell->northWallPresent && cell->southWallPresent) return both;
+            else if(cell->southWallPresent) return right;
+            else if(cell->northWallPresent) return left;
+            else return none;
+        }
+        case dirEAST:
+        {
+            if(cell->northWallPresent && cell->southWallPresent) return both;
+            else if(cell->northWallPresent) return right;
+            else if(cell->southWallPresent) return left;
+            else return none;
+        }
+    }
 }
 
 - (void)tearDownGL
@@ -187,6 +317,7 @@ GLint uniforms[NUM_UNIFORMS];
 {   
     [_camera updateMatricesWithScreenWidth:self.view.bounds.size.width andScreenHeight:self.view.bounds.size.height andFieldOfView:DEFAULT_FOV];
 
+    [self updateContinuousRotation];
     [self clampCube];
     
     [_cubeView updateMatricesWithView: _camera.view];
@@ -203,8 +334,10 @@ GLint uniforms[NUM_UNIFORMS];
 
 - (void)updateContinuousRotation {
     NSTimeInterval currentTime = [NSDate timeIntervalSinceReferenceDate];
+    if(!_prevRotationTime) _prevRotationTime = [NSDate timeIntervalSinceReferenceDate];
     double timeDelta = currentTime - _prevRotationTime;
     double angleDelta = timeDelta * REVOLUTIONS_PER_MINUTE / 60 * 2 * M_PI; // s * rev/min * min/60s * 2PI/rev
+    
     [_rotatorCube rotationRef]->y += angleDelta;
     _prevRotationTime = currentTime;
 }

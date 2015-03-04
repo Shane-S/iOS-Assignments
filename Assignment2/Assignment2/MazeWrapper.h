@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Plane.h"
+#include "MazeCell.h"
 
 extern const float MAZE_CELL_WIDTH;
 
@@ -22,5 +24,5 @@ typedef struct MazeImpl MazeImpl;
 
 -(instancetype) initWithRows: (int)rows andCols: (int)cols;
 
-
+-(void) getCellAtRow: (int)r andCol: (int)c storeIn: (MazeCell*)cell;
 @end
