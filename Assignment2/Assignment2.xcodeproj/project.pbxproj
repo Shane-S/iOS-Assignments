@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		700BC2BF1AA830B500D7C575 /* FogView.m in Sources */ = {isa = PBXBuildFile; fileRef = 700BC2BE1AA830B500D7C575 /* FogView.m */; };
 		703E397D1AA02AA3006C2477 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 703E397C1AA02AA3006C2477 /* main.m */; };
 		703E39801AA02AA3006C2477 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 703E397F1AA02AA3006C2477 /* AppDelegate.m */; };
 		703E39821AA02AA3006C2477 /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 703E39811AA02AA3006C2477 /* Shader.fsh */; };
@@ -44,6 +45,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		700BC2BA1AA82F8800D7C575 /* Fog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fog.h; sourceTree = "<group>"; };
+		700BC2BD1AA830B500D7C575 /* FogView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FogView.h; sourceTree = "<group>"; };
+		700BC2BE1AA830B500D7C575 /* FogView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FogView.m; sourceTree = "<group>"; };
+		700BC2C01AA832A500D7C575 /* Uniforms.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Uniforms.h; sourceTree = "<group>"; };
 		703E39771AA02AA3006C2477 /* Assignment2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Assignment2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		703E397B1AA02AA3006C2477 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		703E397C1AA02AA3006C2477 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -192,6 +197,7 @@
 			children = (
 				703E39811AA02AA3006C2477 /* Shader.fsh */,
 				703E39831AA02AA3006C2477 /* Shader.vsh */,
+				700BC2C01AA832A500D7C575 /* Uniforms.h */,
 			);
 			name = Shaders;
 			sourceTree = "<group>";
@@ -212,6 +218,7 @@
 				7078F7F21AA52DFC006BB1A7 /* Plane.h */,
 				7078F7F31AA52DFC006BB1A7 /* Plane.m */,
 				70DCE80B1AA690B000B21BF9 /* MazeCell.h */,
+				700BC2BA1AA82F8800D7C575 /* Fog.h */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -234,6 +241,8 @@
 				703E39A71AA03F5B006C2477 /* CubeView.m */,
 				7078F7F51AA5438F006BB1A7 /* PlaneView.h */,
 				7078F7F61AA5438F006BB1A7 /* PlaneView.m */,
+				700BC2BD1AA830B500D7C575 /* FogView.h */,
+				700BC2BE1AA830B500D7C575 /* FogView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -356,6 +365,7 @@
 				703E39AF1AA03F5B006C2477 /* GLProgramUtils.m in Sources */,
 				70C9F6141AA2D78E00FFE49B /* Camera.m in Sources */,
 				703E39801AA02AA3006C2477 /* AppDelegate.m in Sources */,
+				700BC2BF1AA830B500D7C575 /* FogView.m in Sources */,
 				703E39871AA02AA3006C2477 /* GameViewController.m in Sources */,
 				703E397D1AA02AA3006C2477 /* main.m in Sources */,
 			);

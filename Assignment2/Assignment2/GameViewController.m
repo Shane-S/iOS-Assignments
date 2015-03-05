@@ -11,6 +11,8 @@
 #import "Camera.h"
 #import "MazeWrapper.h"
 #import "PlaneView.h"
+#import "Uniforms.h"
+#import "FogView.h"
 #import <OpenGLES/ES2/glext.h>
 
 /// The RPM of the spinning cube
@@ -24,37 +26,6 @@ const float CAMERA_ROTATE_FACTOR = 0.01f;
 /// The amount by which camera movement will be scaled
 const float CAMERA_MOVE_FACTOR = 0.03f;
 
-enum
-{
-    FOG_NONE,
-    FOG_LINEAR,
-    FOG_EXP,
-    FOG_EXP2
-};
-
-// Uniform index.
-enum
-{
-    UNIFORM_MODELVIEW_MATRIX,
-    UNIFORM_PROJECTION_MATRIX,
-    UNIFORM_NORMAL_MATRIX,
-    UNIFORM_TEXTURE,
-    UNIFORM_LIGHT_POSITION,
-    UNIFORM_LIGHT_ON,
-    UNIFORM_LIGHT_DIRECTION,
-    UNIFORM_LIGHT_INTENSITY,
-    UNIFORM_LIGHT_CONE_ANGLE_COSINE,
-    UNIFORM_LIGHT_COLOUR,
-    UNIFORM_AMBIENT,
-    UNIFORM_SPECULAR,
-    UNIFORM_SHININESS,
-    UNIFORM_FOG_COLOUR,
-    UNIFORM_FOG_TYPE,
-    UNIFORM_FOG_DENSITY,
-    UNIFORM_FOG_START,
-    UNIFORM_FOG_END,
-    NUM_UNIFORMS
-};
 GLint uniforms[NUM_UNIFORMS];
 
 // The wall textures for planes
@@ -79,9 +50,7 @@ enum
 
     Camera* _camera;
     
-    float _fogDensity;
-    GLKVector4 _fogColour;
-    
+    FogView* _fogView;
 }
 @property (strong, nonatomic) EAGLContext *context;
 
@@ -128,8 +97,13 @@ enum
     
     maze = [[MazeWrapper alloc] initWithRows:8 andCols:8];
     
-    _fogColour = GLKVector4Make(1, 0.5f, 0, 1);
-    _fogDensity = 0.01f;
+    Fog fog;
+    fog.density = 0.01f;
+    fog.colour = GLKVector4Make(1, 0.5f, 0, 1);
+    fog.type = FOG_LINEAR;
+    fog.start = 0.5f;
+    fog.end = 7.0f;
+    _fogView = [[FogView alloc] initWithFog:fog andUniformArray:uniforms];
     
     [self setupGL];
 }
@@ -343,7 +317,7 @@ enum
     float intensity = 100.0f;
     float cosine = cosf(((M_PI * 2)/360) * 10);
     
-    glClearColor(_fogColour.r, _fogColour.g, _fogColour.b, 1.0f);
+    glClearColor(_fogView.fog->colour.r, _fogView.fog->colour.g, _fogView.fog->colour.b, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     // Use the program we compiled earlier
@@ -360,11 +334,7 @@ enum
     glUniform3fv(uniforms[UNIFORM_LIGHT_COLOUR], 1, lightColour.v);
     
     // Use fog
-    glUniform4fv(uniforms[UNIFORM_FOG_COLOUR], 1, _fogColour.v);
-    glUniform1f(uniforms[UNIFORM_FOG_DENSITY], _fogDensity);
-    glUniform1i(uniforms[UNIFORM_FOG_TYPE], FOG_LINEAR);
-    glUniform1f(uniforms[UNIFORM_FOG_START], 0.5f);
-    glUniform1f(uniforms[UNIFORM_FOG_END],  7.0f);
+    [_fogView draw];
     
     glUniformMatrix4fv(uniforms[UNIFORM_PROJECTION_MATRIX], 1, false, _camera.projection.m);
     [self drawCube];
