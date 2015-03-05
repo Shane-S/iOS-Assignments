@@ -21,14 +21,25 @@ const int REVOLUTIONS_PER_MINUTE = 5;
 /// x-axis
 const float CAMERA_ROTATE_FACTOR = 0.01f;
 
+/// The amount by which camera movement will be scaled
 const float CAMERA_MOVE_FACTOR = 0.03f;
 
 // Uniform index.
 enum
 {
-    UNIFORM_MODELVIEWPROJECTION_MATRIX,
+    UNIFORM_MODELVIEW_MATRIX,
+    UNIFORM_PROJECTION_MATRIX,
     UNIFORM_NORMAL_MATRIX,
     UNIFORM_TEXTURE,
+    UNIFORM_LIGHT_POSITION,
+    UNIFORM_LIGHT_ON,
+    UNIFORM_LIGHT_DIRECTION,
+    UNIFORM_LIGHT_INTENSITY,
+    UNIFORM_LIGHT_CONE_ANGLE_COSINE,
+    UNIFORM_LIGHT_COLOUR,
+    UNIFORM_AMBIENT,
+    UNIFORM_SPECULAR,
+    UNIFORM_SHININESS,
     NUM_UNIFORMS
 };
 GLint uniforms[NUM_UNIFORMS];
@@ -150,7 +161,7 @@ enum
     GLKVector2 d = GLKVector2Make(cur.x - _dragStart.x, _dragStart.y - cur.y);
     _camera.rotation -= d.x * CAMERA_ROTATE_FACTOR;
     
-    GLKVector3 movement = GLKVector3MultiplyScalar(_camera.lookAtVector, d.y * CAMERA_MOVE_FACTOR);
+    GLKVector3 movement = GLKVector3MultiplyScalar(_camera.lookDirection, d.y * CAMERA_MOVE_FACTOR);
     _camera.position = (GLKVector3Add(_camera.position, movement));
     _dragStart = cur;
 }
@@ -221,12 +232,12 @@ enum
 -(void)makeMazeCell: (MazeCell*) cell andPlaneType: (PlaneType)wallType andCol: (int)col andRow: (int)row andTextures: (GLuint*)textures
 {
     const GLKVector3* ref = &(planePositions[wallType]);
-    Plane* eastPlane = [[Plane alloc] initWithPosition: GLKVector3Make(col * MAZE_CELL_WIDTH + ref->x, 0, row * MAZE_CELL_WIDTH + ref->z) andScale:1 andPlaneType:wallType];
+    Plane* plane = [[Plane alloc] initWithPosition: GLKVector3Make(col * MAZE_CELL_WIDTH + ref->x, 0, row * MAZE_CELL_WIDTH + ref->z) andScale:1 andPlaneType:wallType];
     
     GLuint texture = [self textureForCell:cell withPlaneType:wallType andTextureList:textures];
     
-    PlaneView* eastView = [[PlaneView alloc] initWithPlane: eastPlane andTexture:texture];
-    [_walls addObject: eastView];
+    PlaneView* planeView = [[PlaneView alloc] initWithPlane: plane andTexture:texture];
+    [_walls addObject: planeView];
 }
 
 -(GLuint)textureForCell: (MazeCell*) cell withPlaneType: (PlaneType)planeType andTextureList: (GLuint *)textures;
@@ -316,12 +327,33 @@ enum
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
     // Clear the scene
-    glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
+    GLKVector3 clear = {0.65f, 0.65f, 0.65f};
+    GLKVector3 ambient = {1, 1, 1};
+    
+    GLKVector3 lightColour = {1, 1, 0};
+    GLKVector3 lightPosition = _camera.position;
+    float intensity = 100.0f;
+    float cosine = cosf(((M_PI * 2)/360) * 10);
+    
+    clear = GLKVector3Multiply(clear, ambient);
+    
+    glClearColor(clear.r, clear.g, clear.b, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     // Use the program we compiled earlier
     glUseProgram(_program);
     
+    glUniform3fv(uniforms[UNIFORM_AMBIENT], 1, ambient.v);
+    
+    // Turn the light on
+    glUniform1i(uniforms[UNIFORM_LIGHT_ON], 1);
+    glUniform1f(uniforms[UNIFORM_LIGHT_CONE_ANGLE_COSINE], cosine); // 20 degrees converted to radians
+    glUniform1f(uniforms[UNIFORM_LIGHT_INTENSITY], intensity);
+    glUniform3fv(uniforms[UNIFORM_LIGHT_POSITION], 1, lightPosition.v);
+    glUniform3fv(uniforms[UNIFORM_LIGHT_DIRECTION], 1, GLKVector3Make(0, 0, 1).v);
+    glUniform3fv(uniforms[UNIFORM_LIGHT_COLOUR], 1, lightColour.v);
+    
+    glUniformMatrix4fv(uniforms[UNIFORM_PROJECTION_MATRIX], 1, false, _camera.projection.m);
     [self drawCube];
     [self drawMaze];
 }
@@ -329,7 +361,7 @@ enum
 -(void)drawCube
 {
     glBindVertexArrayOES(_cubeView.vertexArray);
-    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, GLKMatrix4Multiply(_camera.projection, _cubeView.modelViewMatrix).m);
+    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_MATRIX], 1, 0, _cubeView.modelViewMatrix.m);
     glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, _cubeView.normalMatrix.m);
     
     glBindTexture(GL_TEXTURE_2D, _cubeView.texture);
@@ -343,7 +375,7 @@ enum
     for(PlaneView* planeView in _walls)
     {
         glBindVertexArrayOES(planeView.vertexArray);
-        glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, GLKMatrix4Multiply(_camera.projection, planeView.modelViewMatrix).m);
+        glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_MATRIX], 1, 0, planeView.modelViewMatrix.m);
         glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, planeView.normalMatrix.m);
         
         glBindTexture(GL_TEXTURE_2D, planeView.texture);
@@ -371,9 +403,19 @@ enum
     if([GLProgramUtils makeProgram:&_program withVertShader:vertPath andFragShader:fragPath andAttributes:shaderAttrs withNumberOfAttributes:sizeof(shaderAttrs) / sizeof(ShaderAttribute)]) {
         return NO;
     }
-    uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX] = glGetUniformLocation(_program, "modelViewProjectionMatrix");
+    uniforms[UNIFORM_MODELVIEW_MATRIX] = glGetUniformLocation(_program, "modelViewMatrix");
+    uniforms[UNIFORM_PROJECTION_MATRIX] = glGetUniformLocation(_program, "projectionMatrix");
     uniforms[UNIFORM_NORMAL_MATRIX] = glGetUniformLocation(_program, "normalMatrix");
     uniforms[UNIFORM_TEXTURE] = glGetUniformLocation(_program, "texture");
+    uniforms[UNIFORM_LIGHT_POSITION] = glGetUniformLocation(_program, "lightPosition");
+    uniforms[UNIFORM_LIGHT_ON] = glGetUniformLocation(_program, "lightOn");
+    uniforms[UNIFORM_LIGHT_DIRECTION] = glGetUniformLocation(_program, "lightDirection");
+    uniforms[UNIFORM_LIGHT_INTENSITY] = glGetUniformLocation(_program, "lightIntensity");
+    uniforms[UNIFORM_LIGHT_CONE_ANGLE_COSINE] = glGetUniformLocation(_program, "lightConeAngleCosine");
+    uniforms[UNIFORM_AMBIENT] = glGetUniformLocation(_program, "ambient");
+    uniforms[UNIFORM_LIGHT_COLOUR] = glGetUniformLocation(_program, "lightColour");
+    //uniforms[UNIFORM_SPECULAR] = glGetUniformLocation(_program, "texture");
+    //uniforms[UNIFORM_SHININESS] = glGetUniformLocation(_program, "texture");
     
     glActiveTexture(GL_TEXTURE0);
     return YES;

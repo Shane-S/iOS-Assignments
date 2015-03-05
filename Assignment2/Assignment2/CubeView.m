@@ -56,10 +56,11 @@
 -(void) updateMatricesWithView: (GLKMatrix4)view {
     
     // Perform model rotation & scaling
-    _modelMatrix = GLKMatrix4MakeTranslation(_cube.position.x, _cube.position.y, _cube.position.z);
-    _modelMatrix = GLKMatrix4Rotate(_modelMatrix, _cube.rotation.x, 1.0f, 0.0f, 0.0f);
-    _modelMatrix = GLKMatrix4Rotate(_modelMatrix, _cube.rotation.y, 0.0f, 1.0f, 0.0f);
+    _modelMatrix = GLKMatrix4Identity;
+    _modelMatrix = GLKMatrix4RotateX(_modelMatrix, _cube.rotation.x);
+    _modelMatrix = GLKMatrix4RotateY(_modelMatrix, _cube.rotation.y);
     _modelMatrix = GLKMatrix4Multiply(_modelMatrix, GLKMatrix4MakeScale(_cube.scale.x, _cube.scale.y, _cube.scale.z));
+    _modelMatrix = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(_cube.position.x, _cube.position.y, _cube.position.z), _modelMatrix);
     
     _modelViewMatrix = GLKMatrix4Multiply(view, _modelMatrix);
     

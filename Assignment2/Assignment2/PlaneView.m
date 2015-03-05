@@ -48,6 +48,7 @@
 -(void) updateMatricesWithView: (GLKMatrix4)view {
     
     // Perform model translation & scaling
+    _modelMatrix = GLKMatrix4Identity;
     _modelMatrix = GLKMatrix4Multiply(_modelMatrix, GLKMatrix4MakeScale(_plane.scale, _plane.scale, _plane.scale));
     _modelMatrix = GLKMatrix4MakeTranslation(_plane.position.x, _plane.position.y, _plane.position.z);
     

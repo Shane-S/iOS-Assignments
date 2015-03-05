@@ -21,8 +21,8 @@ const float DEFAULT_FARPLANE = 100.0f;
         _projection = projection;
         _position = position;
         _rotation = rotation;
-        _view = GLKMatrix4Rotate(GLKMatrix4Identity, rotation, 0, 1, 0);
-        _view = GLKMatrix4Translate(_view, position.x, position.y, position.z);
+        _view = GLKMatrix4Rotate(GLKMatrix4Identity, -rotation, 0, 1, 0);
+        _view = GLKMatrix4Translate(_view, -position.x, -position.y, -position.z);
         _viewProjection = GLKMatrix4Multiply(projection, _view);
     }
     return self;
@@ -40,9 +40,9 @@ const float DEFAULT_FARPLANE = 100.0f;
     _viewProjection = GLKMatrix4Multiply(_projection, _view);
 }
 
--(GLKVector3)lookAtVector
+-(GLKVector3)lookDirection
 {
-    // Rotate the -z axis about y to match the camera's current direction and return the value
+    // Rotate the -z axis (the camera's default look direction) about y to match the camera's current direction
     GLKVector3 direction;
     GLKMatrix4 rot = GLKMatrix4MakeYRotation(_rotation);
 

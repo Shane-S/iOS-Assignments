@@ -15,7 +15,7 @@
 @property (nonatomic) GLKMatrix4 projection;
 @property (nonatomic) GLKVector3 position;
 @property (nonatomic) float rotation;
-@property (nonatomic, readonly) GLKVector3 lookAtVector;
+@property (nonatomic, readonly) GLKVector3 lookDirection;
 @property (nonatomic, readonly) GLKMatrix4 viewProjection;
 
 extern const float DEFAULT_FOV;
