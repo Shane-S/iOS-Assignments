@@ -24,6 +24,14 @@ const float CAMERA_ROTATE_FACTOR = 0.01f;
 /// The amount by which camera movement will be scaled
 const float CAMERA_MOVE_FACTOR = 0.03f;
 
+enum
+{
+    FOG_NONE,
+    FOG_LINEAR,
+    FOG_EXP,
+    FOG_EXP2
+};
+
 // Uniform index.
 enum
 {
@@ -40,6 +48,11 @@ enum
     UNIFORM_AMBIENT,
     UNIFORM_SPECULAR,
     UNIFORM_SHININESS,
+    UNIFORM_FOG_COLOUR,
+    UNIFORM_FOG_TYPE,
+    UNIFORM_FOG_DENSITY,
+    UNIFORM_FOG_START,
+    UNIFORM_FOG_END,
     NUM_UNIFORMS
 };
 GLint uniforms[NUM_UNIFORMS];
@@ -55,24 +68,20 @@ enum
 
 @interface GameViewController () {
     GLuint _program;
-    
-    GLKMatrix4 _modelViewProjectionMatrix;
-    GLKMatrix3 _normalMatrix;
-    float _rotation;
-    
-    GLuint _vertexArray;
-    GLuint _vertexBuffer;
-    
+
     Cube* _rotatorCube;
     CubeView *_cubeView;
     CGPoint _dragStart;
     NSTimeInterval _prevRotationTime;
     
+    NSMutableArray* _walls;
+    MazeWrapper* maze;
+
     Camera* _camera;
     
-    NSMutableArray* _walls;
+    float _fogDensity;
+    GLKVector4 _fogColour;
     
-    MazeWrapper* maze;
 }
 @property (strong, nonatomic) EAGLContext *context;
 
@@ -117,7 +126,10 @@ enum
     _camera = [[Camera alloc] initWithPosition:GLKVector3Make(0, 0, 0.0f)  andRotation:M_PI
                            andProjectionMatrix:GLKMatrix4MakePerspective(DEFAULT_FOV * (360 / M_PI * 2), aspect, DEFAULT_NEARPLANE, DEFAULT_FARPLANE)];
     
-    maze = [[MazeWrapper alloc] init];
+    maze = [[MazeWrapper alloc] initWithRows:8 andCols:8];
+    
+    _fogColour = GLKVector4Make(1, 0.5f, 0, 1);
+    _fogDensity = 0.01f;
     
     [self setupGL];
 }
@@ -281,10 +293,7 @@ enum
 - (void)tearDownGL
 {
     [EAGLContext setCurrentContext:self.context];
-    
-    glDeleteBuffers(1, &_vertexBuffer);
-    glDeleteVertexArraysOES(1, &_vertexArray);
-    
+
     if (_program) {
         glDeleteProgram(_program);
         _program = 0;
@@ -327,7 +336,6 @@ enum
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
     // Clear the scene
-    GLKVector3 clear = {0.65f, 0.65f, 0.65f};
     GLKVector3 ambient = {1, 1, 1};
     
     GLKVector3 lightColour = {1, 1, 0};
@@ -335,9 +343,7 @@ enum
     float intensity = 100.0f;
     float cosine = cosf(((M_PI * 2)/360) * 10);
     
-    clear = GLKVector3Multiply(clear, ambient);
-    
-    glClearColor(clear.r, clear.g, clear.b, 1.0f);
+    glClearColor(_fogColour.r, _fogColour.g, _fogColour.b, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     // Use the program we compiled earlier
@@ -352,6 +358,13 @@ enum
     glUniform3fv(uniforms[UNIFORM_LIGHT_POSITION], 1, lightPosition.v);
     glUniform3fv(uniforms[UNIFORM_LIGHT_DIRECTION], 1, GLKVector3Make(0, 0, 1).v);
     glUniform3fv(uniforms[UNIFORM_LIGHT_COLOUR], 1, lightColour.v);
+    
+    // Use fog
+    glUniform4fv(uniforms[UNIFORM_FOG_COLOUR], 1, _fogColour.v);
+    glUniform1f(uniforms[UNIFORM_FOG_DENSITY], _fogDensity);
+    glUniform1i(uniforms[UNIFORM_FOG_TYPE], FOG_LINEAR);
+    glUniform1f(uniforms[UNIFORM_FOG_START], 0.5f);
+    glUniform1f(uniforms[UNIFORM_FOG_END],  7.0f);
     
     glUniformMatrix4fv(uniforms[UNIFORM_PROJECTION_MATRIX], 1, false, _camera.projection.m);
     [self drawCube];
@@ -414,6 +427,12 @@ enum
     uniforms[UNIFORM_LIGHT_CONE_ANGLE_COSINE] = glGetUniformLocation(_program, "lightConeAngleCosine");
     uniforms[UNIFORM_AMBIENT] = glGetUniformLocation(_program, "ambient");
     uniforms[UNIFORM_LIGHT_COLOUR] = glGetUniformLocation(_program, "lightColour");
+    uniforms[UNIFORM_FOG_COLOUR] = glGetUniformLocation(_program, "fogColour");
+    uniforms[UNIFORM_FOG_DENSITY] = glGetUniformLocation(_program, "fogDensity");
+    uniforms[UNIFORM_FOG_TYPE] = glGetUniformLocation(_program, "fogType");
+    uniforms[UNIFORM_FOG_START] = glGetUniformLocation(_program, "fogStart");
+    uniforms[UNIFORM_FOG_END] = glGetUniformLocation(_program, "fogEnd");
+
     //uniforms[UNIFORM_SPECULAR] = glGetUniformLocation(_program, "texture");
     //uniforms[UNIFORM_SHININESS] = glGetUniformLocation(_program, "texture");
     
