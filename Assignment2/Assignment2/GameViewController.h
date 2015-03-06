@@ -12,4 +12,5 @@
 #import "CubeView.h"
 
 @interface GameViewController : GLKViewController
+@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *flashlightToggleRecognizer;
 @end

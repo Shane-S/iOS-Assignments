@@ -48,8 +48,10 @@
             glUniform1f(_uniforms[UNIFORM_FOG_START], _fog.start);
             glUniform1f(_uniforms[UNIFORM_FOG_END],  _fog.end);
         case FOG_EXP:
-            break;
         case FOG_EXP2:
+            glUniform4fv(_uniforms[UNIFORM_FOG_COLOUR], 1, _fog.colour.v);
+            glUniform1i(_uniforms[UNIFORM_FOG_TYPE], _fog.type);
+            glUniform1f(_uniforms[UNIFORM_FOG_DENSITY], _fog.density);
             break;
     }
 }

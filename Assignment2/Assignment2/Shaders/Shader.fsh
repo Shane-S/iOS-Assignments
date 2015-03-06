@@ -40,10 +40,9 @@ uniform vec3 ambient;
 void main()
 {
     // Get the initial texture colour
-    vec4 colour = texture2D(texture, texCoordOut);
-    
-    // Add some default intensities
-    colour.rgb *= ambient.rgb;
+    vec4 texColour = texture2D(texture, texCoordOut);
+    vec4 colour = texColour;
+    vec3 diffuse = vec3(0.0, 0.0, 0.0);
     
     // Do the flashlight calculations
     if(lightOn)
@@ -93,20 +92,19 @@ void main()
             float actualIntensity = lightIntensity / positionToLightLength;
 
             // Calculate diffuse
-            vec3 diffuse;
             float angleIntensity = dot(positionToLightNormed, normalOut);
             diffuse.rgb = (lightColour.rgb * colour.rgb) * max(0.0, angleIntensity);
             
             // Calculate specular
        //    vec3 specular;
             
-            colour.rgb += diffuse.rgb;// * actualIntensity;
-            
             // Vary the intensity based on the distance from the light
             //colour.rgb += (diffuse.rgb + specular.rgb) * actualIntensity;
         }
     }
-    colour.rgb = clamp(colour.rgb, 0.0, 1.0);
+
+    colour.rgb = (colour.rgb * ambient.rgb) + diffuse.rgb;
+    colour.rgb = clamp(colour.rgb, vec3(0.0, 0.0, 0.0), texColour.rgb * 1.8);
     
     if(fogType != FOG_NONE)
     {
@@ -117,16 +115,12 @@ void main()
         }
         else if(fogType == FOG_EXP)
         {
-            
+            float fogFactor = clamp( exp(-fogDensity * -positionOut.z), 0.0, 1.0);
+            colour = mix(fogColour, colour, fogFactor);
         }
         else if(fogType == FOG_EXP2)
         {
-            float fogFactor = exp2( -fogDensity *
-                                   fogDensity *
-                                   positionOut.z *
-                                   positionOut.z *
-                                   LOG2 );
-            fogFactor = clamp(fogFactor, 0.0, 1.0);
+            float fogFactor = clamp(exp(-pow(fogDensity * -positionOut.z, 2.0)), 0.0, 1.0);
             colour = mix(fogColour, colour, fogFactor);
         }
     }

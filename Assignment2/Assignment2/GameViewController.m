@@ -26,7 +26,9 @@ const float CAMERA_ROTATE_FACTOR = 0.01f;
 /// The amount by which camera movement will be scaled
 const float CAMERA_MOVE_FACTOR = 0.03f;
 
-GLint uniforms[NUM_UNIFORMS];
+const GLKVector4 DEFAULT_CLEAR_COLOUR = {0.65f, 0.65f, 0.65f, 1.0f};
+
+GLuint uniforms[NUM_UNIFORMS];
 
 // The wall textures for planes
 enum
@@ -49,12 +51,20 @@ enum
     MazeWrapper* maze;
 
     Camera* _camera;
-    
     FogView* _fogView;
+    
+    // Light stuff
+    int _lightOn;
+    GLKVector3 _lightColour;
+    float _lightCosine;
+    float _lightIntensity;
+    
+    GLKVector3 _ambient;
+    
 }
 @property (strong, nonatomic) EAGLContext *context;
 
-@property (strong, nonatomic) UITapGestureRecognizer *doubleTap;
+@property (strong, nonatomic) UITapGestureRecognizer *resetTapRecognizer;
 
 /**
  * @brief Creates the GL context for rendering and initialises the CubeView.
@@ -97,13 +107,26 @@ enum
     
     maze = [[MazeWrapper alloc] initWithRows:8 andCols:8];
     
+    _ambient = GLKVector3Make(1, 1, 1);
+    
     Fog fog;
-    fog.density = 0.01f;
+    fog.density = 0.3f;
     fog.colour = GLKVector4Make(1, 0.5f, 0, 1);
-    fog.type = FOG_LINEAR;
-    fog.start = 0.5f;
+    fog.type = FOG_EXP2;
+    fog.start = 0.05f;
     fog.end = 7.0f;
     _fogView = [[FogView alloc] initWithFog:fog andUniformArray:uniforms];
+    
+    _lightColour = GLKVector3Make(0.8f, 0.8, 0.8);
+    _lightIntensity = 250.0f;
+    _lightCosine = cosf(((M_PI * 2)/360) * 10);
+    _lightOn = 0;
+    
+    _resetTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(resetScene:)];
+    _resetTapRecognizer.numberOfTapsRequired = 2;
+    _resetTapRecognizer.numberOfTouchesRequired = 1;
+
+    [self.view addGestureRecognizer:_resetTapRecognizer];
     
     [self setupGL];
 }
@@ -136,26 +159,6 @@ enum
 
 - (BOOL)prefersStatusBarHidden {
     return YES;
-}
-
-- (IBAction)onPan:(UIPanGestureRecognizer *)sender {
-    if(sender.state == UIGestureRecognizerStateBegan)
-    {
-        _dragStart = [sender locationInView:self.view];
-    }
-    CGPoint cur = [sender locationInView:self.view];
-    GLKVector2 d = GLKVector2Make(cur.x - _dragStart.x, _dragStart.y - cur.y);
-    _camera.rotation -= d.x * CAMERA_ROTATE_FACTOR;
-    
-    GLKVector3 movement = GLKVector3MultiplyScalar(_camera.lookDirection, d.y * CAMERA_MOVE_FACTOR);
-    _camera.position = (GLKVector3Add(_camera.position, movement));
-    _dragStart = cur;
-}
-
-- (IBAction)resetScene:(id)sender {
-    _rotatorCube.rotation = GLKVector3Make(0, 0, 0);
-    _rotatorCube.scale = GLKVector3Make(1, 1, 1);
-    _rotatorCube.position = GLKVector3Make(0, 0, 0);
 }
 
 - (void)setupGL
@@ -281,20 +284,11 @@ enum
 - (void)update
 {   
     [_camera updateMatricesWithScreenWidth:self.view.bounds.size.width andScreenHeight:self.view.bounds.size.height andFieldOfView:DEFAULT_FOV];
-
+    
     [self updateContinuousRotation];
-    [self clampCube];
     
     [_cubeView updateMatricesWithView: _camera.view];
     for(PlaneView* planeView in _walls) [planeView updateMatricesWithView: _camera.view];
-}
-
-- (void)clampCube {
-    if(_rotatorCube.rotation.x > M_PI * 2) [_rotatorCube rotationRef]->x = (2 * M_PI) - _rotatorCube.rotation.x;
-    else if(_rotatorCube.rotation.x < 0) [_rotatorCube rotationRef]->x = _rotatorCube.rotation.x + (2 * M_PI);
-    
-    if(_rotatorCube.rotation.y > M_PI * 2) [_rotatorCube rotationRef]->y = (2 * M_PI) - _rotatorCube.rotation.y;
-    else if(_rotatorCube.rotation.y < 0) [_rotatorCube rotationRef]->y = _rotatorCube.rotation.y + (2 * M_PI);
 }
 
 - (void)updateContinuousRotation {
@@ -310,29 +304,25 @@ enum
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
     // Clear the scene
-    GLKVector3 ambient = {1, 1, 1};
-    
-    GLKVector3 lightColour = {1, 1, 0};
     GLKVector3 lightPosition = _camera.position;
-    float intensity = 100.0f;
-    float cosine = cosf(((M_PI * 2)/360) * 10);
-    
-    glClearColor(_fogView.fog->colour.r, _fogView.fog->colour.g, _fogView.fog->colour.b, 1.0f);
+    GLKVector4 clearColour = _fogView.fog->type ? _fogView.fog->colour : DEFAULT_CLEAR_COLOUR;
+    clearColour = GLKVector4Multiply(clearColour, GLKVector4Make(_ambient.r, _ambient.g, _ambient.b, 1.0f));
+    glClearColor(clearColour.r, clearColour.g, clearColour.b, clearColour.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     // Use the program we compiled earlier
     glUseProgram(_program);
     
-    glUniform3fv(uniforms[UNIFORM_AMBIENT], 1, ambient.v);
+    glUniform3fv(uniforms[UNIFORM_AMBIENT], 1, _ambient.v);
     
     // Turn the light on
-    glUniform1i(uniforms[UNIFORM_LIGHT_ON], 1);
-    glUniform1f(uniforms[UNIFORM_LIGHT_CONE_ANGLE_COSINE], cosine); // 20 degrees converted to radians
-    glUniform1f(uniforms[UNIFORM_LIGHT_INTENSITY], intensity);
+    glUniform1i(uniforms[UNIFORM_LIGHT_ON], _lightOn);
+    glUniform1f(uniforms[UNIFORM_LIGHT_CONE_ANGLE_COSINE], _lightCosine); // 20 degrees converted to radians
+    glUniform1f(uniforms[UNIFORM_LIGHT_INTENSITY], _lightIntensity);
     glUniform3fv(uniforms[UNIFORM_LIGHT_POSITION], 1, lightPosition.v);
     glUniform3fv(uniforms[UNIFORM_LIGHT_DIRECTION], 1, GLKVector3Make(0, 0, 1).v);
-    glUniform3fv(uniforms[UNIFORM_LIGHT_COLOUR], 1, lightColour.v);
-    
+    glUniform3fv(uniforms[UNIFORM_LIGHT_COLOUR], 1, _lightColour.v);
+
     // Use fog
     [_fogView draw];
     
@@ -408,6 +398,41 @@ enum
     
     glActiveTexture(GL_TEXTURE0);
     return YES;
+}
+
+- (IBAction)onAmbientChange:(UIPinchGestureRecognizer *)sender {
+    _ambient.r *= sender.scale;
+    _ambient.g *= sender.scale;
+    _ambient.b *= sender.scale;
+    
+    _ambient.r = fmaxf(0.2f, fminf(_ambient.r, 1.0f));
+    _ambient.g = fmaxf(0.2f, fminf(_ambient.g, 1.0f));
+    _ambient.b = fmaxf(0.2f, fminf(_ambient.b, 1.0f));
+    
+    sender.scale = 1.0f;
+}
+
+- (IBAction)onFlashlightToggle:(id)sender {
+    _lightOn = !_lightOn;
+}
+
+- (IBAction)onPan:(UIPanGestureRecognizer *)sender {
+    if(sender.state == UIGestureRecognizerStateBegan)
+    {
+        _dragStart = [sender locationInView:self.view];
+    }
+    CGPoint cur = [sender locationInView:self.view];
+    GLKVector2 d = GLKVector2Make(cur.x - _dragStart.x, _dragStart.y - cur.y);
+    _camera.rotation -= d.x * CAMERA_ROTATE_FACTOR;
+    
+    GLKVector3 movement = GLKVector3MultiplyScalar(_camera.lookDirection, d.y * CAMERA_MOVE_FACTOR);
+    _camera.position = (GLKVector3Add(_camera.position, movement));
+    _dragStart = cur;
+}
+
+- (IBAction)resetScene:(id)sender {
+    _camera.rotation = M_PI;
+    _camera.position = GLKVector3Make(0, 0, 0);
 }
 
 @end

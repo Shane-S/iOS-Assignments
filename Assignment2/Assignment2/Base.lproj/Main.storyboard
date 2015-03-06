@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BV1-FR-VrT">
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
     <scenes>
@@ -19,8 +20,13 @@
                         <gestureRecognizers/>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="PU5-KW-A6R" appends="YES" id="mcG-7C-5FL"/>
+                            <outletCollection property="gestureRecognizers" destination="JQX-Vy-f7a" appends="YES" id="PI1-RC-hbi"/>
+                            <outletCollection property="gestureRecognizers" destination="B8f-Q3-UtN" appends="YES" id="Ee8-rz-Z1M"/>
                         </connections>
                     </view>
+                    <connections>
+                        <outlet property="flashlightToggleRecognizer" destination="JQX-Vy-f7a" id="1TK-5e-mVU"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
                 <panGestureRecognizer minimumNumberOfTouches="1" id="PU5-KW-A6R">
@@ -28,6 +34,16 @@
                         <action selector="onPan:" destination="BV1-FR-VrT" id="PGG-NG-3ke"/>
                     </connections>
                 </panGestureRecognizer>
+                <tapGestureRecognizer numberOfTouchesRequired="2" id="JQX-Vy-f7a">
+                    <connections>
+                        <action selector="onFlashlightToggle:" destination="BV1-FR-VrT" id="hAC-aC-k72"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <pinchGestureRecognizer id="B8f-Q3-UtN">
+                    <connections>
+                        <action selector="onAmbientChange:" destination="BV1-FR-VrT" id="dyi-bR-inI"/>
+                    </connections>
+                </pinchGestureRecognizer>
             </objects>
         </scene>
     </scenes>
