@@ -29,6 +29,6 @@ void main()
     
     positionOut = viewSpacePos.xyz;
     texCoordOut = texCoordIn;
-
+    
     gl_Position = projectionMatrix * viewSpacePos;
 }

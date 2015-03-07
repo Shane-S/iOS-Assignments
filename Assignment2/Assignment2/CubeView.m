@@ -10,13 +10,6 @@
 #import "GLProgramUtils.h"
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
-
-@interface CubeView()
-
-@property (strong, nonatomic) Cube* cube;
-
-@end
-
 @implementation CubeView
 
 - (instancetype)initWithCube: (Cube*) cube andTexture:(GLuint)texture
@@ -46,7 +39,6 @@
         // Break the bindings (not strictly necessary since this would be done automatically on drawing next)
         glBindVertexArrayOES(0);
         _cube = cube;
-        
         _texture = texture;
     }
     

@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Game View Controller-->
@@ -16,8 +17,112 @@
                     <view key="view" contentMode="scaleToFill" id="3se-qz-xqx" customClass="GLKView">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="jC1-9B-Sbk">
+                                <rect key="frame" x="49" y="503" width="118" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="114" id="CXk-dE-bly"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="onGreenColourChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="Co5-Sy-DgR"/>
+                                </connections>
+                            </slider>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="3Ed-g2-r0w">
+                                <rect key="frame" x="49" y="541" width="118" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="114" id="t96-wS-1Vq"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="onBlueColourChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="sjM-bm-7V3"/>
+                                </connections>
+                            </slider>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Uz5-aJ-mTH">
+                                <rect key="frame" x="49" y="465" width="118" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="114" id="fH8-9w-s8E"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="onRedColourChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="yNy-gG-PbK"/>
+                                </connections>
+                            </slider>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="R:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ttP-Ly-w2c">
+                                <rect key="frame" x="16" y="469" width="17" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="G:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eza-tc-d4P">
+                                <rect key="frame" x="16" y="507" width="18" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="B:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CDt-ao-uxV">
+                                <rect key="frame" x="16" y="545" width="17" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Fog Colour" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jja-3S-ZI7">
+                                <rect key="frame" x="16" y="430" width="86" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="E3E-JV-XcQ">
+                                <rect key="frame" x="16" y="382" width="196" height="29"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="196" id="Zvi-Jo-NA8"/>
+                                </constraints>
+                                <segments>
+                                    <segment title="Linear"/>
+                                    <segment title="Exp"/>
+                                    <segment title="Exp2"/>
+                                </segments>
+                            </segmentedControl>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YJX-ze-a4F">
+                                <rect key="frame" x="16" y="344" width="51" height="30"/>
+                                <state key="normal" title="Fog On">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onFogToggle:" destination="BV1-FR-VrT" eventType="touchUpInside" id="cVZ-wN-ZkW"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O8H-TW-O2i">
+                                <rect key="frame" x="476" y="28" width="108" height="30"/>
+                                <state key="normal" title="Toggle Controls">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onToggleControls:" destination="BV1-FR-VrT" eventType="touchUpInside" id="oqC-Fw-Hlc"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="E3E-JV-XcQ" firstAttribute="top" secondItem="YJX-ze-a4F" secondAttribute="bottom" constant="8" id="3a0-4D-EuQ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="O8H-TW-O2i" secondAttribute="trailing" id="73L-Go-QNJ"/>
+                            <constraint firstItem="eza-tc-d4P" firstAttribute="top" secondItem="ttP-Ly-w2c" secondAttribute="bottom" constant="17" id="8Aa-9p-jq0"/>
+                            <constraint firstItem="eza-tc-d4P" firstAttribute="bottom" secondItem="jC1-9B-Sbk" secondAttribute="bottom" constant="-5" id="8gw-FV-0k9"/>
+                            <constraint firstItem="eza-tc-d4P" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="BIo-Yi-8sz"/>
+                            <constraint firstItem="CDt-ao-uxV" firstAttribute="bottom" secondItem="3Ed-g2-r0w" secondAttribute="bottom" constant="-5" id="IGI-YM-icB"/>
+                            <constraint firstItem="qHh-Mt-9TT" firstAttribute="top" secondItem="3Ed-g2-r0w" secondAttribute="bottom" constant="29" id="IVu-Lr-rUX"/>
+                            <constraint firstItem="Uz5-aJ-mTH" firstAttribute="top" secondItem="jja-3S-ZI7" secondAttribute="bottom" constant="14" id="Nej-AM-p6X"/>
+                            <constraint firstItem="E3E-JV-XcQ" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="PEa-4l-ZYD"/>
+                            <constraint firstItem="jja-3S-ZI7" firstAttribute="top" secondItem="E3E-JV-XcQ" secondAttribute="bottom" constant="20" id="RGQ-3C-95u"/>
+                            <constraint firstItem="3Ed-g2-r0w" firstAttribute="leading" secondItem="CDt-ao-uxV" secondAttribute="trailing" constant="18" id="RcF-YE-0ss"/>
+                            <constraint firstItem="O8H-TW-O2i" firstAttribute="top" secondItem="8aa-yV-Osq" secondAttribute="bottom" constant="8" id="YIw-Wg-Kgb"/>
+                            <constraint firstItem="CDt-ao-uxV" firstAttribute="top" secondItem="eza-tc-d4P" secondAttribute="bottom" constant="17" id="aBC-B2-CMV"/>
+                            <constraint firstItem="jC1-9B-Sbk" firstAttribute="leading" secondItem="eza-tc-d4P" secondAttribute="trailing" constant="17" id="ffJ-LH-Ydi"/>
+                            <constraint firstItem="Uz5-aJ-mTH" firstAttribute="leading" secondItem="ttP-Ly-w2c" secondAttribute="trailing" constant="18" id="h4a-ny-s0j"/>
+                            <constraint firstItem="jja-3S-ZI7" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="js2-qG-Wqv"/>
+                            <constraint firstItem="YJX-ze-a4F" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="ljF-S4-G0T"/>
+                            <constraint firstItem="ttP-Ly-w2c" firstAttribute="bottom" secondItem="Uz5-aJ-mTH" secondAttribute="bottom" constant="-5" id="mbY-1s-g3e"/>
+                            <constraint firstItem="CDt-ao-uxV" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="oMX-fl-yfh"/>
+                            <constraint firstItem="ttP-Ly-w2c" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="yMV-K8-XhH"/>
+                        </constraints>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="PU5-KW-A6R" appends="YES" id="mcG-7C-5FL"/>
                             <outletCollection property="gestureRecognizers" destination="JQX-Vy-f7a" appends="YES" id="PI1-RC-hbi"/>
@@ -26,6 +131,15 @@
                     </view>
                     <connections>
                         <outlet property="flashlightToggleRecognizer" destination="JQX-Vy-f7a" id="1TK-5e-mVU"/>
+                        <outlet property="fogColourBLabel" destination="CDt-ao-uxV" id="7PU-iN-dLH"/>
+                        <outlet property="fogColourBSlider" destination="3Ed-g2-r0w" id="cP3-Qt-t7q"/>
+                        <outlet property="fogColourGLabel" destination="eza-tc-d4P" id="bex-Ds-aQK"/>
+                        <outlet property="fogColourGSlider" destination="jC1-9B-Sbk" id="7iv-oC-vee"/>
+                        <outlet property="fogColourLabel" destination="jja-3S-ZI7" id="Ho1-Pc-r8B"/>
+                        <outlet property="fogColourRLabel" destination="ttP-Ly-w2c" id="Yyd-93-wVL"/>
+                        <outlet property="fogColourRSlider" destination="Uz5-aJ-mTH" id="AKu-Jf-rWj"/>
+                        <outlet property="fogToggle" destination="YJX-ze-a4F" id="2db-eV-Wdz"/>
+                        <outlet property="fogTypeToggle" destination="E3E-JV-XcQ" id="5nQ-kG-jrm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>

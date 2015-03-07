@@ -22,6 +22,8 @@
 @property (nonatomic) GLKMatrix4 modelViewMatrix;
 @property (nonatomic) GLKMatrix3 normalMatrix;
 
+@property (strong, nonatomic) Cube* cube;
+
 /// The integer identifying the texture with which the plane view was constructed
 @property (readonly, nonatomic) GLuint texture;
 

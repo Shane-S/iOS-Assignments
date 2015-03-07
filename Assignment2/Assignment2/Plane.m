@@ -12,7 +12,7 @@ static const float _planeVertices[5][FLOATS_PER_FACE] =
 {
     // North wall
     {
-        // positionX, positionY, positionZ,  normalX, normalY, normalZ, u, v
+     // positionX, positionY, positionZ,     normalX, normalY, normalZ, u, v
         0.5f,      0.5f,      0.5f,          0.0f,     0.0f,   1.0f,    1, 1,
        -0.5f,      0.5f,      0.5f,          0.0f,     0.0f,   1.0f,    0, 1,
         0.5f,     -0.5f,      0.5f,          0.0f,     0.0f,   1.0f,    1, 0,

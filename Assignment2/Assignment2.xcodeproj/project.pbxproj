@@ -32,6 +32,9 @@
 		70C9F6141AA2D78E00FFE49B /* Camera.m in Sources */ = {isa = PBXBuildFile; fileRef = 70C9F6131AA2D78E00FFE49B /* Camera.m */; };
 		70C9F6171AA2FE9500FFE49B /* maze.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 70C9F6151AA2FE9500FFE49B /* maze.cpp */; };
 		70C9F6191AA3006600FFE49B /* MazeWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C9F6181AA3006600FFE49B /* MazeWrapper.mm */; };
+		70D0BF311AAA8AEC0011BBFF /* MinimapShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 70D0BF301AAA8AEC0011BBFF /* MinimapShader.vsh */; };
+		70D0BF331AAA8AFE0011BBFF /* MinimapShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 70D0BF321AAA8AFE0011BBFF /* MinimapShader.fsh */; };
+		70D0BF361AAA8CA50011BBFF /* MinimapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 70D0BF351AAA8CA50011BBFF /* MinimapView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +91,10 @@
 		70C9F6161AA2FE9500FFE49B /* maze.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = maze.h; sourceTree = "<group>"; };
 		70C9F6181AA3006600FFE49B /* MazeWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MazeWrapper.mm; sourceTree = "<group>"; };
 		70C9F61A1AA3012700FFE49B /* MazeWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MazeWrapper.h; sourceTree = "<group>"; };
+		70D0BF301AAA8AEC0011BBFF /* MinimapShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = MinimapShader.vsh; sourceTree = "<group>"; };
+		70D0BF321AAA8AFE0011BBFF /* MinimapShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = MinimapShader.fsh; sourceTree = "<group>"; };
+		70D0BF341AAA8CA50011BBFF /* MinimapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MinimapView.h; sourceTree = "<group>"; };
+		70D0BF351AAA8CA50011BBFF /* MinimapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MinimapView.m; sourceTree = "<group>"; };
 		70DCE80B1AA690B000B21BF9 /* MazeCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MazeCell.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -198,6 +205,8 @@
 				703E39811AA02AA3006C2477 /* Shader.fsh */,
 				703E39831AA02AA3006C2477 /* Shader.vsh */,
 				700BC2C01AA832A500D7C575 /* Uniforms.h */,
+				70D0BF301AAA8AEC0011BBFF /* MinimapShader.vsh */,
+				70D0BF321AAA8AFE0011BBFF /* MinimapShader.fsh */,
 			);
 			name = Shaders;
 			sourceTree = "<group>";
@@ -243,6 +252,8 @@
 				7078F7F61AA5438F006BB1A7 /* PlaneView.m */,
 				700BC2BD1AA830B500D7C575 /* FogView.h */,
 				700BC2BE1AA830B500D7C575 /* FogView.m */,
+				70D0BF341AAA8CA50011BBFF /* MinimapView.h */,
+				70D0BF351AAA8CA50011BBFF /* MinimapView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -333,10 +344,12 @@
 				703E398A1AA02AA3006C2477 /* Main.storyboard in Resources */,
 				703E398C1AA02AA3006C2477 /* Images.xcassets in Resources */,
 				7078F80A1AA5970B006BB1A7 /* both_walls.jpg in Resources */,
+				70D0BF311AAA8AEC0011BBFF /* MinimapShader.vsh in Resources */,
 				7078F8051AA59561006BB1A7 /* floor.jpg in Resources */,
 				703E39841AA02AA3006C2477 /* Shader.vsh in Resources */,
 				7078F80D1AA5970B006BB1A7 /* right_wall.jpg in Resources */,
 				7078F80C1AA5970B006BB1A7 /* no_walls.jpg in Resources */,
+				70D0BF331AAA8AFE0011BBFF /* MinimapShader.fsh in Resources */,
 				703E39821AA02AA3006C2477 /* Shader.fsh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -361,6 +374,7 @@
 				703E39AD1AA03F5B006C2477 /* CubeView.m in Sources */,
 				70C9F6171AA2FE9500FFE49B /* maze.cpp in Sources */,
 				703E39AC1AA03F5B006C2477 /* Cube.m in Sources */,
+				70D0BF361AAA8CA50011BBFF /* MinimapView.m in Sources */,
 				7078F7F41AA52DFC006BB1A7 /* Plane.m in Sources */,
 				703E39AF1AA03F5B006C2477 /* GLProgramUtils.m in Sources */,
 				70C9F6141AA2D78E00FFE49B /* Camera.m in Sources */,

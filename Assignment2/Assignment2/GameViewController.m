@@ -13,6 +13,7 @@
 #import "PlaneView.h"
 #import "Uniforms.h"
 #import "FogView.h"
+#import "MinimapView.h"
 #import <OpenGLES/ES2/glext.h>
 
 /// The RPM of the spinning cube
@@ -52,19 +53,20 @@ enum
 
     Camera* _camera;
     FogView* _fogView;
+    BOOL _fogOn;
     
     // Light stuff
-    int _lightOn;
-    GLKVector3 _lightColour;
+    bool _lightOn;
+    GLKVector4 _lightColour;
     float _lightCosine;
     float _lightIntensity;
     
-    GLKVector3 _ambient;
+    GLKVector4 _ambient;
     
 }
 @property (strong, nonatomic) EAGLContext *context;
-
 @property (strong, nonatomic) UITapGestureRecognizer *resetTapRecognizer;
+@property (strong, nonatomic) MinimapView* minimap;
 
 /**
  * @brief Creates the GL context for rendering and initialises the CubeView.
@@ -107,27 +109,27 @@ enum
     
     maze = [[MazeWrapper alloc] initWithRows:8 andCols:8];
     
-    _ambient = GLKVector3Make(1, 1, 1);
+    _ambient = GLKVector4Make(1, 1, 1, 1);
     
     Fog fog;
     fog.density = 0.3f;
-    fog.colour = GLKVector4Make(1, 0.5f, 0, 1);
-    fog.type = FOG_EXP2;
+    fog.colour = GLKVector4Make(0.5f, 0.5f, 0.5f, 1);
+    fog.type = FOG_NONE;
     fog.start = 0.05f;
     fog.end = 7.0f;
     _fogView = [[FogView alloc] initWithFog:fog andUniformArray:uniforms];
+    _fogOn = NO;
     
-    _lightColour = GLKVector3Make(0.8f, 0.8, 0.8);
+    _lightColour = GLKVector4Make(0.8f, 0.8, 0.8, 1.0f);
     _lightIntensity = 250.0f;
     _lightCosine = cosf(((M_PI * 2)/360) * 10);
-    _lightOn = 0;
+    _lightOn = false;
     
     _resetTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(resetScene:)];
     _resetTapRecognizer.numberOfTapsRequired = 2;
     _resetTapRecognizer.numberOfTouchesRequired = 1;
-
-    [self.view addGestureRecognizer:_resetTapRecognizer];
     
+    [self.view addGestureRecognizer:_resetTapRecognizer];
     [self setupGL];
 }
 
@@ -177,7 +179,7 @@ enum
     _cubeView = [[CubeView alloc] initWithCube: _rotatorCube andTexture:[GLProgramUtils setupTexture:@"crate.jpg"]];
     
     [self setupMaze];
-    
+    _minimap = [[MinimapView alloc] initWithMaze: maze andWalls: _walls andCube: _cubeView];
     glActiveTexture(GL_TEXTURE0);
     
 }
@@ -213,7 +215,6 @@ enum
             if(cell.southWallPresent) [self makeMazeCell:&cell andPlaneType:SOUTH_WALL andCol:col andRow:row andTextures:textures];
             if(cell.westWallPresent) [self makeMazeCell:&cell andPlaneType:WEST_WALL andCol:col andRow:row andTextures:textures];
             if(cell.eastWallPresent) [self makeMazeCell:&cell andPlaneType:EAST_WALL andCol:col andRow:row andTextures:textures];
-
         }
     }
 }
@@ -313,22 +314,24 @@ enum
     // Use the program we compiled earlier
     glUseProgram(_program);
     
-    glUniform3fv(uniforms[UNIFORM_AMBIENT], 1, _ambient.v);
+    glUniform4fv(uniforms[UNIFORM_AMBIENT], 1, _ambient.v);
     
     // Turn the light on
-    glUniform1i(uniforms[UNIFORM_LIGHT_ON], _lightOn);
     glUniform1f(uniforms[UNIFORM_LIGHT_CONE_ANGLE_COSINE], _lightCosine); // 20 degrees converted to radians
-    glUniform1f(uniforms[UNIFORM_LIGHT_INTENSITY], _lightIntensity);
+    glUniform1f(uniforms[UNIFORM_LIGHT_INTENSITY], _lightOn ? _lightIntensity : 0.0f);
     glUniform3fv(uniforms[UNIFORM_LIGHT_POSITION], 1, lightPosition.v);
     glUniform3fv(uniforms[UNIFORM_LIGHT_DIRECTION], 1, GLKVector3Make(0, 0, 1).v);
-    glUniform3fv(uniforms[UNIFORM_LIGHT_COLOUR], 1, _lightColour.v);
+    glUniform4fv(uniforms[UNIFORM_LIGHT_COLOUR], 1, _lightColour.v);
 
     // Use fog
+    _fogView.fog->type = _fogOn ? _fogTypeToggle.selectedSegmentIndex + 1: FOG_NONE;
     [_fogView draw];
     
     glUniformMatrix4fv(uniforms[UNIFORM_PROJECTION_MATRIX], 1, false, _camera.projection.m);
-    [self drawCube];
-    [self drawMaze];
+    //[self drawCube];
+    //[self drawMaze];
+    
+    [_minimap drawWithAspectRatio:self.view.bounds.size.width / self.view.bounds.size.height];
 }
 
 -(void)drawCube
@@ -381,7 +384,6 @@ enum
     uniforms[UNIFORM_NORMAL_MATRIX] = glGetUniformLocation(_program, "normalMatrix");
     uniforms[UNIFORM_TEXTURE] = glGetUniformLocation(_program, "texture");
     uniforms[UNIFORM_LIGHT_POSITION] = glGetUniformLocation(_program, "lightPosition");
-    uniforms[UNIFORM_LIGHT_ON] = glGetUniformLocation(_program, "lightOn");
     uniforms[UNIFORM_LIGHT_DIRECTION] = glGetUniformLocation(_program, "lightDirection");
     uniforms[UNIFORM_LIGHT_INTENSITY] = glGetUniformLocation(_program, "lightIntensity");
     uniforms[UNIFORM_LIGHT_CONE_ANGLE_COSINE] = glGetUniformLocation(_program, "lightConeAngleCosine");
@@ -435,4 +437,40 @@ enum
     _camera.position = GLKVector3Make(0, 0, 0);
 }
 
+- (IBAction)onFogToggle:(UIButton *)sender {
+    if(!_fogOn)
+    {
+        _fogOn = YES;
+        [sender setTitle:@"Fog Off" forState:UIControlStateNormal];
+    }
+    else
+    {
+        _fogOn = NO;
+        [sender setTitle:@"Fog On" forState:UIControlStateNormal];
+    }
+}
+
+- (IBAction)onToggleControls:(id)sender {
+    _fogTypeToggle.hidden = !_fogTypeToggle.hidden;
+    _fogColourLabel.hidden = !_fogColourLabel.hidden;
+    _fogColourRLabel.hidden = !_fogColourRLabel.hidden;
+    _fogColourGLabel.hidden = !_fogColourGLabel.hidden;
+    _fogColourBLabel.hidden = !_fogColourBLabel.hidden;
+    _fogColourRSlider.hidden = !_fogColourRSlider.hidden;
+    _fogColourGSlider.hidden = !_fogColourGSlider.hidden;
+    _fogColourBSlider.hidden = !_fogColourBSlider.hidden;
+    _fogToggle.hidden = !_fogToggle.hidden;
+}
+
+- (IBAction)onRedColourChanged:(UISlider *)sender {
+    _fogView.fog->colour.r = sender.value;
+}
+
+- (IBAction)onGreenColourChanged:(UISlider *)sender {
+    _fogView.fog->colour.g = sender.value;
+}
+
+- (IBAction)onBlueColourChanged:(UISlider *)sender {
+    _fogView.fog->colour.b = sender.value;
+}
 @end

@@ -38,6 +38,7 @@
 -(void)draw
 {
     FogType type = _fog.type;
+    glUniform1i(_uniforms[UNIFORM_FOG_TYPE], type);
     switch(type)
     {
         case FOG_NONE:
@@ -50,7 +51,6 @@
         case FOG_EXP:
         case FOG_EXP2:
             glUniform4fv(_uniforms[UNIFORM_FOG_COLOUR], 1, _fog.colour.v);
-            glUniform1i(_uniforms[UNIFORM_FOG_TYPE], _fog.type);
             glUniform1f(_uniforms[UNIFORM_FOG_DENSITY], _fog.density);
             break;
     }
