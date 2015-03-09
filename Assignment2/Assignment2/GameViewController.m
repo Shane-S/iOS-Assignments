@@ -17,7 +17,7 @@
 #import <OpenGLES/ES2/glext.h>
 
 /// The RPM of the spinning cube
-const int REVOLUTIONS_PER_MINUTE = 5;
+const int REVOLUTIONS_PER_MINUTE = 10;
 
 /// Specifies the amount by which the camera will rotate about the y-axis
 /// (i.e. by how much the Look At point will change) on scrolling one screen unit in the
@@ -171,6 +171,9 @@ enum
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
+    glEnable (GL_BLEND);
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glLineWidth(2.0f);
     
     // Set the cube's properties
     _rotatorCube = [[Cube alloc] initWithScale: GLKVector3Make(0.3f, 0.3f, 0.3f) andRotation: GLKVector3Make(0, 0, 0) andPosition: GLKVector3Make(0, 0, 0)];
@@ -450,7 +453,7 @@ enum
     }
 }
 
-- (IBAction)onToggleControls:(id)sender {
+- (IBAction)onToggleControls:(UIButton*)sender {
     _fogTypeToggle.hidden = !_fogTypeToggle.hidden;
     _fogColourLabel.hidden = !_fogColourLabel.hidden;
     _fogColourRLabel.hidden = !_fogColourRLabel.hidden;
@@ -460,6 +463,8 @@ enum
     _fogColourGSlider.hidden = !_fogColourGSlider.hidden;
     _fogColourBSlider.hidden = !_fogColourBSlider.hidden;
     _fogToggle.hidden = !_fogToggle.hidden;
+    
+    [sender setTitle: _fogTypeToggle.hidden ? @"Show Controls" : @"Hide Controls" forState:UIControlStateNormal];
 }
 
 - (IBAction)onRedColourChanged:(UISlider *)sender {
