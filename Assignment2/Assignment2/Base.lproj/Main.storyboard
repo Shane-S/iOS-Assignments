@@ -127,6 +127,7 @@
                             <outletCollection property="gestureRecognizers" destination="PU5-KW-A6R" appends="YES" id="mcG-7C-5FL"/>
                             <outletCollection property="gestureRecognizers" destination="JQX-Vy-f7a" appends="YES" id="PI1-RC-hbi"/>
                             <outletCollection property="gestureRecognizers" destination="B8f-Q3-UtN" appends="YES" id="Ee8-rz-Z1M"/>
+                            <outletCollection property="gestureRecognizers" destination="E2h-Hq-rcb" appends="YES" id="ac3-vH-6TY"/>
                         </connections>
                     </view>
                     <connections>
@@ -140,6 +141,7 @@
                         <outlet property="fogColourRSlider" destination="Uz5-aJ-mTH" id="AKu-Jf-rWj"/>
                         <outlet property="fogToggle" destination="YJX-ze-a4F" id="2db-eV-Wdz"/>
                         <outlet property="fogTypeToggle" destination="E3E-JV-XcQ" id="5nQ-kG-jrm"/>
+                        <outlet property="mapToggle" destination="E2h-Hq-rcb" id="Bww-pJ-pVn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
@@ -148,7 +150,7 @@
                         <action selector="onPan:" destination="BV1-FR-VrT" id="PGG-NG-3ke"/>
                     </connections>
                 </panGestureRecognizer>
-                <tapGestureRecognizer numberOfTouchesRequired="2" id="JQX-Vy-f7a">
+                <tapGestureRecognizer numberOfTouchesRequired="3" id="JQX-Vy-f7a">
                     <connections>
                         <action selector="onFlashlightToggle:" destination="BV1-FR-VrT" id="hAC-aC-k72"/>
                     </connections>
@@ -158,6 +160,11 @@
                         <action selector="onAmbientChange:" destination="BV1-FR-VrT" id="dyi-bR-inI"/>
                     </connections>
                 </pinchGestureRecognizer>
+                <tapGestureRecognizer numberOfTouchesRequired="2" id="E2h-Hq-rcb">
+                    <connections>
+                        <action selector="toggleMinimap:" destination="BV1-FR-VrT" id="Zds-ki-oXo"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
         </scene>
     </scenes>

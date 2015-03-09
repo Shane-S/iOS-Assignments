@@ -22,6 +22,7 @@
 @property (weak, nonatomic) IBOutlet UISlider *fogColourGSlider;
 @property (weak, nonatomic) IBOutlet UISlider *fogColourBSlider;
 @property (weak, nonatomic) IBOutlet UIButton *fogToggle;
+@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *mapToggle;
 
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *flashlightToggleRecognizer;
 @end

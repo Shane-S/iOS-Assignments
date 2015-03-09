@@ -63,6 +63,8 @@ enum
     
     GLKVector4 _ambient;
     
+    BOOL _mapOn;
+    
 }
 @property (strong, nonatomic) EAGLContext *context;
 @property (strong, nonatomic) UITapGestureRecognizer *resetTapRecognizer;
@@ -128,6 +130,10 @@ enum
     _resetTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(resetScene:)];
     _resetTapRecognizer.numberOfTapsRequired = 2;
     _resetTapRecognizer.numberOfTouchesRequired = 1;
+    
+    _mapToggle.numberOfTapsRequired = 2;
+    
+    _mapOn = NO;
     
     [self.view addGestureRecognizer:_resetTapRecognizer];
     [self setupGL];
@@ -331,10 +337,11 @@ enum
     [_fogView draw];
     
     glUniformMatrix4fv(uniforms[UNIFORM_PROJECTION_MATRIX], 1, false, _camera.projection.m);
-    //[self drawCube];
-    //[self drawMaze];
+    [self drawCube];
+    [self drawMaze];
     
-    [_minimap drawWithAspectRatio:self.view.bounds.size.width / self.view.bounds.size.height];
+    if(_mapOn)
+        [_minimap drawWithAspectRatio:self.view.bounds.size.width / self.view.bounds.size.height];
 }
 
 -(void)drawCube
@@ -438,6 +445,10 @@ enum
 - (IBAction)resetScene:(id)sender {
     _camera.rotation = M_PI;
     _camera.position = GLKVector3Make(0, 0, 0);
+}
+
+- (IBAction)toggleMinimap:(id)sender {
+    _mapOn = !_mapOn;
 }
 
 - (IBAction)onFogToggle:(UIButton *)sender {

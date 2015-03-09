@@ -71,34 +71,35 @@ static GLuint uniforms[NUM_UNIFORMS];
 
 -(void)drawWithAspectRatio: (float)ratio
 {
+    // Scale the maze so that it takes up _percentOfScreen * 2 (OpenGL goes from -1 to 1, so need to fit within 2).
+    // _maze.numRows / (_maze.numRows - 1) is making the assumption that our maze is a square. If this is not the case, then we're screwed since
+    // I arrived at this equation at around 5 AM and no longer remember why it is the way it is (in particular, why I divide by _mazeRows - 1;
+    // it was something to do with the number of steps in between the numbers vs the actual number of rows).
     float scaleFactor = (_maze.numRows / (_maze.numRows - 1)) * (2.0 * _percentOfScreen / _maze.numRows);
+    
+    // Translate the maze about its centre, moving up and 0.5 down so that it starts at 0 offset by half of the height, and do the same with z.
+    // Note that this equation relies on equal widths/heights for the maze, and I'm pretty sure that it also relies on the scale of the planes.
     GLKVector2 translations = GLKVector2Make((-_maze.numRows / 2.0) + 0.5, (_maze.numRows / 2.0) - 0.5);
-    GLKMatrix4 rotationMatrix;
-    GLKMatrix4 scaleMatrix;
-    GLKMatrix4 translationMatrix;
+    
+    // Scale our maze according to the current orientation of the screen. If y > x, then we want to multiply y by the aspect ratio. Conversely, if x > y,
+    // then we must divide x by the aspect ratio. We treat the smaller component of the aspect ratio as "unit length", and scale the larger one down.
+    GLKVector3 scales = GLKVector3Make(ratio < 1.0f ? scaleFactor : scaleFactor / ratio, ratio < 1.0f ? scaleFactor * ratio : scaleFactor, scaleFactor);
+    
     GLKMatrix4 mvp;
     
-    // We need this to fit within the screen, so whichever dimension is smaller should be treated as the "unit size", and the larger one
-    // must be scaled down so that their unit sizes are equal
-    GLKVector3 scales = GLKVector3Make(ratio < 1.0f ? scaleFactor : scaleFactor / ratio, ratio < 1.0f ? scaleFactor * ratio : scaleFactor, scaleFactor);
-    rotationMatrix = GLKMatrix4MakeXRotation(M_PI / 2);
+    // Make a view matrix that rotates the world to face z, scales everything to fit on the screen, and translates the map so that its centre is centred in the screen.
+    GLKMatrix4 view = GLKMatrix4MakeXRotation(M_PI / 2);
+    view = GLKMatrix4Multiply(GLKMatrix4MakeScale(scales.x, scales.y, scales.z), view);
+    view = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(translations.x * scales.x, translations.y * scales.y, 0), view);
     
     glUseProgram(_shader);
     for(PlaneView* planeView in _mazeWalls)
     {
         Plane* plane = planeView.plane;
-        // Rotate by 90 degrees clockwise about x (i.e., rotate the world 90 degrees ccw), scale everything down to fit on the screen, and multiply by appropriate aspect ratio values
-        // Note that z will be zeroed in the shader, so it doesn't really matter what happens to it here
-        scaleMatrix = GLKMatrix4MakeScale(scales.x, scales.y, scales.z);
-        translationMatrix = GLKMatrix4MakeTranslation((plane.position.x + translations.x) * scales.x,
-                                                      (-plane.position.z + translations.y) * scales.y,
-                                                      plane.position.z * scales.z);
+        mvp = GLKMatrix4Multiply(view, planeView.modelMatrix);
         
-        mvp = GLKMatrix4Multiply(translationMatrix, GLKMatrix4Multiply(scaleMatrix, rotationMatrix));
-        
+        // zIndex should be <= 0.1 (the near clipping plane). It allows things to be properly layered on-screen.
         glBindVertexArrayOES(planeView.vertexArray);
-        
-        // Concatenate our hacked-up model view projection matrix :)
         glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, GL_FALSE, mvp.m);
         if(plane.type == FLOOR)
         {
@@ -114,25 +115,13 @@ static GLuint uniforms[NUM_UNIFORMS];
         }
     }
     
-    // Draw the cube
-    // Concatenate the cube's rotation with our rotation about x
-    rotationMatrix = GLKMatrix4Multiply(GLKMatrix4MakeZRotation(-_cubeView.cube.rotation.y), GLKMatrix4MakeXRotation(-_cubeView.cube.rotation.x + (M_PI / 2)));
-    rotationMatrix = GLKMatrix4Multiply(rotationMatrix, GLKMatrix4MakeYRotation(-_cubeView.cube.rotation.z));
-    
-    // Concatenate the cube's scale with our scale factor
-    scaleMatrix = GLKMatrix4MakeScale(_cubeView.cube.scale.x * scales.x, _cubeView.cube.scale.y * scales.y, _cubeView.cube.scale.z * scales.z);
-    
-    // Move the cube to the appropriate position
-    translationMatrix = GLKMatrix4MakeTranslation((_cubeView.cube.position.x + translations.x) * scales.x,
-                                                  (-_cubeView.cube.position.z + translations.y) * scales.y,
-                                                  _cubeView.cube.position.z * scales.z);
-    
     glBindVertexArrayOES(_cubeView.vertexArray);
-    
     glUniform4fv(uniforms[UNIFORM_COLOUR], 1, GLKVector4Make(1, 0, 0, 1).v);
-    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, GL_FALSE, GLKMatrix4Multiply(translationMatrix, GLKMatrix4Multiply(scaleMatrix, rotationMatrix)).m);
+    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, GL_FALSE, GLKMatrix4Multiply(view, _cubeView.modelMatrix).m);
     for(int i = 0; i < 72; i += 3)
     {
+        // To draw the triangles as lines, we have to go through the array and draw each set of lines as a line loop. This is a lot
+        // of draw calls, however, so I might switch back to triangles later.
         glDrawArrays(GL_LINE_LOOP, i, 3);
     }
 }
