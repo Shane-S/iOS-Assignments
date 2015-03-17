@@ -1,8 +1,8 @@
 //
 //  main.m
-//  Assignment2
+//  Assignment3
 //
-//  Created by Shane Spoor on 2015-02-26.
+//  Created by Shane Spoor on 2015-03-16.
 //  Copyright (c) 2015 BCIT. All rights reserved.
 //
 

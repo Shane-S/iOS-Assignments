@@ -107,7 +107,7 @@ void main()
         //colour.rgb += (diffuse.rgb + specular.rgb) * actualIntensity;
     }
     
-    colour = (colour * ambient);// + diffuseComponent;
+    colour = (colour * ambient) + diffuseComponent;
     colour = clamp(colour, vec4(0.0, 0.0, 0.0, 0.0), texColour * 1.8);
     colour = mix(fogColour, colour, fogFactor);
     colour.a = 1.0;

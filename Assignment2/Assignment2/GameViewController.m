@@ -109,7 +109,7 @@ enum
     _camera = [[Camera alloc] initWithPosition:GLKVector3Make(0, 0, 0.0f)  andRotation:M_PI
                            andProjectionMatrix:GLKMatrix4MakePerspective(DEFAULT_FOV * (360 / M_PI * 2), aspect, DEFAULT_NEARPLANE, DEFAULT_FARPLANE)];
     
-    maze = [[MazeWrapper alloc] initWithRows:8 andCols:8];
+    maze = [[MazeWrapper alloc] initWithRows:3 andCols:3];
     
     _ambient = GLKVector4Make(1, 1, 1, 1);
     
