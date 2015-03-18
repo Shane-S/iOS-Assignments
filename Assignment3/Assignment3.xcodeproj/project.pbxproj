@@ -42,6 +42,7 @@
 		701ACD061AB7C2A000648607 /* cube.fbx in Resources */ = {isa = PBXBuildFile; fileRef = 701ACD051AB7C2A000648607 /* cube.fbx */; };
 		701ACD081AB7CC3300648607 /* koolaidman.fbx in Resources */ = {isa = PBXBuildFile; fileRef = 701ACD071AB7CC3300648607 /* koolaidman.fbx */; };
 		70C8180F1AB90344001CDE78 /* chair.fbx in Resources */ = {isa = PBXBuildFile; fileRef = 70C8180E1AB90344001CDE78 /* chair.fbx */; };
+		70C818111AB9091C001CDE78 /* humanoid.fbx in Resources */ = {isa = PBXBuildFile; fileRef = 70C818101AB9091C001CDE78 /* humanoid.fbx */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -112,6 +113,7 @@
 		701ACD051AB7C2A000648607 /* cube.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = cube.fbx; sourceTree = "<group>"; };
 		701ACD071AB7CC3300648607 /* koolaidman.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = koolaidman.fbx; sourceTree = "<group>"; };
 		70C8180E1AB90344001CDE78 /* chair.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = chair.fbx; sourceTree = "<group>"; };
+		70C818101AB9091C001CDE78 /* humanoid.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = humanoid.fbx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -292,6 +294,7 @@
 		701ACCFA1AB7A01D00648607 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				70C818101AB9091C001CDE78 /* humanoid.fbx */,
 				70C8180E1AB90344001CDE78 /* chair.fbx */,
 				701ACD071AB7CC3300648607 /* koolaidman.fbx */,
 				701ACD051AB7C2A000648607 /* cube.fbx */,
@@ -381,6 +384,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				701ACCF81AB79E5D00648607 /* Shader.fsh in Resources */,
+				70C818111AB9091C001CDE78 /* humanoid.fbx in Resources */,
 				701ACCE31AB79E5D00648607 /* both_walls.jpg in Resources */,
 				701ACCE21AB79E5D00648607 /* LaunchScreen.xib in Resources */,
 				701ACCF11AB79E5D00648607 /* MinimapShader.fsh in Resources */,
