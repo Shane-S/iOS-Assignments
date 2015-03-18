@@ -39,6 +39,7 @@ public:
     bool initialized;
     GLfloat* vertices;
 	GLfloat* normals;
+    GLfloat* uvs;
     GLuint* indices;
     GLuint numIndices;
 	GLuint numNormals;
