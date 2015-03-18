@@ -41,6 +41,7 @@
 		701ACD041AB7A8EC00648607 /* Common.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 701ACD021AB7A8EC00648607 /* Common.cxx */; };
 		701ACD061AB7C2A000648607 /* cube.fbx in Resources */ = {isa = PBXBuildFile; fileRef = 701ACD051AB7C2A000648607 /* cube.fbx */; };
 		701ACD081AB7CC3300648607 /* koolaidman.fbx in Resources */ = {isa = PBXBuildFile; fileRef = 701ACD071AB7CC3300648607 /* koolaidman.fbx */; };
+		70C8180F1AB90344001CDE78 /* chair.fbx in Resources */ = {isa = PBXBuildFile; fileRef = 70C8180E1AB90344001CDE78 /* chair.fbx */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -110,6 +111,7 @@
 		701ACD031AB7A8EC00648607 /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
 		701ACD051AB7C2A000648607 /* cube.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = cube.fbx; sourceTree = "<group>"; };
 		701ACD071AB7CC3300648607 /* koolaidman.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = koolaidman.fbx; sourceTree = "<group>"; };
+		70C8180E1AB90344001CDE78 /* chair.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = chair.fbx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -290,6 +292,7 @@
 		701ACCFA1AB7A01D00648607 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				70C8180E1AB90344001CDE78 /* chair.fbx */,
 				701ACD071AB7CC3300648607 /* koolaidman.fbx */,
 				701ACD051AB7C2A000648607 /* cube.fbx */,
 				701ACCFB1AB7A19400648607 /* chicken_animv2.fbx */,
@@ -387,6 +390,7 @@
 				701ACD061AB7C2A000648607 /* cube.fbx in Resources */,
 				701ACCED1AB79E5D00648607 /* Images.xcassets in Resources */,
 				701ACCF21AB79E5D00648607 /* MinimapShader.vsh in Resources */,
+				70C8180F1AB90344001CDE78 /* chair.fbx in Resources */,
 				701ACCFC1AB7A19400648607 /* chicken_animv2.fbx in Resources */,
 				701ACD081AB7CC3300648607 /* koolaidman.fbx in Resources */,
 				701ACCE91AB79E5D00648607 /* floor.jpg in Resources */,
@@ -646,6 +650,7 @@
 				701ACC5B1AB7994500648607 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		701ACC5C1AB7994500648607 /* Build configuration list for PBXNativeTarget "Assignment3Tests" */ = {
 			isa = XCConfigurationList;
@@ -654,6 +659,7 @@
 				701ACC5E1AB7994500648607 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
