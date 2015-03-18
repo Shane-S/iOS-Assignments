@@ -68,9 +68,9 @@ void FBXRender::TraverseFBXNodes(FbxNode* node, GLuint& numVertices, GLfloat*& v
             
             for (int j = 0; j < numVerts; j++) {
                 FbxVector4 coord = mesh->GetControlPointAt(j);
-                tempVerts[j*3+0] = (GLfloat)coord.mData[0] * 0.05f - 1.2;
-                tempVerts[j*3+1] = (GLfloat)coord.mData[1] * 0.05f - 0.4f;
-                tempVerts[j*3+2] = (GLfloat)coord.mData[2] * 0.05f;
+                tempVerts[j*3+0] = (GLfloat)coord.mData[0];
+                tempVerts[j*3+1] = (GLfloat)coord.mData[1];
+                tempVerts[j*3+2] = (GLfloat)coord.mData[2];
                 
             }
             vertices = tempVerts;
