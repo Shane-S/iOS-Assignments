@@ -14,6 +14,7 @@
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
+void LoadUVInformation(FbxMesh* pMesh, GLfloat* uvs);
 
 bool FBXRender::Initialize(FbxNode* rootNode, GLuint& numVertices, GLfloat* &vertices, GLuint& numIndices, GLuint* &indices)
 {
@@ -55,7 +56,8 @@ void FBXRender::TraverseFBXNodes(FbxNode* node, GLuint& numVertices, GLfloat*& v
     int numChildren = node->GetChildCount();
     FbxNode* childNode = 0;
     
-    for (int i = 0; i < numChildren; i++) {
+    for (int i = 0; i < numChildren; i++)
+    {
         childNode = node->GetChild(i);
         FbxMesh* mesh = childNode->GetMesh();
         
@@ -100,9 +102,113 @@ void FBXRender::TraverseFBXNodes(FbxNode* node, GLuint& numVertices, GLfloat*& v
                 }
                 normals = tempNormals;
             }
+            
+            //FbxGeometryElementUV* uvElement = mesh->GetElementUV();
+            //if (uvElement)
+            //{
+                
+            //}
+            
+            LoadUVInformation(mesh, uvs);
+            
         } // else
         
         TraverseFBXNodes(childNode, numVertices, vertices, numIndices, indices);
     } // for
 }
+
+void LoadUVInformation(FbxMesh* pMesh, GLfloat* uvs)
+{
+    //get all UV set names
+    FbxStringList lUVSetNameList;
+    pMesh->GetUVSetNames(lUVSetNameList);
+    
+    //iterating over all uv sets
+    for (int lUVSetIndex = 0; lUVSetIndex < lUVSetNameList.GetCount(); lUVSetIndex++)
+    {
+        //get lUVSetIndex-th uv set
+        const char* lUVSetName = lUVSetNameList.GetStringAt(lUVSetIndex);
+        const FbxGeometryElementUV* lUVElement = pMesh->GetElementUV(lUVSetName);
+        
+        if(!lUVElement)
+            continue;
+        
+        // only support mapping mode eByPolygonVertex and eByControlPoint
+        if( lUVElement->GetMappingMode() != FbxGeometryElement::eByPolygonVertex &&
+           lUVElement->GetMappingMode() != FbxGeometryElement::eByControlPoint )
+            return;
+        
+        //index array, where holds the index referenced to the uv data
+        const bool lUseIndex = lUVElement->GetReferenceMode() != FbxGeometryElement::eDirect;
+        const int lIndexCount= (lUseIndex) ? lUVElement->GetIndexArray().GetCount() : 0;
+        
+        //iterating through the data by polygon
+        const int lPolyCount = pMesh->GetPolygonCount();
+        const int lPolySize = pMesh->GetPolygonSize(0);
+        
+        GLfloat* tempUVs = new GLfloat[lPolyCount * lPolySize];
+        int uvIndex = 0;
+        
+        if( lUVElement->GetMappingMode() == FbxGeometryElement::eByControlPoint )
+        {
+            for( int lPolyIndex = 0; lPolyIndex < lPolyCount; ++lPolyIndex )
+            {
+                // build the max index array that we need to pass into MakePoly
+                for( int lVertIndex = 0; lVertIndex < lPolySize; ++lVertIndex )
+                {
+                    FbxVector2 lUVValue;
+                    
+                    //get the index of the current vertex in control points array
+                    int lPolyVertIndex = pMesh->GetPolygonVertex(lPolyIndex,lVertIndex);
+                    
+                    //the UV index depends on the reference mode
+                    int lUVIndex = lUseIndex ? lUVElement->GetIndexArray().GetAt(lPolyVertIndex) : lPolyVertIndex;
+                    
+                    lUVValue = lUVElement->GetDirectArray().GetAt(lUVIndex);
+                    
+                    tempUVs[uvIndex++] = lUVValue[0];
+                    tempUVs[uvIndex++] = lUVValue[1];
+                    //User TODO:
+                    //Print out the value of UV(lUVValue) or log it to a file
+                }
+            }
+            
+            uvs = tempUVs;
+        }
+        else if (lUVElement->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
+        {
+            int lPolyIndexCounter = 0;
+            const int lPolySize = pMesh->GetPolygonSize(0);
+            
+            GLfloat* tempUVs = new GLfloat[lPolyCount * lPolySize];
+            
+            for( int lPolyIndex = 0; lPolyIndex < lPolyCount; ++lPolyIndex )
+            {
+                // build the max index array that we need to pass into MakePoly
+                for( int lVertIndex = 0; lVertIndex < lPolySize; ++lVertIndex )
+                {
+                    if (lPolyIndexCounter < lIndexCount)
+                    {
+                        FbxVector2 lUVValue;
+                        
+                        //the UV index depends on the reference mode
+                        int lUVIndex = lUseIndex ? lUVElement->GetIndexArray().GetAt(lPolyIndexCounter) : lPolyIndexCounter;
+                        
+                        lUVValue = lUVElement->GetDirectArray().GetAt(lUVIndex);
+                        
+                        tempUVs[uvIndex++] = lUVValue[0];
+                        tempUVs[uvIndex++] = lUVValue[1];
+                        //User TODO:
+                        //Print out the value of UV(lUVValue) or log it to a file
+                        
+                        lPolyIndexCounter++;
+                    }
+                }
+            }
+            
+            uvs = tempUVs;
+        }
+    }
+}
+
 
