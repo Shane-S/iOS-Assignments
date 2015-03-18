@@ -16,6 +16,7 @@
 #import "Uniforms.h"
 #import "FogView.h"
 #import "MinimapView.h"
+#import "AIEntity.h"
 #import <OpenGLES/ES2/glext.h>
 
 /// The RPM of the spinning cube
@@ -44,7 +45,8 @@ enum
 
 @interface GameViewController () {
     GLuint _program;
-
+    
+    AIEntity* _aiEntity;
     Cube* _rotatorCube;
     CubeView *_cubeView;
     CGPoint _dragStart;
@@ -205,6 +207,9 @@ enum
     // Set the cube's properties
     _rotatorCube = [[Cube alloc] initWithScale: GLKVector3Make(0.3f, 0.3f, 0.3f) andRotation: GLKVector3Make(0, 0, 0) andPosition: GLKVector3Make(0, 0, 0)];
     
+    // create AIEntity
+    _aiEntity = [[AIEntity alloc] init];
+    
     // Create the cube view with its cube
     _cubeView = [[CubeView alloc] initWithCube: _rotatorCube andTexture:[GLProgramUtils setupTexture:@"crate.jpg"]];
     
@@ -362,6 +367,7 @@ enum
     [self updateContinuousRotation];
     
     [_cubeView updateMatricesWithView: _camera.view];
+    [_aiEntity update];
     for(PlaneView* planeView in _walls) [planeView updateMatricesWithView: _camera.view];
 }
 
@@ -403,14 +409,25 @@ enum
     glUniformMatrix4fv(uniforms[UNIFORM_PROJECTION_MATRIX], 1, false, _camera.projection.m);
     [self drawCube];
     [self drawMaze];
+    [self drawAIEntity];
+    
+    if(_mapOn)
+        [_minimap drawWithAspectRatio:self.view.bounds.size.width / self.view.bounds.size.height];
+}
+
+-(void)drawAIEntity
+{
     glBindVertexArrayOES(0);
+    
+    GLKMatrix4 modelView = GLKMatrix4Multiply(_camera.view, _aiEntity.modelMatrix);
+    GLKMatrix3 normal = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(modelView), NULL);
+    
+    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_MATRIX], 1, 0, modelView.m);
+    glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, normal.m);
     
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
     glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);
-    
-    if(_mapOn)
-        [_minimap drawWithAspectRatio:self.view.bounds.size.width / self.view.bounds.size.height];
 }
 
 -(void)drawCube

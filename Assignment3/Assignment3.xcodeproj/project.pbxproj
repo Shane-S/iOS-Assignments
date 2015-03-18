@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		30E5292A1AB91E79008FF225 /* AIEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 30E529291AB91E79008FF225 /* AIEntity.m */; };
 		701ACC381AB7994500648607 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 701ACC371AB7994500648607 /* main.m */; };
 		701ACC561AB7994500648607 /* Assignment3Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 701ACC551AB7994500648607 /* Assignment3Tests.m */; };
 		701ACCE01AB79E5D00648607 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 701ACCB31AB79E5D00648607 /* AppDelegate.m */; };
@@ -56,6 +57,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		30E529281AB91D63008FF225 /* AIEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIEntity.h; sourceTree = "<group>"; };
+		30E529291AB91E79008FF225 /* AIEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIEntity.m; sourceTree = "<group>"; };
 		701ACC321AB7994500648607 /* Assignment3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Assignment3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		701ACC361AB7994500648607 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		701ACC371AB7994500648607 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -211,6 +214,8 @@
 				701ACCD11AB79E5D00648607 /* MazeWrapper.mm */,
 				701ACCD71AB79E5D00648607 /* Plane.h */,
 				701ACCD81AB79E5D00648607 /* Plane.m */,
+				30E529281AB91D63008FF225 /* AIEntity.h */,
+				30E529291AB91E79008FF225 /* AIEntity.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -429,6 +434,7 @@
 				701ACCE61AB79E5D00648607 /* Cube.m in Sources */,
 				701ACCEA1AB79E5D00648607 /* FogView.m in Sources */,
 				701ACCEC1AB79E5D00648607 /* GLProgramUtils.m in Sources */,
+				30E5292A1AB91E79008FF225 /* AIEntity.m in Sources */,
 				701ACCE01AB79E5D00648607 /* AppDelegate.m in Sources */,
 				701ACCE41AB79E5D00648607 /* Camera.m in Sources */,
 				701ACCF51AB79E5D00648607 /* Plane.m in Sources */,
