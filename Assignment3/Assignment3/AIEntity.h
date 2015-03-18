@@ -11,12 +11,22 @@
 
 #import <Foundation/Foundation.h>
 #import <GLKit/GLKit.h>
+#import "MazeWrapper.h"
 
 @interface AIEntity : NSObject
 
+enum AIState
+{
+    choosingDirection,
+    moving
+};
+
 -(instancetype)init;
--(void)update;
+-(void)updateWithElapsedTime:(float) deltaTime andMap:(MazeWrapper*) maze;
+@property (nonatomic) float speed;
 @property (nonatomic) GLKVector3 position;
+@property (nonatomic) GLKVector3 targetPosition;
+@property (nonatomic) enum AIState state;
 @property (nonatomic) GLKMatrix4 modelMatrix;
 
 @end

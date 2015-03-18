@@ -51,6 +51,7 @@ enum
     CubeView *_cubeView;
     CGPoint _dragStart;
     NSTimeInterval _prevRotationTime;
+    NSTimeInterval _prevTime;
     
     NSMutableArray* _walls;
     MazeWrapper* maze;
@@ -361,14 +362,19 @@ enum
 #pragma mark - GLKView and GLKViewController delegate methods
 
 - (void)update
-{   
+{
+    NSTimeInterval currentTime = [NSDate timeIntervalSinceReferenceDate];
+    double timeDelta = currentTime - _prevRotationTime;
+    
     [_camera updateMatricesWithScreenWidth:self.view.bounds.size.width andScreenHeight:self.view.bounds.size.height andFieldOfView:DEFAULT_FOV];
     
     [self updateContinuousRotation];
     
     [_cubeView updateMatricesWithView: _camera.view];
-    [_aiEntity update];
+    [_aiEntity updateWithElapsedTime:timeDelta andMap:maze];
     for(PlaneView* planeView in _walls) [planeView updateMatricesWithView: _camera.view];
+    
+    _prevTime = currentTime;
 }
 
 - (void)updateContinuousRotation {

@@ -25,4 +25,6 @@ typedef struct MazeImpl MazeImpl;
 -(instancetype) initWithRows: (int)rows andCols: (int)cols;
 
 -(void) getCellAtRow: (int)r andCol: (int)c storeIn: (MazeCell*)cell;
+
+-(void) getCellAtPositionX:(int) x andY:(int) y storeIn: (MazeCell*)cell;
 @end

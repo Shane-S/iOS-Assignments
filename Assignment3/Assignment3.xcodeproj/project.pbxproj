@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		302C3A0C1ABA268C00EC6BA0 /* NSMutableArray_Shuffling.m in Sources */ = {isa = PBXBuildFile; fileRef = 302C3A0B1ABA268C00EC6BA0 /* NSMutableArray_Shuffling.m */; };
 		30E5292A1AB91E79008FF225 /* AIEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 30E529291AB91E79008FF225 /* AIEntity.m */; };
 		701ACC381AB7994500648607 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 701ACC371AB7994500648607 /* main.m */; };
 		701ACC561AB7994500648607 /* Assignment3Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 701ACC551AB7994500648607 /* Assignment3Tests.m */; };
@@ -57,6 +58,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		302C3A0A1ABA1EF500EC6BA0 /* NSMutableArray_Shuffling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMutableArray_Shuffling.h; sourceTree = "<group>"; };
+		302C3A0B1ABA268C00EC6BA0 /* NSMutableArray_Shuffling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSMutableArray_Shuffling.m; sourceTree = "<group>"; };
 		30E529281AB91D63008FF225 /* AIEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIEntity.h; sourceTree = "<group>"; };
 		30E529291AB91E79008FF225 /* AIEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIEntity.m; sourceTree = "<group>"; };
 		701ACC321AB7994500648607 /* Assignment3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Assignment3.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -292,6 +295,8 @@
 				701ACD031AB7A8EC00648607 /* Common.h */,
 				701ACCC91AB79E5D00648607 /* GLProgramUtils.h */,
 				701ACCCA1AB79E5D00648607 /* GLProgramUtils.m */,
+				302C3A0A1ABA1EF500EC6BA0 /* NSMutableArray_Shuffling.h */,
+				302C3A0B1ABA268C00EC6BA0 /* NSMutableArray_Shuffling.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -431,6 +436,7 @@
 				701ACCF31AB79E5D00648607 /* MinimapView.m in Sources */,
 				701ACCE81AB79E5D00648607 /* DisjointSet.cpp in Sources */,
 				701ACCE71AB79E5D00648607 /* CubeView.m in Sources */,
+				302C3A0C1ABA268C00EC6BA0 /* NSMutableArray_Shuffling.m in Sources */,
 				701ACCE61AB79E5D00648607 /* Cube.m in Sources */,
 				701ACCEA1AB79E5D00648607 /* FogView.m in Sources */,
 				701ACCEC1AB79E5D00648607 /* GLProgramUtils.m in Sources */,

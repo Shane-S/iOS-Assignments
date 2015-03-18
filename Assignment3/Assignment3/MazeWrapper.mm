@@ -56,4 +56,10 @@ public:
 {
     *cell = mazeImpl->maze->GetCell(r, c);
 }
+
+-(void) getCellAtPositionX:(int) x andY:(int) y storeIn: (MazeCell*)cell
+{
+    [self getCellAtRow:0 andCol:0 storeIn:cell];
+}
+
 @end
