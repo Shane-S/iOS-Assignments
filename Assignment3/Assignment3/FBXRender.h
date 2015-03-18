@@ -47,7 +47,8 @@ public:
 	MeshExtents meshExtents;
 
 	void TraverseFBXNodes(FbxNode* node, GLuint& numVertices, GLfloat*& vertices, GLuint& numIndices, GLuint*& indices);
-	//void LoadVBO(GLuint shaderPosAttr, GLuint shaderNormalAttr);
+    void LoadUVInformation(FbxMesh* mesh);
+    //void LoadVBO(GLuint shaderPosAttr, GLuint shaderNormalAttr);
 };
 
 

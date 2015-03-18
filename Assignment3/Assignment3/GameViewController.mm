@@ -198,7 +198,7 @@ enum
     
     
     // FBX start
-    NSString *modelFileName = [[NSBundle mainBundle] pathForResource:@"chair" ofType:@"fbx"];
+    NSString *modelFileName = [[NSBundle mainBundle] pathForResource:@"humanoid" ofType:@"fbx"];
     [self initializeFBX];
     [self LoadFBXScene:modelFileName];
     

@@ -10,7 +10,7 @@
 
 const float DEFAULT_FOV = M_PI / 3;
 const float DEFAULT_NEARPLANE = 0.1f;
-const float DEFAULT_FARPLANE = 100.0f;
+const float DEFAULT_FARPLANE = 1000.0f;
 
 @implementation Camera
 

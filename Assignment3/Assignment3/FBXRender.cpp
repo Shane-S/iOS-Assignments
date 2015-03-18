@@ -109,7 +109,7 @@ void FBXRender::TraverseFBXNodes(FbxNode* node, GLuint& numVertices, GLfloat*& v
                 
             //}
             
-            LoadUVInformation(mesh, uvs);
+            LoadUVInformation(mesh);
             
         } // else
         
@@ -117,7 +117,7 @@ void FBXRender::TraverseFBXNodes(FbxNode* node, GLuint& numVertices, GLfloat*& v
     } // for
 }
 
-void LoadUVInformation(FbxMesh* pMesh, GLfloat* uvs)
+void FBXRender::LoadUVInformation(FbxMesh* pMesh)
 {
     //get all UV set names
     FbxStringList lUVSetNameList;
@@ -146,7 +146,7 @@ void LoadUVInformation(FbxMesh* pMesh, GLfloat* uvs)
         const int lPolyCount = pMesh->GetPolygonCount();
         const int lPolySize = pMesh->GetPolygonSize(0);
         
-        GLfloat* tempUVs = new GLfloat[lPolyCount * lPolySize];
+        GLfloat* tempUVs = new GLfloat[lPolyCount * lPolySize * 2];
         int uvIndex = 0;
         
         if( lUVElement->GetMappingMode() == FbxGeometryElement::eByControlPoint )
@@ -173,14 +173,11 @@ void LoadUVInformation(FbxMesh* pMesh, GLfloat* uvs)
                 }
             }
             
-            uvs = tempUVs;
         }
         else if (lUVElement->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
         {
             int lPolyIndexCounter = 0;
             const int lPolySize = pMesh->GetPolygonSize(0);
-            
-            GLfloat* tempUVs = new GLfloat[lPolyCount * lPolySize];
             
             for( int lPolyIndex = 0; lPolyIndex < lPolyCount; ++lPolyIndex )
             {
@@ -206,8 +203,8 @@ void LoadUVInformation(FbxMesh* pMesh, GLfloat* uvs)
                 }
             }
             
-            uvs = tempUVs;
         }
+        uvs = tempUVs;
     }
 }
 
