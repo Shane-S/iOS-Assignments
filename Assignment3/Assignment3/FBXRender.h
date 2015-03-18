@@ -37,8 +37,12 @@ public:
 
     //private:
     bool initialized;
-	GLfloat *normals;
+    GLfloat* vertices;
+	GLfloat* normals;
+    GLuint* indices;
+    GLuint numIndices;
 	GLuint numNormals;
+    GLuint numVertices;
 	MeshExtents meshExtents;
 
 	void TraverseFBXNodes(FbxNode* node, GLuint& numVertices, GLfloat*& vertices, GLuint& numIndices, GLuint*& indices);

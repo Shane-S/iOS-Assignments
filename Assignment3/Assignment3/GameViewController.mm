@@ -198,24 +198,9 @@ enum
     
     
     // FBX start
-    NSString *modelFileName = [[NSBundle mainBundle] pathForResource:@"chicken_animv2" ofType:@"fbx"];
+    NSString *modelFileName = [[NSBundle mainBundle] pathForResource:@"koolaidman" ofType:@"fbx"];
     [self initializeFBX];
     [self LoadFBXScene:modelFileName];
-    
-    // Create a buffer, tell OpenGL to set it as the active buffer (with glBindBuffer), and set the buffer's data to the cube's vertices
-    glGenBuffers(1, &vertexBuffer);
-    glGenBuffers(1, &indexBuffer);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 3 * numVertices, vertices, GL_STATIC_DRAW);
-    
-    // Tell OpenGL to set the format for the vertex buffer in the vertex array
-    glEnableVertexAttribArray(GLKVertexAttribPosition);
-    glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), 0);
-    
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * numIndices, indices, GL_STATIC_DRAW);
-    // FBX end
     
     // Set the cube's properties
     _rotatorCube = [[Cube alloc] initWithScale: GLKVector3Make(0.3f, 0.3f, 0.3f) andRotation: GLKVector3Make(0, 0, 0) andPosition: GLKVector3Make(0, 0, 0)];
@@ -245,8 +230,6 @@ enum
     if(!_scene) NSLog(@"Couldn't create scene. No good man.");
 }
 
-
-
 - (BOOL)LoadFBXScene:(NSString *)filename
 {
     FbxString fbxSt([filename cStringUsingEncoding:[NSString defaultCStringEncoding]]) ;
@@ -255,6 +238,21 @@ enum
     
     FbxNode *rootNode = _scene->GetRootNode();
     fbxRender.Initialize(rootNode, numVertices, vertices, numIndices, indices);
+    
+    // Create a buffer, tell OpenGL to set it as the active buffer (with glBindBuffer), and set the buffer's data to the chicken's vertices
+    glGenBuffers(1, &vertexBuffer);
+    glGenBuffers(1, &indexBuffer);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 3 * numVertices, vertices, GL_STATIC_DRAW);
+    
+    // Tell OpenGL to set the format for the vertex buffer in the vertex array
+    glEnableVertexAttribArray(GLKVertexAttribPosition);
+    glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * numIndices, indices, GL_STATIC_DRAW);
+    // FBX end
     
     return TRUE;
 }
@@ -405,10 +403,11 @@ enum
     glUniformMatrix4fv(uniforms[UNIFORM_PROJECTION_MATRIX], 1, false, _camera.projection.m);
     [self drawCube];
     [self drawMaze];
+    glBindVertexArrayOES(0);
     
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-    glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, indices);
-    
+    glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);
     
     if(_mapOn)
         [_minimap drawWithAspectRatio:self.view.bounds.size.width / self.view.bounds.size.height];

@@ -39,6 +39,8 @@
 		701ACCFF1AB7A23600648607 /* FBXRender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 701ACCFD1AB7A23600648607 /* FBXRender.cpp */; };
 		701ACD011AB7A2B300648607 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 701ACD001AB7A2B300648607 /* libiconv.dylib */; };
 		701ACD041AB7A8EC00648607 /* Common.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 701ACD021AB7A8EC00648607 /* Common.cxx */; };
+		701ACD061AB7C2A000648607 /* cube.fbx in Resources */ = {isa = PBXBuildFile; fileRef = 701ACD051AB7C2A000648607 /* cube.fbx */; };
+		701ACD081AB7CC3300648607 /* koolaidman.fbx in Resources */ = {isa = PBXBuildFile; fileRef = 701ACD071AB7CC3300648607 /* koolaidman.fbx */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -106,6 +108,8 @@
 		701ACD001AB7A2B300648607 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		701ACD021AB7A8EC00648607 /* Common.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Common.cxx; sourceTree = "<group>"; };
 		701ACD031AB7A8EC00648607 /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
+		701ACD051AB7C2A000648607 /* cube.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = cube.fbx; sourceTree = "<group>"; };
+		701ACD071AB7CC3300648607 /* koolaidman.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = koolaidman.fbx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -286,6 +290,8 @@
 		701ACCFA1AB7A01D00648607 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				701ACD071AB7CC3300648607 /* koolaidman.fbx */,
+				701ACD051AB7C2A000648607 /* cube.fbx */,
 				701ACCFB1AB7A19400648607 /* chicken_animv2.fbx */,
 			);
 			name = Models;
@@ -378,9 +384,11 @@
 				701ACCF91AB79E5D00648607 /* Shader.vsh in Resources */,
 				701ACCE11AB79E5D00648607 /* Main.storyboard in Resources */,
 				701ACCEE1AB79E5D00648607 /* left_wall.jpg in Resources */,
+				701ACD061AB7C2A000648607 /* cube.fbx in Resources */,
 				701ACCED1AB79E5D00648607 /* Images.xcassets in Resources */,
 				701ACCF21AB79E5D00648607 /* MinimapShader.vsh in Resources */,
 				701ACCFC1AB7A19400648607 /* chicken_animv2.fbx in Resources */,
+				701ACD081AB7CC3300648607 /* koolaidman.fbx in Resources */,
 				701ACCE91AB79E5D00648607 /* floor.jpg in Resources */,
 				701ACCF71AB79E5D00648607 /* right_wall.jpg in Resources */,
 				701ACCF41AB79E5D00648607 /* no_walls.jpg in Resources */,

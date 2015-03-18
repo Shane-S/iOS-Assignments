@@ -118,40 +118,10 @@ bool LoadScene(FbxManager* pManager, FbxDocument* pScene, const char* pFilename)
         return false;
     }
 
-    FBXSDK_printf("FBX file format version for this FBX SDK is %d.%d.%d\n", lSDKMajor, lSDKMinor, lSDKRevision);
-
     if (lImporter->IsFBX())
     {
-        FBXSDK_printf("FBX file format version for file '%s' is %d.%d.%d\n\n", pFilename, lFileMajor, lFileMinor, lFileRevision);
-
         // From this point, it is possible to access animation stack information without
         // the expense of loading the entire file.
-
-        FBXSDK_printf("Animation Stack Information\n");
-
-        lAnimStackCount = lImporter->GetAnimStackCount();
-
-        FBXSDK_printf("    Number of Animation Stacks: %d\n", lAnimStackCount);
-        FBXSDK_printf("    Current Animation Stack: \"%s\"\n", lImporter->GetActiveAnimStackName().Buffer());
-        FBXSDK_printf("\n");
-
-        for(i = 0; i < lAnimStackCount; i++)
-        {
-            FbxTakeInfo* lTakeInfo = lImporter->GetTakeInfo(i);
-
-            FBXSDK_printf("    Animation Stack %d\n", i);
-            FBXSDK_printf("         Name: \"%s\"\n", lTakeInfo->mName.Buffer());
-            FBXSDK_printf("         Description: \"%s\"\n", lTakeInfo->mDescription.Buffer());
-
-            // Change the value of the import name if the animation stack should be imported 
-            // under a different name.
-            FBXSDK_printf("         Import Name: \"%s\"\n", lTakeInfo->mImportName.Buffer());
-
-            // Set the value of the import state to false if the animation stack should be not
-            // be imported. 
-            FBXSDK_printf("         Import State: %s\n", lTakeInfo->mSelect ? "true" : "false");
-            FBXSDK_printf("\n");
-        }
 
         // Set the import states. By default, the import states are always set to 
         // true. The code below shows how to change these states.
