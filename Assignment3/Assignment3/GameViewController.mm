@@ -543,7 +543,10 @@ enum
     // Otherwise, adjust the AI entity
     else
     {
-        
+        GLKVector3 rotation = GLKVector3Make(_aiEntity.rotation.x - (d.y * CAMERA_ROTATE_FACTOR),
+                                             _aiEntity.rotation.y + (d.x * CAMERA_ROTATE_FACTOR),
+                                             0);
+        _aiEntity.rotation = rotation;
     }
     
     _dragStart = cur;

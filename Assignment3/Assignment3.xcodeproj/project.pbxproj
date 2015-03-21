@@ -607,6 +607,7 @@
 					"\"/Applications/Autodesk/FBX SDK/2015.1/include\"",
 				);
 				INFOPLIST_FILE = Assignment3/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
 					"-ObjC",
@@ -630,6 +631,7 @@
 					"\"/Applications/Autodesk/FBX SDK/2015.1/include\"",
 				);
 				INFOPLIST_FILE = Assignment3/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
 					"-ObjC",
