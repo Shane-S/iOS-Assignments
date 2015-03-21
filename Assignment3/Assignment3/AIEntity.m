@@ -21,6 +21,8 @@
     if((self = [super init]))
     {
         _position = GLKVector3Make(0, 0, 0);
+        _scale = GLKVector3Make(1.0f, 1.0f, 1.0f);
+        _rotation = GLKVector3Make(0, 0, 0);
         _targetPosition = GLKVector3Make(0, 0, 0);
         _state = choosingDirection;
         _speed = 1.0f;
@@ -211,8 +213,5 @@
             _position = GLKVector3Add(_position, displacement);
         }
     }
-    
-    _modelMatrix = GLKMatrix4Identity;
-    _modelMatrix = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(_position.x, _position.y, _position.z), _modelMatrix);
 }
 @end

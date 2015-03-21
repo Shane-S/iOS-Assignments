@@ -25,9 +25,10 @@ enum AIState
 -(void)updateWithElapsedTime:(float) deltaTime andMap:(MazeWrapper*) maze;
 @property (nonatomic) float speed;
 @property (nonatomic) GLKVector3 position;
+@property (nonatomic) GLKVector3 scale;
+@property (nonatomic) GLKVector3 rotation;
 @property (nonatomic) GLKVector3 targetPosition;
 @property (nonatomic) enum AIState state;
-@property (nonatomic) GLKMatrix4 modelMatrix;
 
 @end
 #endif

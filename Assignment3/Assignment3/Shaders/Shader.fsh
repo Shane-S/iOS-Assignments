@@ -98,7 +98,7 @@ void main()
         // Calculate diffuse
         float angleIntensity = max(0.0, dot(positionToLightNormed, normalOut));
        
-        diffuseComponent = (lightColour * texColour) * angleIntensity * lightIntensity;
+        diffuseComponent = (lightColour * texColour) * lightIntensity * angleIntensity;
      
         // Calculate specular
         // vec3 specular;
@@ -106,7 +106,7 @@ void main()
         // Vary the intensity based on the distance from the light
         //colour.rgb += (diffuse.rgb + specular.rgb) * actualIntensity;
     }
-    
+
     colour = (colour * ambient) + diffuseComponent;
     colour = clamp(colour, vec4(0.0, 0.0, 0.0, 0.0), texColour * 1.8);
     colour = mix(fogColour, colour, fogFactor);

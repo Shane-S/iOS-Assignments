@@ -17,6 +17,7 @@
 #import "FogView.h"
 #import "MinimapView.h"
 #import "AIEntity.h"
+#import "AIEntityView.h"
 #import <OpenGLES/ES2/glext.h>
 
 /// The RPM of the spinning cube
@@ -47,6 +48,7 @@ enum
     GLuint _program;
     
     AIEntity* _aiEntity;
+    AIEntityView* _aiView;
     Cube* _rotatorCube;
     CubeView *_cubeView;
     CGPoint _dragStart;
@@ -70,19 +72,9 @@ enum
     
     BOOL _mapOn;
     
-    
     // FBX stuff
     FbxManager *_sdkManager;
     FbxScene *_scene;
-    FbxArray<FbxString*> animStackNameArray;
-    FBXRender fbxRender;
-    
-    GLuint numVertices;
-    GLfloat *vertices;
-    GLuint numIndices;
-    GLuint *indices;
-    GLuint vertexBuffer;
-    GLuint indexBuffer;
 }
 @property (strong, nonatomic) EAGLContext *context;
 @property (strong, nonatomic) UITapGestureRecognizer *resetTapRecognizer;
@@ -200,16 +192,20 @@ enum
     glLineWidth(2.0f);
     
     
-    // FBX start
-    NSString *modelFileName = [[NSBundle mainBundle] pathForResource:@"humanoid" ofType:@"fbx"];
-    [self initializeFBX];
-    [self LoadFBXScene:modelFileName];
-    
     // Set the cube's properties
     _rotatorCube = [[Cube alloc] initWithScale: GLKVector3Make(0.3f, 0.3f, 0.3f) andRotation: GLKVector3Make(0, 0, 0) andPosition: GLKVector3Make(0, 0, 0)];
     
     // create AIEntity
     _aiEntity = [[AIEntity alloc] init];
+    _aiEntity.scale = GLKVector3Make(0.005f, 0.005f, 0.005f);
+    
+    // Load the FBX model and texture for it
+    NSString *modelFileName = [[NSBundle mainBundle] pathForResource:@"ArmyPilot" ofType:@"fbx"];
+    [self initializeFBX];
+    FbxMesh* chickenMesh = [self LoadFBXScene:modelFileName];
+    GLuint texture = [GLProgramUtils setupTexture:@"body01.jpg"];
+    
+    _aiView = [[AIEntityView alloc] initWithEntity:_aiEntity andTexture:texture andMesh:chickenMesh];
     
     // Create the cube view with its cube
     _cubeView = [[CubeView alloc] initWithCube: _rotatorCube andTexture:[GLProgramUtils setupTexture:@"crate.jpg"]];
@@ -234,33 +230,39 @@ enum
     //Create an FBX scene. This object holds most objects imported/exported from/to files.
     _scene = FbxScene::Create(_sdkManager, "My Scene");
     if(!_scene) NSLog(@"Couldn't create scene. No good man.");
+    
+    FbxGeometryConverter converter(_sdkManager);
+    converter.Triangulate(_scene, true);
 }
 
-- (BOOL)LoadFBXScene:(NSString *)filename
+- (FbxMesh*)LoadFBXScene:(NSString *)filename
 {
     FbxString fbxSt([filename cStringUsingEncoding:[NSString defaultCStringEncoding]]) ;
     bool bResult = LoadScene(_sdkManager, _scene, fbxSt.Buffer());
     if (!bResult) return FALSE;
     
-    FbxNode *rootNode = _scene->GetRootNode();
-    fbxRender.Initialize(rootNode, numVertices, vertices, numIndices, indices);
+    // Find the first mesh node in the scene (there are far better way of doing this, and it's not
+    // really what we want, but this is sufficient for now)
+    FbxNode *root = _scene->GetRootNode();
+    FbxNode* meshNode = NULL;
+    int numChildren = root->GetChildCount();
+    for(int i = 0; i < numChildren; i++)
+    {
+        FbxNode* node = root->GetChild(i);
+        FbxNodeAttribute* attr = node->GetNodeAttribute();
+        FbxNodeAttribute::EType type = attr->GetAttributeType();
+        if (type == FbxNodeAttribute::eMesh)
+        {
+            meshNode = node;
+            break;
+        }
+    }
     
-    // Create a buffer, tell OpenGL to set it as the active buffer (with glBindBuffer), and set the buffer's data to the chicken's vertices
-    glGenBuffers(1, &vertexBuffer);
-    glGenBuffers(1, &indexBuffer);
+    if(meshNode == NULL) return NULL;
     
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 3 * numVertices, vertices, GL_STATIC_DRAW);
-    
-    // Tell OpenGL to set the format for the vertex buffer in the vertex array
-    glEnableVertexAttribArray(GLKVertexAttribPosition);
-    glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * numIndices, indices, GL_STATIC_DRAW);
-    // FBX end
-    
-    return TRUE;
+    // Get the mesh and load its indices into the index buffer
+    FbxMesh* mesh = meshNode->GetMesh();
+    return mesh;
 }
 
 -(void) setupMaze
@@ -372,6 +374,8 @@ enum
     
     [_cubeView updateMatricesWithView: _camera.view];
     [_aiEntity updateWithElapsedTime:timeDelta andMap:maze];
+    [_aiView updateMatricesWithView:_camera.view];
+    
     for(PlaneView* planeView in _walls) [planeView updateMatricesWithView: _camera.view];
     
     _prevTime = currentTime;
@@ -423,17 +427,14 @@ enum
 
 -(void)drawAIEntity
 {
-    glBindVertexArrayOES(0);
+    glBindVertexArrayOES(_aiView.vertexArray);
+
+    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_MATRIX], 1, 0, _aiView.modelViewMatrix.m);
+    glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, GLKMatrix4InvertAndTranspose(_aiView.modelViewMatrix, NULL).m);
     
-    GLKMatrix4 modelView = GLKMatrix4Multiply(_camera.view, _aiEntity.modelMatrix);
-    GLKMatrix3 normal = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(modelView), NULL);
-    
-    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_MATRIX], 1, 0, modelView.m);
-    glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, normal.m);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-    glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);
+    glBindTexture(GL_TEXTURE_2D, _aiView.texture);
+    glUniform1i(uniforms[UNIFORM_TEXTURE], 0);
+    glDrawArrays(GL_TRIANGLES, 0, _aiView.numIndices);
 }
 
 -(void)drawCube
