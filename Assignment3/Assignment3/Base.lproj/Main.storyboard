@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BV1-FR-VrT">
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -88,17 +89,8 @@
                                     <action selector="onFogToggle:" destination="BV1-FR-VrT" eventType="touchUpInside" id="cVZ-wN-ZkW"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O8H-TW-O2i">
-                                <rect key="frame" x="476" y="28" width="108" height="30"/>
-                                <state key="normal" title="Show Controls">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="onToggleControls:" destination="BV1-FR-VrT" eventType="touchUpInside" id="oqC-Fw-Hlc"/>
-                                </connections>
-                            </button>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pF5-85-9ev">
-                                <rect key="frame" x="16" y="306" width="91" height="30"/>
+                                <rect key="frame" x="16" y="477" width="91" height="30"/>
                                 <state key="normal" title="Adjust Model">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -106,31 +98,77 @@
                                     <action selector="toggleModelAdj:" destination="BV1-FR-VrT" eventType="touchUpInside" id="lGb-UQ-GQH"/>
                                 </connections>
                             </button>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Movement Axis:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Diu-nD-1kA">
+                                <rect key="frame" x="16" y="567" width="110" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <segmentedControl hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="1w6-VX-Voc">
+                                <rect key="frame" x="134" y="563" width="71" height="29"/>
+                                <segments>
+                                    <segment title="X"/>
+                                    <segment title="Y"/>
+                                    <segment title="Z"/>
+                                </segments>
+                            </segmentedControl>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Z6-4x-820">
+                                <rect key="frame" x="16" y="522" width="118" height="30"/>
+                                <state key="normal" title="Reset to Defaults">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="0WN-uf-d2M">
+                                <rect key="frame" x="426" y="28" width="158" height="29"/>
+                                <segments>
+                                    <segment title="None"/>
+                                    <segment title="Fog"/>
+                                    <segment title="Model"/>
+                                </segments>
+                                <connections>
+                                    <action selector="switchControls:" destination="BV1-FR-VrT" eventType="valueChanged" id="1t8-R7-PYk"/>
+                                </connections>
+                            </segmentedControl>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Controls: " lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cnj-P6-YuV">
+                                <rect key="frame" x="343" y="31" width="75" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="pF5-85-9ev" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="2mI-Ez-SOD"/>
                             <constraint firstItem="E3E-JV-XcQ" firstAttribute="top" secondItem="YJX-ze-a4F" secondAttribute="bottom" constant="8" id="3a0-4D-EuQ"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="O8H-TW-O2i" secondAttribute="trailing" id="73L-Go-QNJ"/>
+                            <constraint firstItem="1w6-VX-Voc" firstAttribute="leading" secondItem="Diu-nD-1kA" secondAttribute="trailing" constant="8" id="797-1L-HRC"/>
+                            <constraint firstItem="Diu-nD-1kA" firstAttribute="baseline" secondItem="1w6-VX-Voc" secondAttribute="baseline" id="7Cq-ee-qMf"/>
                             <constraint firstItem="eza-tc-d4P" firstAttribute="top" secondItem="ttP-Ly-w2c" secondAttribute="bottom" constant="17" id="8Aa-9p-jq0"/>
                             <constraint firstItem="eza-tc-d4P" firstAttribute="bottom" secondItem="jC1-9B-Sbk" secondAttribute="bottom" constant="-5" id="8gw-FV-0k9"/>
                             <constraint firstItem="eza-tc-d4P" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="BIo-Yi-8sz"/>
+                            <constraint firstItem="Cnj-P6-YuV" firstAttribute="top" secondItem="8aa-yV-Osq" secondAttribute="bottom" constant="11" id="Fvy-CY-JEr"/>
                             <constraint firstItem="CDt-ao-uxV" firstAttribute="bottom" secondItem="3Ed-g2-r0w" secondAttribute="bottom" constant="-5" id="IGI-YM-icB"/>
                             <constraint firstItem="qHh-Mt-9TT" firstAttribute="top" secondItem="3Ed-g2-r0w" secondAttribute="bottom" constant="29" id="IVu-Lr-rUX"/>
+                            <constraint firstItem="Diu-nD-1kA" firstAttribute="top" secondItem="7Z6-4x-820" secondAttribute="bottom" constant="15" id="Mzy-3d-wFH"/>
                             <constraint firstItem="Uz5-aJ-mTH" firstAttribute="top" secondItem="jja-3S-ZI7" secondAttribute="bottom" constant="14" id="Nej-AM-p6X"/>
+                            <constraint firstItem="qHh-Mt-9TT" firstAttribute="top" secondItem="Diu-nD-1kA" secondAttribute="bottom" constant="15" id="O1D-64-Khz"/>
+                            <constraint firstItem="7Z6-4x-820" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="OaW-Oh-m0o"/>
                             <constraint firstItem="E3E-JV-XcQ" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="PEa-4l-ZYD"/>
                             <constraint firstItem="jja-3S-ZI7" firstAttribute="top" secondItem="E3E-JV-XcQ" secondAttribute="bottom" constant="20" id="RGQ-3C-95u"/>
                             <constraint firstItem="3Ed-g2-r0w" firstAttribute="leading" secondItem="CDt-ao-uxV" secondAttribute="trailing" constant="18" id="RcF-YE-0ss"/>
-                            <constraint firstItem="O8H-TW-O2i" firstAttribute="top" secondItem="8aa-yV-Osq" secondAttribute="bottom" constant="8" id="YIw-Wg-Kgb"/>
-                            <constraint firstItem="YJX-ze-a4F" firstAttribute="top" secondItem="pF5-85-9ev" secondAttribute="bottom" constant="8" id="YTB-P5-dsg"/>
                             <constraint firstItem="CDt-ao-uxV" firstAttribute="top" secondItem="eza-tc-d4P" secondAttribute="bottom" constant="17" id="aBC-B2-CMV"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="0WN-uf-d2M" secondAttribute="trailing" id="djD-Js-rMd"/>
+                            <constraint firstItem="7Z6-4x-820" firstAttribute="top" secondItem="pF5-85-9ev" secondAttribute="bottom" constant="15" id="djE-rj-VhT"/>
+                            <constraint firstItem="Diu-nD-1kA" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="fMS-DT-T0T"/>
                             <constraint firstItem="jC1-9B-Sbk" firstAttribute="leading" secondItem="eza-tc-d4P" secondAttribute="trailing" constant="17" id="ffJ-LH-Ydi"/>
+                            <constraint firstItem="0WN-uf-d2M" firstAttribute="top" secondItem="8aa-yV-Osq" secondAttribute="bottom" constant="8" id="h2j-xj-5aw"/>
                             <constraint firstItem="Uz5-aJ-mTH" firstAttribute="leading" secondItem="ttP-Ly-w2c" secondAttribute="trailing" constant="18" id="h4a-ny-s0j"/>
                             <constraint firstItem="jja-3S-ZI7" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="js2-qG-Wqv"/>
                             <constraint firstItem="YJX-ze-a4F" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="ljF-S4-G0T"/>
                             <constraint firstItem="ttP-Ly-w2c" firstAttribute="bottom" secondItem="Uz5-aJ-mTH" secondAttribute="bottom" constant="-5" id="mbY-1s-g3e"/>
+                            <constraint firstItem="0WN-uf-d2M" firstAttribute="baseline" secondItem="Cnj-P6-YuV" secondAttribute="baseline" id="nIC-5a-bgg"/>
                             <constraint firstItem="CDt-ao-uxV" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="oMX-fl-yfh"/>
+                            <constraint firstItem="0WN-uf-d2M" firstAttribute="leading" secondItem="Cnj-P6-YuV" secondAttribute="trailing" constant="8" id="ohL-ip-7jH"/>
                             <constraint firstItem="ttP-Ly-w2c" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="yMV-K8-XhH"/>
                         </constraints>
                         <connections>
@@ -141,7 +179,7 @@
                         </connections>
                     </view>
                     <connections>
-                        <outlet property="adjustModelBtn" destination="pF5-85-9ev" id="9SS-hJ-9KC"/>
+                        <outlet property="adjustModelBtn" destination="pF5-85-9ev" id="iKA-2l-jHI"/>
                         <outlet property="flashlightToggleRecognizer" destination="JQX-Vy-f7a" id="1TK-5e-mVU"/>
                         <outlet property="fogColourBLabel" destination="CDt-ao-uxV" id="7PU-iN-dLH"/>
                         <outlet property="fogColourBSlider" destination="3Ed-g2-r0w" id="cP3-Qt-t7q"/>
@@ -153,6 +191,9 @@
                         <outlet property="fogToggle" destination="YJX-ze-a4F" id="2db-eV-Wdz"/>
                         <outlet property="fogTypeToggle" destination="E3E-JV-XcQ" id="5nQ-kG-jrm"/>
                         <outlet property="mapToggle" destination="E2h-Hq-rcb" id="Bww-pJ-pVn"/>
+                        <outlet property="modelReset" destination="7Z6-4x-820" id="6qi-qN-apR"/>
+                        <outlet property="movementAxisLbl" destination="Diu-nD-1kA" id="iht-QV-pfV"/>
+                        <outlet property="movementAxisSel" destination="1w6-VX-Voc" id="tL0-Yv-6c8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>

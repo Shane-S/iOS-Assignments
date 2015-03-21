@@ -1,0 +1,14 @@
+README
+======
+* Tap with two fingers to turn the flashlight on
+* Pan up/down to move in the direction that the camera is facing
+* Pan left/right to rotate the camera
+
+~~Not Done~~
+* There are three fog equations enabled, but currently they can only be changed
+  through code GameViewController.m”
+* minimap
+
+~~V2~~
+* Add controls to change fog colour and type
+* NOTE: V1 also included the ability to change ambient lighting by pinching

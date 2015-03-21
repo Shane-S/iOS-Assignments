@@ -234,8 +234,8 @@ enum
     _scene = FbxScene::Create(_sdkManager, "My Scene");
     if(!_scene) NSLog(@"Couldn't create scene. No good man.");
     
-    FbxGeometryConverter converter(_sdkManager);
-    converter.Triangulate(_scene, true);
+    //FbxGeometryConverter converter(_sdkManager);
+    //converter.Triangulate(_scene, true);
 }
 
 - (FbxMesh*)LoadFBXScene:(NSString *)filename
@@ -509,13 +509,22 @@ enum
 }
 
 - (IBAction)onAmbientChange:(UIPinchGestureRecognizer *)sender {
-    _ambient.r *= sender.scale;
-    _ambient.g *= sender.scale;
-    _ambient.b *= sender.scale;
-    
-    _ambient.r = fmaxf(0.2f, fminf(_ambient.r, 1.0f));
-    _ambient.g = fmaxf(0.2f, fminf(_ambient.g, 1.0f));
-    _ambient.b = fmaxf(0.2f, fminf(_ambient.b, 1.0f));
+    if(_aiEntity.state != paused)
+    {
+        _ambient.r *= sender.scale;
+        _ambient.g *= sender.scale;
+        _ambient.b *= sender.scale;
+        
+        _ambient.r = fmaxf(0.2f, fminf(_ambient.r, 1.0f));
+        _ambient.g = fmaxf(0.2f, fminf(_ambient.g, 1.0f));
+        _ambient.b = fmaxf(0.2f, fminf(_ambient.b, 1.0f));
+    }
+    else
+    {
+        GLKVector3 scale = _aiEntity.scale;
+        GLKVector3MultiplyScalar(scale, sender.scale);
+        _aiEntity.scale = scale;
+    }
     
     sender.scale = 1.0f;
 }
@@ -573,6 +582,25 @@ enum
         [sender setTitle:@"Stop Adjusting" forState:UIControlStateNormal];
     }
 }
+- (IBAction)switchControls:(UISegmentedControl *)sender {
+    
+    switch (sender.selectedSegmentIndex) {
+        case 0:
+            [self setModelControlsAreHidden:YES];
+            [self setFogControlsAreHidden:YES];
+            break;
+        case 1:
+            [self setModelControlsAreHidden:YES];
+            [self setFogControlsAreHidden:NO];
+            break;
+        case 2:
+            [self setModelControlsAreHidden:NO];
+            [self setFogControlsAreHidden:YES];
+            break;
+        default:
+            break;
+    }
+}
 
 - (IBAction)resetScene:(id)sender {
     _camera.rotation = M_PI;
@@ -596,19 +624,24 @@ enum
     }
 }
 
-- (IBAction)onToggleControls:(UIButton*)sender {
-    _fogTypeToggle.hidden = !_fogTypeToggle.hidden;
-    _fogColourLabel.hidden = !_fogColourLabel.hidden;
-    _fogColourRLabel.hidden = !_fogColourRLabel.hidden;
-    _fogColourGLabel.hidden = !_fogColourGLabel.hidden;
-    _fogColourBLabel.hidden = !_fogColourBLabel.hidden;
-    _fogColourRSlider.hidden = !_fogColourRSlider.hidden;
-    _fogColourGSlider.hidden = !_fogColourGSlider.hidden;
-    _fogColourBSlider.hidden = !_fogColourBSlider.hidden;
-    _fogToggle.hidden = !_fogToggle.hidden;
-    _adjustModelBtn.hidden = !_adjustModelBtn.hidden;
-    
-    [sender setTitle: _fogTypeToggle.hidden ? @"Show Controls" : @"Hide Controls" forState:UIControlStateNormal];
+- (void) setModelControlsAreHidden: (BOOL)hidden
+{
+    _adjustModelBtn.hidden = hidden;
+    _modelReset.hidden = hidden;
+    _movementAxisLbl.hidden = hidden;
+    _movementAxisSel.hidden = hidden;
+}
+
+- (void) setFogControlsAreHidden: (BOOL)hidden {
+    _fogTypeToggle.hidden = hidden;
+    _fogColourLabel.hidden = hidden;
+    _fogColourRLabel.hidden = hidden;
+    _fogColourGLabel.hidden = hidden;
+    _fogColourBLabel.hidden = hidden;
+    _fogColourRSlider.hidden = hidden;
+    _fogColourGSlider.hidden = hidden;
+    _fogColourBSlider.hidden = hidden;
+    _fogToggle.hidden = hidden;
 }
 
 - (IBAction)onRedColourChanged:(UISlider *)sender {

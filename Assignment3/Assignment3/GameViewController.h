@@ -13,6 +13,9 @@
 
 @interface GameViewController : GLKViewController
 
+@property (weak, nonatomic) IBOutlet UIButton *modelReset;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *movementAxisSel;
+@property (weak, nonatomic) IBOutlet UILabel *movementAxisLbl;
 @property (weak, nonatomic) IBOutlet UIButton *adjustModelBtn;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *fogTypeToggle;
 @property (weak, nonatomic) IBOutlet UILabel *fogColourLabel;
