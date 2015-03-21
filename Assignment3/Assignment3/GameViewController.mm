@@ -54,6 +54,7 @@ enum
     Cube* _rotatorCube;
     CubeView *_cubeView;
     CGPoint _dragStart;
+    CGPoint _modelDragStart;
     NSTimeInterval _prevRotationTime;
     NSTimeInterval _prevTime;
     
@@ -142,7 +143,7 @@ enum
     _resetTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(resetScene:)];
     _resetTapRecognizer.numberOfTapsRequired = 2;
     _resetTapRecognizer.numberOfTouchesRequired = 1;
-    
+
     _mapToggle.numberOfTapsRequired = 2;
     
     _mapOn = NO;
@@ -522,7 +523,7 @@ enum
     else
     {
         GLKVector3 scale = _aiEntity.scale;
-        GLKVector3MultiplyScalar(scale, sender.scale);
+        scale = GLKVector3MultiplyScalar(scale, sender.scale);
         _aiEntity.scale = scale;
     }
     
@@ -531,6 +532,39 @@ enum
 
 - (IBAction)onFlashlightToggle:(id)sender {
     _lightOn = !_lightOn;
+}
+
+- (IBAction)moveModel:(UIPanGestureRecognizer*)sender
+{
+    if(_aiEntity.state != paused) return;
+    
+    if(sender.state == UIGestureRecognizerStateBegan)
+    {
+        _modelDragStart = [sender locationInView:self.view];
+    }
+    CGPoint cur = [sender locationInView:self.view];
+    float movement = (_modelDragStart.y - cur.y) * CAMERA_MOVE_FACTOR;
+    GLKVector3 newPos = _aiEntity.position;
+    
+    switch(_movementAxisSel.selectedSegmentIndex)
+    {
+        case 0:
+            newPos.x += movement;
+            break;
+        case 1:
+            newPos.y += movement;
+            break;
+        case 2:
+            newPos.z += movement;
+            break;
+        default:
+            break;
+    }
+    
+    _aiEntity.position = newPos;
+    
+    _modelDragStart = cur;
+
 }
 
 - (IBAction)onPan:(UIPanGestureRecognizer *)sender {
@@ -609,6 +643,11 @@ enum
 
 - (IBAction)toggleMinimap:(id)sender {
     _mapOn = !_mapOn;
+}
+
+- (IBAction)resetModelToDefault:(id)sender {
+    _aiEntity.scale = GLKVector3Make(0.005f, 0.005f, 0.005f);
+    _aiEntity.rotation = GLKVector3Make(1.0f, 1.0f, 1.0f);
 }
 
 - (IBAction)onFogToggle:(UIButton *)sender {

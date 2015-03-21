@@ -37,21 +37,14 @@
 		701ACCF71AB79E5D00648607 /* right_wall.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 701ACCDB1AB79E5D00648607 /* right_wall.jpg */; };
 		701ACCF81AB79E5D00648607 /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 701ACCDD1AB79E5D00648607 /* Shader.fsh */; };
 		701ACCF91AB79E5D00648607 /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 701ACCDE1AB79E5D00648607 /* Shader.vsh */; };
-		701ACCFC1AB7A19400648607 /* chicken_animv2.fbx in Resources */ = {isa = PBXBuildFile; fileRef = 701ACCFB1AB7A19400648607 /* chicken_animv2.fbx */; };
 		701ACD011AB7A2B300648607 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 701ACD001AB7A2B300648607 /* libiconv.dylib */; };
 		701ACD041AB7A8EC00648607 /* Common.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 701ACD021AB7A8EC00648607 /* Common.cxx */; };
 		701ACD061AB7C2A000648607 /* cube.fbx in Resources */ = {isa = PBXBuildFile; fileRef = 701ACD051AB7C2A000648607 /* cube.fbx */; };
-		701ACD081AB7CC3300648607 /* koolaidman.fbx in Resources */ = {isa = PBXBuildFile; fileRef = 701ACD071AB7CC3300648607 /* koolaidman.fbx */; };
 		70C532191ABCE60C0020C53E /* AIEntityView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C532181ABCE60C0020C53E /* AIEntityView.mm */; };
-		70C5321B1ABCF2E40020C53E /* Chicken_BN.fbx in Resources */ = {isa = PBXBuildFile; fileRef = 70C5321A1ABCF2E40020C53E /* Chicken_BN.fbx */; };
-		70C5321E1ABCF3070020C53E /* chicken_diffuse.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 70C5321C1ABCF3070020C53E /* chicken_diffuse.jpg */; };
-		70C5321F1ABCF3070020C53E /* chicken_diffuse.tga in Resources */ = {isa = PBXBuildFile; fileRef = 70C5321D1ABCF3070020C53E /* chicken_diffuse.tga */; };
-		70C532211ABCF3170020C53E /* Chicken_PT.fbx in Resources */ = {isa = PBXBuildFile; fileRef = 70C532201ABCF3170020C53E /* Chicken_PT.fbx */; };
 		70C532761ABCFDB30020C53E /* ArmyPilot.fbx in Resources */ = {isa = PBXBuildFile; fileRef = 70C532751ABCFDB30020C53E /* ArmyPilot.fbx */; };
-		70C532781ABCFDCB0020C53E /* body01.png in Resources */ = {isa = PBXBuildFile; fileRef = 70C532771ABCFDCB0020C53E /* body01.png */; };
 		70C5327C1ABD039E0020C53E /* body01.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 70C5327B1ABD039E0020C53E /* body01.jpg */; };
-		70C8180F1AB90344001CDE78 /* chair.fbx in Resources */ = {isa = PBXBuildFile; fileRef = 70C8180E1AB90344001CDE78 /* chair.fbx */; };
-		70C818111AB9091C001CDE78 /* humanoid.fbx in Resources */ = {isa = PBXBuildFile; fileRef = 70C818101AB9091C001CDE78 /* humanoid.fbx */; };
+		70C5327F1ABD270A0020C53E /* head01.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 70C5327D1ABD270A0020C53E /* head01.jpg */; };
+		70C532801ABD270A0020C53E /* m4tex.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 70C5327E1ABD270A0020C53E /* m4tex.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -117,24 +110,17 @@
 		701ACCDD1AB79E5D00648607 /* Shader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = Shader.fsh; path = Shaders/Shader.fsh; sourceTree = "<group>"; };
 		701ACCDE1AB79E5D00648607 /* Shader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = Shader.vsh; path = Shaders/Shader.vsh; sourceTree = "<group>"; };
 		701ACCDF1AB79E5D00648607 /* Uniforms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Uniforms.h; sourceTree = "<group>"; };
-		701ACCFB1AB7A19400648607 /* chicken_animv2.fbx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = chicken_animv2.fbx; sourceTree = "<group>"; };
 		701ACD001AB7A2B300648607 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		701ACD021AB7A8EC00648607 /* Common.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Common.cxx; sourceTree = "<group>"; };
 		701ACD031AB7A8EC00648607 /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
 		701ACD051AB7C2A000648607 /* cube.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = cube.fbx; sourceTree = "<group>"; };
-		701ACD071AB7CC3300648607 /* koolaidman.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = koolaidman.fbx; sourceTree = "<group>"; };
 		70C532171ABCE60C0020C53E /* AIEntityView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIEntityView.h; sourceTree = "<group>"; };
 		70C532181ABCE60C0020C53E /* AIEntityView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AIEntityView.mm; sourceTree = "<group>"; };
-		70C5321A1ABCF2E40020C53E /* Chicken_BN.fbx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Chicken_BN.fbx; path = KFC/Chicken_BN.fbx; sourceTree = "<group>"; };
-		70C5321C1ABCF3070020C53E /* chicken_diffuse.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = chicken_diffuse.jpg; path = KFC/chicken_diffuse.jpg; sourceTree = "<group>"; };
-		70C5321D1ABCF3070020C53E /* chicken_diffuse.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = chicken_diffuse.tga; path = KFC/chicken_diffuse.tga; sourceTree = "<group>"; };
-		70C532201ABCF3170020C53E /* Chicken_PT.fbx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Chicken_PT.fbx; path = KFC/Chicken_PT.fbx; sourceTree = "<group>"; };
 		70C532741ABCF8040020C53E /* ShaderAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderAttribute.h; sourceTree = "<group>"; };
 		70C532751ABCFDB30020C53E /* ArmyPilot.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = ArmyPilot.fbx; sourceTree = "<group>"; };
-		70C532771ABCFDCB0020C53E /* body01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = body01.png; sourceTree = "<group>"; };
 		70C5327B1ABD039E0020C53E /* body01.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = body01.jpg; sourceTree = "<group>"; };
-		70C8180E1AB90344001CDE78 /* chair.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = chair.fbx; sourceTree = "<group>"; };
-		70C818101AB9091C001CDE78 /* humanoid.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = humanoid.fbx; sourceTree = "<group>"; };
+		70C5327D1ABD270A0020C53E /* head01.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = head01.jpg; sourceTree = "<group>"; };
+		70C5327E1ABD270A0020C53E /* m4tex.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = m4tex.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -294,10 +280,9 @@
 		701ACCA91AB799BE00648607 /* Textures */ = {
 			isa = PBXGroup;
 			children = (
+				70C5327D1ABD270A0020C53E /* head01.jpg */,
+				70C5327E1ABD270A0020C53E /* m4tex.jpg */,
 				70C5327B1ABD039E0020C53E /* body01.jpg */,
-				70C532771ABCFDCB0020C53E /* body01.png */,
-				70C5321C1ABCF3070020C53E /* chicken_diffuse.jpg */,
-				70C5321D1ABCF3070020C53E /* chicken_diffuse.tga */,
 				701ACCB91AB79E5D00648607 /* both_walls.jpg */,
 				701ACCBC1AB79E5D00648607 /* crate.jpg */,
 				701ACCC31AB79E5D00648607 /* floor.jpg */,
@@ -325,13 +310,7 @@
 			isa = PBXGroup;
 			children = (
 				70C532751ABCFDB30020C53E /* ArmyPilot.fbx */,
-				70C532201ABCF3170020C53E /* Chicken_PT.fbx */,
-				70C5321A1ABCF2E40020C53E /* Chicken_BN.fbx */,
-				70C818101AB9091C001CDE78 /* humanoid.fbx */,
-				70C8180E1AB90344001CDE78 /* chair.fbx */,
-				701ACD071AB7CC3300648607 /* koolaidman.fbx */,
 				701ACD051AB7C2A000648607 /* cube.fbx */,
-				701ACCFB1AB7A19400648607 /* chicken_animv2.fbx */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -416,30 +395,23 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				70C5321E1ABCF3070020C53E /* chicken_diffuse.jpg in Resources */,
 				701ACCF81AB79E5D00648607 /* Shader.fsh in Resources */,
-				70C818111AB9091C001CDE78 /* humanoid.fbx in Resources */,
 				701ACCE31AB79E5D00648607 /* both_walls.jpg in Resources */,
 				701ACCE21AB79E5D00648607 /* LaunchScreen.xib in Resources */,
 				70C5327C1ABD039E0020C53E /* body01.jpg in Resources */,
 				701ACCF11AB79E5D00648607 /* MinimapShader.fsh in Resources */,
-				70C5321B1ABCF2E40020C53E /* Chicken_BN.fbx in Resources */,
-				70C5321F1ABCF3070020C53E /* chicken_diffuse.tga in Resources */,
 				701ACCF91AB79E5D00648607 /* Shader.vsh in Resources */,
 				701ACCE11AB79E5D00648607 /* Main.storyboard in Resources */,
 				701ACCEE1AB79E5D00648607 /* left_wall.jpg in Resources */,
 				701ACD061AB7C2A000648607 /* cube.fbx in Resources */,
+				70C5327F1ABD270A0020C53E /* head01.jpg in Resources */,
 				701ACCED1AB79E5D00648607 /* Images.xcassets in Resources */,
 				701ACCF21AB79E5D00648607 /* MinimapShader.vsh in Resources */,
 				70C532761ABCFDB30020C53E /* ArmyPilot.fbx in Resources */,
-				70C8180F1AB90344001CDE78 /* chair.fbx in Resources */,
-				701ACCFC1AB7A19400648607 /* chicken_animv2.fbx in Resources */,
-				70C532211ABCF3170020C53E /* Chicken_PT.fbx in Resources */,
-				701ACD081AB7CC3300648607 /* koolaidman.fbx in Resources */,
 				701ACCE91AB79E5D00648607 /* floor.jpg in Resources */,
-				70C532781ABCFDCB0020C53E /* body01.png in Resources */,
 				701ACCF71AB79E5D00648607 /* right_wall.jpg in Resources */,
 				701ACCF41AB79E5D00648607 /* no_walls.jpg in Resources */,
+				70C532801ABD270A0020C53E /* m4tex.jpg in Resources */,
 				701ACCE51AB79E5D00648607 /* crate.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

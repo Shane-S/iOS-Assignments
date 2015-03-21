@@ -117,6 +117,9 @@
                                 <state key="normal" title="Reset to Defaults">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="resetModelToDefault:" destination="BV1-FR-VrT" eventType="touchUpInside" id="cBF-WR-7MG"/>
+                                </connections>
                             </button>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="0WN-uf-d2M">
                                 <rect key="frame" x="426" y="28" width="158" height="29"/>
@@ -176,6 +179,7 @@
                             <outletCollection property="gestureRecognizers" destination="JQX-Vy-f7a" appends="YES" id="PI1-RC-hbi"/>
                             <outletCollection property="gestureRecognizers" destination="B8f-Q3-UtN" appends="YES" id="Ee8-rz-Z1M"/>
                             <outletCollection property="gestureRecognizers" destination="E2h-Hq-rcb" appends="YES" id="ac3-vH-6TY"/>
+                            <outletCollection property="gestureRecognizers" destination="wjs-I7-HSA" appends="YES" id="DB5-x2-cTB"/>
                         </connections>
                     </view>
                     <connections>
@@ -191,6 +195,7 @@
                         <outlet property="fogToggle" destination="YJX-ze-a4F" id="2db-eV-Wdz"/>
                         <outlet property="fogTypeToggle" destination="E3E-JV-XcQ" id="5nQ-kG-jrm"/>
                         <outlet property="mapToggle" destination="E2h-Hq-rcb" id="Bww-pJ-pVn"/>
+                        <outlet property="modelMover" destination="wjs-I7-HSA" id="dya-mF-aWW"/>
                         <outlet property="modelReset" destination="7Z6-4x-820" id="6qi-qN-apR"/>
                         <outlet property="movementAxisLbl" destination="Diu-nD-1kA" id="iht-QV-pfV"/>
                         <outlet property="movementAxisSel" destination="1w6-VX-Voc" id="tL0-Yv-6c8"/>
@@ -217,6 +222,11 @@
                         <action selector="toggleMinimap:" destination="BV1-FR-VrT" id="Zds-ki-oXo"/>
                     </connections>
                 </tapGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="2" id="wjs-I7-HSA">
+                    <connections>
+                        <action selector="moveModel:" destination="BV1-FR-VrT" id="mJc-JI-cLd"/>
+                    </connections>
+                </panGestureRecognizer>
             </objects>
         </scene>
     </scenes>

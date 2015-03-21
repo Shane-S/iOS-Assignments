@@ -1,0 +1,26 @@
+==README - Assignment 3==
+Authors
+*   Shane Spoor, A00852406
+*   Dan Russell, A00857150
+
+
+~~ VERSION 1 ~~
+-Controls-
+*   Use the segmented selection at the top right to select which
+    controls to use
+*   To adjust the model (note: the player can't move while adjusting)
+    []  Select the "Model" option from the controls list
+    []  Tap the "Ajust Model" button to start transforming the model
+    []  Swipe with one finger to rotate the model
+    []  Swipe up or down with two fingers to translate the model
+        (+) Select the axis of movement from the "Movement Axis" segment
+            selector
+    []  Pinch/Zoom to scale the model
+    []  Select the "Reset Model" button to reset the model's orientation
+        and scale
+    []  Select "Stop Adjusting" to return the model to the maze (from where
+        it left off)
+
+-Notes-
+*   It is HIGHLY RECOMMENDED to test this on the simulator or an iPad; version
+    1 takes an extremely long time (1+ minutes) to load   
