@@ -38,7 +38,6 @@
 		701ACCF81AB79E5D00648607 /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 701ACCDD1AB79E5D00648607 /* Shader.fsh */; };
 		701ACCF91AB79E5D00648607 /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 701ACCDE1AB79E5D00648607 /* Shader.vsh */; };
 		701ACCFC1AB7A19400648607 /* chicken_animv2.fbx in Resources */ = {isa = PBXBuildFile; fileRef = 701ACCFB1AB7A19400648607 /* chicken_animv2.fbx */; };
-		701ACCFF1AB7A23600648607 /* FBXRender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 701ACCFD1AB7A23600648607 /* FBXRender.cpp */; };
 		701ACD011AB7A2B300648607 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 701ACD001AB7A2B300648607 /* libiconv.dylib */; };
 		701ACD041AB7A8EC00648607 /* Common.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 701ACD021AB7A8EC00648607 /* Common.cxx */; };
 		701ACD061AB7C2A000648607 /* cube.fbx in Resources */ = {isa = PBXBuildFile; fileRef = 701ACD051AB7C2A000648607 /* cube.fbx */; };
@@ -119,8 +118,6 @@
 		701ACCDE1AB79E5D00648607 /* Shader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = Shader.vsh; path = Shaders/Shader.vsh; sourceTree = "<group>"; };
 		701ACCDF1AB79E5D00648607 /* Uniforms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Uniforms.h; sourceTree = "<group>"; };
 		701ACCFB1AB7A19400648607 /* chicken_animv2.fbx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = chicken_animv2.fbx; sourceTree = "<group>"; };
-		701ACCFD1AB7A23600648607 /* FBXRender.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FBXRender.cpp; sourceTree = "<group>"; };
-		701ACCFE1AB7A23600648607 /* FBXRender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBXRender.h; sourceTree = "<group>"; };
 		701ACD001AB7A2B300648607 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		701ACD021AB7A8EC00648607 /* Common.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Common.cxx; sourceTree = "<group>"; };
 		701ACD031AB7A8EC00648607 /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
@@ -256,8 +253,6 @@
 		701ACCA61AB7999000648607 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				701ACCFD1AB7A23600648607 /* FBXRender.cpp */,
-				701ACCFE1AB7A23600648607 /* FBXRender.h */,
 				701ACCBF1AB79E5D00648607 /* CubeView.h */,
 				701ACCC01AB79E5D00648607 /* CubeView.m */,
 				701ACCC51AB79E5D00648607 /* FogView.h */,
@@ -464,7 +459,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				701ACCEB1AB79E5D00648607 /* GameViewController.mm in Sources */,
-				701ACCFF1AB7A23600648607 /* FBXRender.cpp in Sources */,
 				701ACCF61AB79E5D00648607 /* PlaneView.m in Sources */,
 				701ACCF01AB79E5D00648607 /* MazeWrapper.mm in Sources */,
 				70C532191ABCE60C0020C53E /* AIEntityView.mm in Sources */,

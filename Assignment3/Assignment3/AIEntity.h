@@ -15,11 +15,12 @@
 
 @interface AIEntity : NSObject
 
-enum AIState
+typedef enum AIState
 {
     choosingDirection,
-    moving
-};
+    moving,
+    paused
+} AIState;
 
 -(instancetype)init;
 -(void)updateWithElapsedTime:(float) deltaTime andMap:(MazeWrapper*) maze;

@@ -32,6 +32,9 @@
 
 -(void)updateWithElapsedTime:(float) deltaTime andMap:(MazeWrapper*) maze
 {
+    // We're adjusting the model's properties; pause it for now
+    if(_state == paused) return;
+    
     if (_state == choosingDirection)
     {
         MazeCell cell;

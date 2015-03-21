@@ -6,8 +6,7 @@
 //  Copyright (c) 2015 BCIT. All rights reserved.
 //
 #import "Common.h"
-#import "fbxsdk.h"
-#import "FBXRender.h"
+#import <fbxsdk.h>
 #import "GameViewController.h"
 #import "GLProgramUtils.h"
 #import "Camera.h"
@@ -49,6 +48,9 @@ enum
     
     AIEntity* _aiEntity;
     AIEntityView* _aiView;
+    AIState _rememberedState;
+    GLKVector3 _stoppedPos;
+    
     Cube* _rotatorCube;
     CubeView *_cubeView;
     CGPoint _dragStart;
@@ -198,6 +200,7 @@ enum
     // create AIEntity
     _aiEntity = [[AIEntity alloc] init];
     _aiEntity.scale = GLKVector3Make(0.005f, 0.005f, 0.005f);
+    _rememberedState = _aiEntity.state;
     
     // Load the FBX model and texture for it
     NSString *modelFileName = [[NSBundle mainBundle] pathForResource:@"ArmyPilot" ofType:@"fbx"];
@@ -528,11 +531,44 @@ enum
     }
     CGPoint cur = [sender locationInView:self.view];
     GLKVector2 d = GLKVector2Make(cur.x - _dragStart.x, _dragStart.y - cur.y);
-    _camera.rotation -= d.x * CAMERA_ROTATE_FACTOR;
     
-    GLKVector3 movement = GLKVector3MultiplyScalar(_camera.lookDirection, d.y * CAMERA_MOVE_FACTOR);
-    _camera.position = (GLKVector3Add(_camera.position, movement));
+    // If the AI entity isn't paused then we want to move the camera around
+    if(_aiEntity.state != paused)
+    {
+        _camera.rotation -= d.x * CAMERA_ROTATE_FACTOR;
+        
+        GLKVector3 movement = GLKVector3MultiplyScalar(_camera.lookDirection, d.y * CAMERA_MOVE_FACTOR);
+        _camera.position = (GLKVector3Add(_camera.position, movement));
+    }
+    // Otherwise, adjust the AI entity
+    else
+    {
+        
+    }
+    
     _dragStart = cur;
+}
+
+- (IBAction)toggleModelAdj:(UIButton*)sender {
+    if(_aiEntity.state == paused)
+    {
+        _aiEntity.state = _rememberedState;
+        _aiEntity.position = _stoppedPos;
+        [sender setTitle:@"Adjust Model" forState:UIControlStateNormal];
+    }
+    else
+    {
+        _rememberedState = _aiEntity.state;
+        _stoppedPos = _aiEntity.position;
+        _aiEntity.state = paused;
+        
+        GLKVector3 lookDir = _camera.lookDirection;
+        GLKVector3 newPos = GLKVector3Make(lookDir.x, 0, lookDir.z);
+        newPos = GLKVector3Add(newPos, _camera.position);
+        _aiEntity.position = newPos;
+        
+        [sender setTitle:@"Stop Adjusting" forState:UIControlStateNormal];
+    }
 }
 
 - (IBAction)resetScene:(id)sender {
@@ -567,6 +603,7 @@ enum
     _fogColourGSlider.hidden = !_fogColourGSlider.hidden;
     _fogColourBSlider.hidden = !_fogColourBSlider.hidden;
     _fogToggle.hidden = !_fogToggle.hidden;
+    _adjustModelBtn.hidden = !_adjustModelBtn.hidden;
     
     [sender setTitle: _fogTypeToggle.hidden ? @"Show Controls" : @"Hide Controls" forState:UIControlStateNormal];
 }

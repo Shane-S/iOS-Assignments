@@ -13,6 +13,7 @@
 
 @interface GameViewController : GLKViewController
 
+@property (weak, nonatomic) IBOutlet UIButton *adjustModelBtn;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *fogTypeToggle;
 @property (weak, nonatomic) IBOutlet UILabel *fogColourLabel;
 @property (weak, nonatomic) IBOutlet UILabel *fogColourRLabel;

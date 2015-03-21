@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BV1-FR-VrT">
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -98,10 +97,20 @@
                                     <action selector="onToggleControls:" destination="BV1-FR-VrT" eventType="touchUpInside" id="oqC-Fw-Hlc"/>
                                 </connections>
                             </button>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pF5-85-9ev">
+                                <rect key="frame" x="16" y="306" width="91" height="30"/>
+                                <state key="normal" title="Adjust Model">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="toggleModelAdj:" destination="BV1-FR-VrT" eventType="touchUpInside" id="lGb-UQ-GQH"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
+                            <constraint firstItem="pF5-85-9ev" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="2mI-Ez-SOD"/>
                             <constraint firstItem="E3E-JV-XcQ" firstAttribute="top" secondItem="YJX-ze-a4F" secondAttribute="bottom" constant="8" id="3a0-4D-EuQ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="O8H-TW-O2i" secondAttribute="trailing" id="73L-Go-QNJ"/>
                             <constraint firstItem="eza-tc-d4P" firstAttribute="top" secondItem="ttP-Ly-w2c" secondAttribute="bottom" constant="17" id="8Aa-9p-jq0"/>
@@ -114,6 +123,7 @@
                             <constraint firstItem="jja-3S-ZI7" firstAttribute="top" secondItem="E3E-JV-XcQ" secondAttribute="bottom" constant="20" id="RGQ-3C-95u"/>
                             <constraint firstItem="3Ed-g2-r0w" firstAttribute="leading" secondItem="CDt-ao-uxV" secondAttribute="trailing" constant="18" id="RcF-YE-0ss"/>
                             <constraint firstItem="O8H-TW-O2i" firstAttribute="top" secondItem="8aa-yV-Osq" secondAttribute="bottom" constant="8" id="YIw-Wg-Kgb"/>
+                            <constraint firstItem="YJX-ze-a4F" firstAttribute="top" secondItem="pF5-85-9ev" secondAttribute="bottom" constant="8" id="YTB-P5-dsg"/>
                             <constraint firstItem="CDt-ao-uxV" firstAttribute="top" secondItem="eza-tc-d4P" secondAttribute="bottom" constant="17" id="aBC-B2-CMV"/>
                             <constraint firstItem="jC1-9B-Sbk" firstAttribute="leading" secondItem="eza-tc-d4P" secondAttribute="trailing" constant="17" id="ffJ-LH-Ydi"/>
                             <constraint firstItem="Uz5-aJ-mTH" firstAttribute="leading" secondItem="ttP-Ly-w2c" secondAttribute="trailing" constant="18" id="h4a-ny-s0j"/>
@@ -131,6 +141,7 @@
                         </connections>
                     </view>
                     <connections>
+                        <outlet property="adjustModelBtn" destination="pF5-85-9ev" id="9SS-hJ-9KC"/>
                         <outlet property="flashlightToggleRecognizer" destination="JQX-Vy-f7a" id="1TK-5e-mVU"/>
                         <outlet property="fogColourBLabel" destination="CDt-ao-uxV" id="7PU-iN-dLH"/>
                         <outlet property="fogColourBSlider" destination="3Ed-g2-r0w" id="cP3-Qt-t7q"/>
